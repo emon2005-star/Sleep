@@ -27,13 +27,38 @@ commands:
     usage: /nightskip <set|get|status|reset|reload|help> [percentage]
     permission: easysleep.admin
     permission-message: "§cYou don't have permission to use this command!"
+  sleepgui:
+    description: Open the EasySleep GUI interface
+    usage: /sleepgui [reload|sections|help]
+    permission: easysleep.gui
+    permission-message: "§cYou don't have permission to use the GUI!"
+    aliases: [sgui, sleepui, esleep]
+  sgui:
+    description: Short alias for sleepgui
+    usage: /sgui [reload|sections|help]
+    permission: easysleep.gui
+    permission-message: "§cYou don't have permission to use the GUI!"
+  sleepui:
+    description: Alternative alias for sleepgui
+    usage: /sleepui [reload|sections|help]
+    permission: easysleep.gui
+    permission-message: "§cYou don't have permission to use the GUI!"
+  esleep:
+    description: Alternative alias for sleepgui
+    usage: /esleep [reload|sections|help]
+    permission: easysleep.gui
+    permission-message: "§cYou don't have permission to use the GUI!"
 
 permissions:
   easysleep.admin:
     description: Allows access to sleep management commands
     default: op
+  easysleep.gui:
+    description: Allows access to the GUI interface
+    default: true
   easysleep.*:
     description: Grants all EasySleep permissions
     default: op
     children:
       easysleep.admin: true
+      easysleep.gui: true

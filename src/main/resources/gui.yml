@@ -1,0 +1,398 @@
+# EasySleep GUI Configuration
+# Customize the appearance and behavior of all GUI menus
+# Plugin by Turjo - Version 1.4.1
+
+# GUI Titles (supports color codes with &)
+gui:
+  titles:
+    main-menu: "&6&l⚡ EasySleep Control Panel ⚡"
+    sleep-settings: "&b&l🌙 Sleep Configuration 🌙"
+    animation-settings: "&d&l✨ Animation Settings ✨"
+    sound-settings: "&a&l🎵 Sound Configuration 🎵"
+    day-counter: "&e&l📅 Day Counter Management 📅"
+    statistics: "&c&l📊 Plugin Statistics 📊"
+    world-management: "&2&l🌍 World Management 🌍"
+    player-management: "&9&l👥 Player Management 👥"
+    advanced-settings: "&4&l⚙️ Advanced Settings ⚙️"
+    particle-effects: "&5&l🎆 Particle Effects 🎆"
+    anti-spam-settings: "&c&l🛡️ Anti-Spam Settings 🛡️"
+    update-center: "&3&l🔄 Update Center 🔄"
+
+  # GUI Items Configuration
+  items:
+    # Main Menu Items
+    main-menu:
+      sleep-settings:
+        material: "BED"
+        name: "&b🌙 Sleep Settings"
+        lore:
+          - "&7Configure sleep percentage"
+          - "&7and requirements for your server"
+          - ""
+          - "&eClick to open!"
+      
+      animation-settings:
+        material: "FIREWORK_ROCKET"
+        name: "&d✨ Animation Settings"
+        lore:
+          - "&7Manage visual effects and"
+          - "&7stunning night skip animations"
+          - ""
+          - "&eClick to open!"
+      
+      sound-settings:
+        material: "NOTE_BLOCK"
+        name: "&a🎵 Sound Settings"
+        lore:
+          - "&7Configure audio effects"
+          - "&7and volume settings"
+          - ""
+          - "&eClick to open!"
+      
+      day-counter:
+        material: "CLOCK"
+        name: "&e📅 Day Counter"
+        lore:
+          - "&7Manage day tracking and"
+          - "&7morning message system"
+          - ""
+          - "&eClick to open!"
+      
+      statistics:
+        material: "BOOK"
+        name: "&c📊 Statistics"
+        lore:
+          - "&7View detailed plugin"
+          - "&7usage statistics"
+          - ""
+          - "&eClick to open!"
+      
+      world-management:
+        material: "GRASS_BLOCK"
+        name: "&2🌍 World Management"
+        lore:
+          - "&7Manage world-specific"
+          - "&7sleep settings"
+          - ""
+          - "&eClick to open!"
+      
+      player-management:
+        material: "PLAYER_HEAD"
+        name: "&9👥 Player Management"
+        lore:
+          - "&7Configure player-specific"
+          - "&7settings and permissions"
+          - ""
+          - "&eClick to open!"
+      
+      advanced-settings:
+        material: "REDSTONE"
+        name: "&4⚙️ Advanced Settings"
+        lore:
+          - "&7Advanced configuration"
+          - "&7options for power users"
+          - ""
+          - "&eClick to open!"
+      
+      particle-effects:
+        material: "BLAZE_POWDER"
+        name: "&5🎆 Particle Effects"
+        lore:
+          - "&7Customize particle effects"
+          - "&7and visual enhancements"
+          - ""
+          - "&eClick to open!"
+      
+      anti-spam-settings:
+        material: "SHIELD"
+        name: "&c🛡️ Anti-Spam Settings"
+        lore:
+          - "&7Configure spam protection"
+          - "&7and cooldown settings"
+          - ""
+          - "&eClick to open!"
+      
+      update-center:
+        material: "COMPASS"
+        name: "&3🔄 Update Center"
+        lore:
+          - "&7Check for updates and"
+          - "&7plugin information"
+          - ""
+          - "&eClick to open!"
+      
+      close:
+        material: "BARRIER"
+        name: "&c❌ Close Menu"
+        lore:
+          - "&7Close the GUI menu"
+          - ""
+          - "&eClick to close!"
+
+    # Sleep Settings Items
+    sleep-settings:
+      current-settings:
+        material: "COMPASS"
+        name: "&b📊 Current Settings"
+      
+      percentage-1:
+        material: "LIME_DYE"
+      percentage-10:
+        material: "GREEN_DYE"
+      percentage-25:
+        material: "YELLOW_DYE"
+      percentage-50:
+        material: "ORANGE_DYE"
+      percentage-75:
+        material: "RED_DYE"
+      percentage-100:
+        material: "PURPLE_DYE"
+      
+      custom-percentage:
+        material: "WRITABLE_BOOK"
+        name: "&e📝 Custom Percentage"
+        lore:
+          - "&7Set a custom sleep percentage"
+          - "&7Type in chat after clicking"
+          - ""
+          - "&eClick to set custom value!"
+      
+      reset-default:
+        material: "STRUCTURE_VOID"
+        name: "&c🔄 Reset to Default"
+        lore:
+          - "&7Reset sleep percentage to 1%"
+          - "&7(Recommended for most servers)"
+          - ""
+          - "&eClick to reset!"
+      
+      back:
+        material: "ARROW"
+        name: "&7⬅ Back to Main Menu"
+        lore:
+          - "&7Return to the main menu"
+          - ""
+          - "&eClick to go back!"
+
+    # Animation Settings Items
+    animation-settings:
+      intensity:
+        material: "GLOWSTONE_DUST"
+        name: "&e⚡ Animation Intensity"
+      
+      distance:
+        material: "ENDER_EYE"
+        name: "&b👁 Animation Distance"
+      
+      duration:
+        material: "CLOCK"
+        name: "&6⏰ Animation Duration"
+      
+      test:
+        material: "FIREWORK_ROCKET"
+        name: "&d🎆 Test Animation"
+        lore:
+          - "&7Test the current animation"
+          - "&7settings on yourself"
+          - ""
+          - "&eClick to test!"
+      
+      back:
+        material: "ARROW"
+        name: "&7⬅ Back to Main Menu"
+        lore:
+          - "&7Return to the main menu"
+          - ""
+          - "&eClick to go back!"
+
+    # Sound Settings Items
+    sound-settings:
+      volume:
+        material: "JUKEBOX"
+        name: "&a🔊 Master Volume"
+      
+      sleep-sound:
+        material: "MUSIC_DISC_CAT"
+        name: "&b🎵 Sleep Sound"
+      
+      night-skip-sound:
+        material: "MUSIC_DISC_BLOCKS"
+        name: "&e🌙 Night Skip Sound"
+      
+      gui-sounds:
+        material: "NOTE_BLOCK"
+        name: "&d🎹 GUI Sounds"
+        lore:
+          - "&7Enable or disable GUI"
+          - "&7click and navigation sounds"
+          - ""
+          - "&eClick to toggle!"
+      
+      test-sounds:
+        material: "BELL"
+        name: "&c🔔 Test All Sounds"
+        lore:
+          - "&7Play all plugin sounds"
+          - "&7to test current settings"
+          - ""
+          - "&eClick to test!"
+      
+      back:
+        material: "ARROW"
+        name: "&7⬅ Back to Main Menu"
+        lore:
+          - "&7Return to the main menu"
+          - ""
+          - "&eClick to go back!"
+
+    # Day Counter Items
+    day-counter:
+      current-day:
+        material: "SUNFLOWER"
+        name: "&e☀️ Current Day Information"
+      
+      set-day-1:
+        material: "WHITE_DYE"
+      set-day-10:
+        material: "LIGHT_GRAY_DYE"
+      set-day-50:
+        material: "GRAY_DYE"
+      set-day-100:
+        material: "YELLOW_DYE"
+      set-day-365:
+        material: "ORANGE_DYE"
+      set-day-1000:
+        material: "RED_DYE"
+      
+      custom-day:
+        material: "WRITABLE_BOOK"
+        name: "&e📝 Set Custom Day"
+        lore:
+          - "&7Set a custom day number"
+          - "&7Type in chat after clicking"
+          - ""
+          - "&eClick to set custom day!"
+      
+      reset-day:
+        material: "STRUCTURE_VOID"
+        name: "&c🔄 Reset to Day 1"
+        lore:
+          - "&7Reset the day counter"
+          - "&7back to Day 1"
+          - ""
+          - "&eClick to reset!"
+      
+      morning-messages:
+        material: "PAPER"
+        name: "&a📜 Morning Messages"
+        lore:
+          - "&7Configure random morning"
+          - "&7messages for new days"
+          - ""
+          - "&eClick to configure!"
+      
+      back:
+        material: "ARROW"
+        name: "&7⬅ Back to Main Menu"
+        lore:
+          - "&7Return to the main menu"
+          - ""
+          - "&eClick to go back!"
+
+    # Statistics Items
+    statistics:
+      sleep-events:
+        material: "BED"
+        name: "&b🛏️ Sleep Events"
+      
+      night-skips:
+        material: "CLOCK"
+        name: "&e🌙 Night Skips"
+      
+      days-tracked:
+        material: "CALENDAR"
+        name: "&a📅 Days Tracked"
+      
+      players-served:
+        material: "PLAYER_HEAD"
+        name: "&d👥 Players Served"
+      
+      current-session:
+        material: "EMERALD"
+        name: "&2📊 Current Session"
+      
+      plugin-info:
+        material: "BOOK"
+        name: "&6📖 Plugin Information"
+      
+      export:
+        material: "WRITABLE_BOOK"
+        name: "&3📤 Export Statistics"
+        lore:
+          - "&7Export statistics to a file"
+          - "&7for external analysis"
+          - ""
+          - "&eClick to export!"
+      
+      reset:
+        material: "TNT"
+        name: "&c💥 Reset Statistics"
+        lore:
+          - "&7Reset all statistics"
+          - "&c&lWARNING: This cannot be undone!"
+          - ""
+          - "&eClick to reset!"
+      
+      back:
+        material: "ARROW"
+        name: "&7⬅ Back to Main Menu"
+        lore:
+          - "&7Return to the main menu"
+          - ""
+          - "&eClick to go back!"
+
+  # GUI Sound Configuration
+  sounds:
+    enabled: true
+    volume: 0.5
+    GUI_OPEN: "UI_BUTTON_CLICK"
+    GUI_CLOSE: "UI_BUTTON_CLICK"
+    GUI_CLICK: "UI_BUTTON_CLICK"
+    GUI_SUCCESS: "ENTITY_EXPERIENCE_ORB_PICKUP"
+    GUI_ERROR: "ENTITY_VILLAGER_NO"
+    GUI_BACK: "UI_BUTTON_CLICK"
+
+# GUI Behavior Settings
+behavior:
+  # Close GUI when player moves too far
+  close-on-move: false
+  close-distance: 10
+  
+  # Auto-refresh GUI content
+  auto-refresh: true
+  refresh-interval: 5 # seconds
+  
+  # Confirm dangerous actions
+  confirm-destructive-actions: true
+  
+  # Animation settings
+  gui-animations:
+    enabled: true
+    open-animation: "FADE_IN"
+    close-animation: "FADE_OUT"
+
+# GUI Layout Settings
+layout:
+  # GUI size (must be multiple of 9, max 54)
+  default-size: 54
+  
+  # Fill empty slots with glass panes
+  fill-empty-slots: true
+  fill-material: "BLACK_STAINED_GLASS_PANE"
+  fill-name: " "
+  
+  # Border decoration
+  border:
+    enabled: true
+    material: "GRAY_STAINED_GLASS_PANE"
+    name: " "
