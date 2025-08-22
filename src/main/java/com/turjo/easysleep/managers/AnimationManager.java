@@ -225,6 +225,8 @@ public class AnimationManager {
                         case 2: // Dream completion
                             player.getWorld().spawnParticle(Particle.TOTEM, loc, 20, 1, 1, 1, 0.1);
                             player.getWorld().spawnParticle(Particle.END_ROD, loc, 15, 0.8, 0.8, 0.8, 0.05);
+                            break;
+                    }
                 }
                 
                 phase++;
