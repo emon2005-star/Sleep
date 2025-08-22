@@ -1,0 +1,39 @@
+name: EasySleep
+version: 1.4.1
+description: A plugin to easily manage player sleep percentage
+author: Turjo
+main: com.turjo.easysleep.EasySleep
+api-version: 1.20
+
+commands:
+  sleep:
+    description: Manage player sleep percentage
+    usage: /sleep <set|get|status|reset|reload|help> [percentage]
+    permission: easysleep.admin
+    permission-message: "§cYou don't have permission to use this command!"
+    aliases: [sleepmanager, sleepmgr, nightskip]
+  sleepmanager:
+    description: Alternative command for sleep management
+    usage: /sleepmanager <set|get|status|reset|reload|help> [percentage]
+    permission: easysleep.admin
+    permission-message: "§cYou don't have permission to use this command!"
+  sleepmgr:
+    description: Short alternative for sleep management
+    usage: /sleepmgr <set|get|status|reset|reload|help> [percentage]
+    permission: easysleep.admin
+    permission-message: "§cYou don't have permission to use this command!"
+  nightskip:
+    description: Night skip management command
+    usage: /nightskip <set|get|status|reset|reload|help> [percentage]
+    permission: easysleep.admin
+    permission-message: "§cYou don't have permission to use this command!"
+
+permissions:
+  easysleep.admin:
+    description: Allows access to sleep management commands
+    default: op
+  easysleep.*:
+    description: Grants all EasySleep permissions
+    default: op
+    children:
+      easysleep.admin: true
