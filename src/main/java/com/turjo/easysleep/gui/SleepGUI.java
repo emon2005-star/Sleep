@@ -62,7 +62,7 @@ public class SleepGUI implements Listener {
      * Open the main GUI menu
      */
     public void openMainMenu(Player player) {
-        if (!plugin.getGUIConfigManager().isSectionEnabled("main-menu")) {
+        if (!plugin.getSectionConfigManager().isSectionEnabled("main-menu")) {
             MessageUtils.sendMessage(player, "&cMain menu is currently disabled!");
             return;
         }
