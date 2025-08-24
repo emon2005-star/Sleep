@@ -63,6 +63,11 @@ public class ClockAnimationManager {
      * Show clock animation for a player
      */
     private void showClockAnimation(Player player) {
+        // Skip if performance mode is enabled
+        if (plugin.getConfigManager().isPerformanceMode()) {
+            return;
+        }
+        
         World world = player.getWorld();
         Location loc = player.getLocation().add(0, 3, 0);
         long time = world.getTime();
@@ -88,10 +93,11 @@ public class ClockAnimationManager {
      * Create clock face with hour markers
      */
     private void createClockFace(Location center, World world) {
-        for (int i = 0; i < 12; i++) {
+        // Reduce markers for performance
+        for (int i = 0; i < 4; i++) { // Only show 4 main markers instead of 12
             double angle = i * 30 * Math.PI / 180; // 30 degrees per hour
-            double x = Math.cos(angle) * 1.5;
-            double z = Math.sin(angle) * 1.5;
+            double x = Math.cos(angle) * 1.0; // Smaller radius
+            double z = Math.sin(angle) * 1.0;
             Location markerLoc = center.clone().add(x, 0, z);
             
             world.spawnParticle(Particle.VILLAGER_HAPPY, markerLoc, 1, 0, 0, 0, 0);
@@ -104,7 +110,8 @@ public class ClockAnimationManager {
     private void createClockHand(Location center, World world, double angleDegrees, double length, Particle particle) {
         double angle = (angleDegrees - 90) * Math.PI / 180; // -90 to start from top
         
-        for (double i = 0.2; i <= length; i += 0.2) {
+        // Reduce hand detail for performance
+        for (double i = 0.3; i <= length; i += 0.3) { // Larger steps, fewer particles
             double x = Math.cos(angle) * i;
             double z = Math.sin(angle) * i;
             Location handLoc = center.clone().add(x, 0, z);

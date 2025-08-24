@@ -82,6 +82,12 @@ public class DayNightCycleManager {
      * Trigger stunning futuristic time acceleration animation
      */
     private void triggerTimeAccelerationAnimation(World world) {
+        // Skip if performance mode is enabled
+        if (plugin.getConfigManager().isPerformanceMode()) {
+            MessageUtils.broadcastToWorld(world, "&a✓ Night skipped! (Performance mode - reduced effects)");
+            return;
+        }
+        
         if (plugin.getConfigManager().isDebugMode()) {
             plugin.getLogger().info("Triggering time acceleration animation in " + world.getName());
         }

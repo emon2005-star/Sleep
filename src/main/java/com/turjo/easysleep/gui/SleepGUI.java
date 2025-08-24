@@ -272,7 +272,7 @@ public class SleepGUI implements Listener {
                 "&7Level 2: &eModerate particles",
                 "&7Level 3: &cIntense particles",
                 "",
-                "&eClick to change!"
+                "&eClick to cycle through levels!"
             )
         ));
         
@@ -323,6 +323,7 @@ public class SleepGUI implements Listener {
                 "&7Current Distance: &e" + plugin.getConfigManager().getMaxAnimationDistance() + " blocks",
                 "&7Maximum distance for animation rendering",
                 "&7Higher values = More visible but more lag",
+                "&7Click to cycle: 8, 16, 32, 64 blocks",
                 "",
                 "&eClick to change!"
             )
@@ -336,6 +337,7 @@ public class SleepGUI implements Listener {
                 "&7Status: " + (plugin.getConfigManager().isPerformanceMode() ? "&aEnabled" : "&cDisabled"),
                 "&7Reduces particles for better performance",
                 "&7Recommended for servers with many players",
+                "&7Especially helpful for Bedrock players",
                 "",
                 "&eClick to toggle!"
             )
@@ -349,6 +351,7 @@ public class SleepGUI implements Listener {
                 "&7Current Duration: &e" + plugin.getConfigManager().getAnimationDuration() + " seconds",
                 "&7How long animations last",
                 "&7Range: 1-10 seconds",
+                "&7Click to cycle through durations",
                 "",
                 "&eClick to change!"
             )
@@ -362,8 +365,9 @@ public class SleepGUI implements Listener {
                 "&7Current Density: &e" + String.format("%.1f", plugin.getConfigManager().getParticleDensity()) + "x",
                 "&7Multiplier for particle count",
                 "&7Range: 0.1x - 3.0x",
+                "&7Lower = Less lag, Higher = More visual",
                 "",
-                "&eClick to change!"
+                "&eClick to cycle through densities!"
             )
         ));
         
@@ -437,6 +441,7 @@ public class SleepGUI implements Listener {
                 "&7Current Volume: &e" + (int)(volume * 100) + "%",
                 "&7Master volume for all sounds",
                 "&7Range: 10% - 200%",
+                "&7Click to cycle through volumes",
                 "",
                 "&eClick to change!"
             )
@@ -1014,6 +1019,60 @@ public class SleepGUI implements Listener {
      */
     private void handleAnimationSettingsClick(Player player, int slot) {
         switch (slot) {
+            case 10: // Toggle Animations
+                toggleConfigValue("settings.enable-animations");
+                MessageUtils.sendMessage(player, "&a✓ Animations " + (plugin.getConfigManager().areAnimationsEnabled() ? "enabled" : "disabled"));
+                playSound(player, "GUI_SUCCESS");
+                openAnimationSettings(player);
+                break;
+            case 11: // Animation Intensity
+                cycleIntensity();
+                MessageUtils.sendMessage(player, "&a✓ Animation intensity set to " + plugin.getConfigManager().getAnimationIntensity());
+                playSound(player, "GUI_SUCCESS");
+                openAnimationSettings(player);
+                break;
+            case 12: // Enhanced Particles
+                toggleConfigValue("features.enhanced-particles");
+                MessageUtils.sendMessage(player, "&a✓ Enhanced particles " + (plugin.getConfigManager().areEnhancedParticlesEnabled() ? "enabled" : "disabled"));
+                playSound(player, "GUI_SUCCESS");
+                openAnimationSettings(player);
+                break;
+            case 13: // Clock Animation
+                toggleConfigValue("features.clock-animation");
+                MessageUtils.sendMessage(player, "&a✓ Clock animation " + (plugin.getConfigManager().isClockAnimationEnabled() ? "enabled" : "disabled"));
+                playSound(player, "GUI_SUCCESS");
+                openAnimationSettings(player);
+                break;
+            case 14: // Day-Night Animation
+                toggleConfigValue("features.day-night-animation");
+                MessageUtils.sendMessage(player, "&a✓ Day-night animation " + (plugin.getConfigManager().isDayNightAnimationEnabled() ? "enabled" : "disabled"));
+                playSound(player, "GUI_SUCCESS");
+                openAnimationSettings(player);
+                break;
+            case 19: // Animation Distance
+                cycleAnimationDistance();
+                MessageUtils.sendMessage(player, "&a✓ Animation distance set to " + plugin.getConfigManager().getMaxAnimationDistance() + " blocks");
+                playSound(player, "GUI_SUCCESS");
+                openAnimationSettings(player);
+                break;
+            case 20: // Performance Mode
+                toggleConfigValue("advanced.performance-mode");
+                MessageUtils.sendMessage(player, "&a✓ Performance mode " + (plugin.getConfigManager().isPerformanceMode() ? "enabled" : "disabled"));
+                playSound(player, "GUI_SUCCESS");
+                openAnimationSettings(player);
+                break;
+            case 21: // Animation Duration
+                cycleAnimationDuration();
+                MessageUtils.sendMessage(player, "&a✓ Animation duration set to " + plugin.getConfigManager().getAnimationDuration() + " seconds");
+                playSound(player, "GUI_SUCCESS");
+                openAnimationSettings(player);
+                break;
+            case 22: // Particle Density
+                cycleParticleDensity();
+                MessageUtils.sendMessage(player, "&a✓ Particle density set to " + String.format("%.1f", plugin.getConfigManager().getParticleDensity()) + "x");
+                playSound(player, "GUI_SUCCESS");
+                openAnimationSettings(player);
+                break;
             case 31: // Test Animation
                 MessageUtils.sendMessage(player, "&d🎆 Testing animation effects...");
                 plugin.getAnimationManager().startSleepAnimation(player);
@@ -1031,6 +1090,18 @@ public class SleepGUI implements Listener {
      */
     private void handleSoundSettingsClick(Player player, int slot) {
         switch (slot) {
+            case 10: // Toggle Sound Effects
+                toggleConfigValue("settings.enable-sound-effects");
+                MessageUtils.sendMessage(player, "&a✓ Sound effects " + (plugin.getConfigManager().areSoundEffectsEnabled() ? "enabled" : "disabled"));
+                playSound(player, "GUI_SUCCESS");
+                openSoundSettings(player);
+                break;
+            case 11: // Sound Volume
+                cycleSoundVolume();
+                MessageUtils.sendMessage(player, "&a✓ Sound volume set to " + (int)(plugin.getConfigManager().getSoundVolume() * 100) + "%");
+                playSound(player, "GUI_SUCCESS");
+                openSoundSettings(player);
+                break;
             case 31: // Test All Sounds
                 MessageUtils.sendMessage(player, "&c🔔 Testing all sounds...");
                 testAllSounds(player);
@@ -1062,6 +1133,12 @@ public class SleepGUI implements Listener {
         }
         
         switch (slot) {
+            case 10: // Toggle Day Counter
+                toggleConfigValue("features.day-counter");
+                MessageUtils.sendMessage(player, "&a✓ Day counter " + (plugin.getConfigManager().isDayCounterEnabled() ? "enabled" : "disabled"));
+                playSound(player, "GUI_SUCCESS");
+                openDayCounter(player);
+                break;
             case 31: // Custom Day
                 player.closeInventory();
                 pendingInput.put(player, "CUSTOM_DAY");
@@ -1090,6 +1167,92 @@ public class SleepGUI implements Listener {
                 playSound(player, "GUI_BACK");
                 break;
         }
+    }
+    
+    /**
+     * Toggle a boolean config value
+     */
+    private void toggleConfigValue(String path) {
+        boolean currentValue = plugin.getConfig().getBoolean(path);
+        plugin.getConfig().set(path, !currentValue);
+        plugin.saveConfig();
+        plugin.getConfigManager().reloadConfig();
+    }
+    
+    /**
+     * Cycle through animation intensity levels
+     */
+    private void cycleIntensity() {
+        int current = plugin.getConfigManager().getAnimationIntensity();
+        int next = current >= 3 ? 1 : current + 1;
+        plugin.getConfig().set("advanced.animation-intensity", next);
+        plugin.saveConfig();
+        plugin.getConfigManager().reloadConfig();
+    }
+    
+    /**
+     * Cycle through animation distances
+     */
+    private void cycleAnimationDistance() {
+        int current = plugin.getConfigManager().getMaxAnimationDistance();
+        int next;
+        switch (current) {
+            case 8: next = 16; break;
+            case 16: next = 32; break;
+            case 32: next = 64; break;
+            default: next = 8; break;
+        }
+        plugin.getConfig().set("advanced.max-animation-distance", next);
+        plugin.saveConfig();
+        plugin.getConfigManager().reloadConfig();
+    }
+    
+    /**
+     * Cycle through animation durations
+     */
+    private void cycleAnimationDuration() {
+        int current = plugin.getConfigManager().getAnimationDuration();
+        int next = current >= 10 ? 1 : current + 1;
+        plugin.getConfig().set("advanced.animation-duration", next);
+        plugin.saveConfig();
+        plugin.getConfigManager().reloadConfig();
+    }
+    
+    /**
+     * Cycle through particle densities
+     */
+    private void cycleParticleDensity() {
+        double current = plugin.getConfigManager().getParticleDensity();
+        double next;
+        if (current <= 0.1) next = 0.5;
+        else if (current <= 0.5) next = 1.0;
+        else if (current <= 1.0) next = 1.5;
+        else if (current <= 1.5) next = 2.0;
+        else if (current <= 2.0) next = 3.0;
+        else next = 0.1;
+        
+        plugin.getConfig().set("effects.particle-density", next);
+        plugin.saveConfig();
+        plugin.getConfigManager().reloadConfig();
+    }
+    
+    /**
+     * Cycle through sound volumes
+     */
+    private void cycleSoundVolume() {
+        double current = plugin.getConfigManager().getSoundVolume();
+        double next;
+        if (current <= 0.1) next = 0.25;
+        else if (current <= 0.25) next = 0.5;
+        else if (current <= 0.5) next = 0.75;
+        else if (current <= 0.75) next = 1.0;
+        else if (current <= 1.0) next = 1.5;
+        else if (current <= 1.5) next = 2.0;
+        else next = 0.1;
+        
+        plugin.getConfig().set("advanced.sound-volume", next);
+        plugin.saveConfig();
+        plugin.getConfigManager().reloadConfig();
     }
     
     /**

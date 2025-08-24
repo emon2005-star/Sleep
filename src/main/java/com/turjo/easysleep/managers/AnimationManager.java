@@ -82,37 +82,44 @@ public class AnimationManager {
      * Create gentle sleep effects - much more subtle
      */
     private void createGentleSleepEffects(Player player, Location center) {
-        if (!isPlayerInRange(player, center)) {
+        if (!isPlayerInRange(player, center, 16)) { // Reduced range for performance
             return;
         }
         
         int intensity = plugin.getConfigManager().getAnimationIntensity();
         double density = plugin.getConfigManager().getParticleDensity();
         
-        // Reduce particle count significantly
-        int particleCount = Math.max(1, (int)(intensity * density * 0.3)); // Much lower multiplier
+        // Drastically reduce particle count for performance
+        int particleCount = Math.max(1, (int)(intensity * density * 0.1)); // Even lower multiplier
         
-        // Gentle floating hearts - very sparse
-        for (int i = 0; i < Math.min(particleCount, 2); i++) { // Max 2 particles
+        // Performance mode reduces particles even more
+        if (plugin.getConfigManager().isPerformanceMode()) {
+            particleCount = Math.max(1, particleCount / 2);
+        }
+        
+        // Gentle floating hearts - extremely sparse
+        for (int i = 0; i < Math.min(particleCount, 1); i++) { // Max 1 particle at a time
             double angle = random.nextDouble() * 2 * Math.PI;
-            double radius = 0.8 + random.nextDouble() * 0.4; // Smaller radius
+            double radius = 0.5 + random.nextDouble() * 0.3; // Even smaller radius
             double x = Math.cos(angle) * radius;
             double z = Math.sin(angle) * radius;
-            double y = random.nextDouble() * 0.3; // Lower height variation
+            double y = random.nextDouble() * 0.2; // Even lower height variation
             
             Location particleLoc = center.clone().add(x, y, z);
             
             try {
                 Particle sleepParticle = Particle.valueOf(plugin.getConfigManager().getSleepParticle());
-                player.getWorld().spawnParticle(sleepParticle, particleLoc, 1, 0.1, 0.1, 0.1, 0.01);
+                player.getWorld().spawnParticle(sleepParticle, particleLoc, 1, 0.05, 0.05, 0.05, 0.005);
             } catch (IllegalArgumentException e) {
-                player.getWorld().spawnParticle(Particle.HEART, particleLoc, 1, 0.1, 0.1, 0.1, 0.01);
+                player.getWorld().spawnParticle(Particle.HEART, particleLoc, 1, 0.05, 0.05, 0.05, 0.005);
             }
         }
         
-        // Optional enhanced particles - very minimal
-        if (plugin.getConfigManager().areEnhancedParticlesEnabled() && random.nextDouble() < 0.3) {
-            player.getWorld().spawnParticle(Particle.END_ROD, center, 1, 0.2, 0.2, 0.2, 0.01);
+        // Optional enhanced particles - extremely minimal
+        if (plugin.getConfigManager().areEnhancedParticlesEnabled() && 
+            !plugin.getConfigManager().isPerformanceMode() && 
+            random.nextDouble() < 0.1) { // Much lower chance
+            player.getWorld().spawnParticle(Particle.END_ROD, center, 1, 0.1, 0.1, 0.1, 0.005);
         }
     }
     
@@ -167,6 +174,12 @@ public class AnimationManager {
      * Time acceleration animation - like the image shows
      */
     private void startTimeAccelerationAnimation(World world) {
+        // Skip animation if performance mode is enabled
+        if (plugin.getConfigManager().isPerformanceMode()) {
+            MessageUtils.broadcastToWorld(world, "&a✓ Night skipped! (Performance mode - animations disabled)");
+            return;
+        }
+        
         new BukkitRunnable() {
             int phase = 0;
             int ticks = 0;
@@ -221,24 +234,28 @@ public class AnimationManager {
      * Create time vortex effect in the sky
      */
     private void createTimeVortex(Player player, Location center, int ticks) {
-        if (!isPlayerInRange(player, center)) return;
+        if (!isPlayerInRange(player, center, 32)) return;
         
         World world = player.getWorld();
-        double radius = 3.0 + Math.sin(ticks * 0.1) * 0.5;
+        double radius = 2.0 + Math.sin(ticks * 0.1) * 0.3; // Smaller radius
         
-        // Circular time vortex
-        for (int i = 0; i < 16; i++) {
+        // Reduced particle count for performance
+        int particleCount = plugin.getConfigManager().isPerformanceMode() ? 6 : 12;
+        
+        // Circular time vortex - much fewer particles
+        for (int i = 0; i < particleCount; i++) {
             double angle = (ticks * 0.2 + i * 22.5) * Math.PI / 180;
             double x = Math.cos(angle) * radius;
             double z = Math.sin(angle) * radius;
-            double y = Math.sin(ticks * 0.05 + i) * 1.0;
+            double y = Math.sin(ticks * 0.05 + i) * 0.5; // Reduced height
             
             Location vortexLoc = center.clone().add(x, y, z);
             
-            world.spawnParticle(Particle.PORTAL, vortexLoc, 2, 0.1, 0.1, 0.1, 0.02);
+            world.spawnParticle(Particle.PORTAL, vortexLoc, 1, 0.05, 0.05, 0.05, 0.01);
             
-            if (i % 4 == 0) { // Every 4th particle gets enhanced effect
-                world.spawnParticle(Particle.END_ROD, vortexLoc, 1, 0.05, 0.05, 0.05, 0.01);
+            // Reduced enhanced effects
+            if (i % 6 == 0 && !plugin.getConfigManager().isPerformanceMode()) {
+                world.spawnParticle(Particle.END_ROD, vortexLoc, 1, 0.02, 0.02, 0.02, 0.005);
             }
         }
         
@@ -252,44 +269,50 @@ public class AnimationManager {
      * Create day-night cycle acceleration effect
      */
     private void createDayNightCycle(Player player, Location center, int ticks) {
-        if (!isPlayerInRange(player, center)) return;
+        if (!isPlayerInRange(player, center, 32)) return;
         
         World world = player.getWorld();
         
-        // Sun/moon cycle representation
+        // Simplified sun/moon cycle representation
         double cycleProgress = (ticks % 40) / 40.0; // Complete cycle every 2 seconds
         double sunAngle = cycleProgress * 2 * Math.PI;
         
-        // Sun position
-        double sunX = Math.cos(sunAngle) * 4;
-        double sunY = Math.sin(sunAngle) * 2;
+        // Reduced size sun position
+        double sunX = Math.cos(sunAngle) * 2.5;
+        double sunY = Math.sin(sunAngle) * 1.5;
         Location sunLoc = center.clone().add(sunX, sunY, 0);
         
-        // Moon position (opposite side)
-        double moonX = Math.cos(sunAngle + Math.PI) * 4;
-        double moonY = Math.sin(sunAngle + Math.PI) * 2;
+        // Reduced size moon position (opposite side)
+        double moonX = Math.cos(sunAngle + Math.PI) * 2.5;
+        double moonY = Math.sin(sunAngle + Math.PI) * 1.5;
         Location moonLoc = center.clone().add(moonX, moonY, 0);
         
-        // Sun particles (day)
+        // Reduced sun particles (day)
         if (sunY > 0) {
-            world.spawnParticle(Particle.FLAME, sunLoc, 3, 0.2, 0.2, 0.2, 0.01);
-            world.spawnParticle(Particle.LAVA, sunLoc, 1, 0.1, 0.1, 0.1, 0);
+            world.spawnParticle(Particle.FLAME, sunLoc, 1, 0.1, 0.1, 0.1, 0.005);
+            if (!plugin.getConfigManager().isPerformanceMode()) {
+                world.spawnParticle(Particle.LAVA, sunLoc, 1, 0.05, 0.05, 0.05, 0);
+            }
         }
         
-        // Moon particles (night)
+        // Reduced moon particles (night)
         if (moonY > 0) {
-            world.spawnParticle(Particle.END_ROD, moonLoc, 2, 0.1, 0.1, 0.1, 0.01);
-            world.spawnParticle(Particle.SOUL_FIRE_FLAME, moonLoc, 1, 0.1, 0.1, 0.1, 0);
+            world.spawnParticle(Particle.END_ROD, moonLoc, 1, 0.05, 0.05, 0.05, 0.005);
+            if (!plugin.getConfigManager().isPerformanceMode()) {
+                world.spawnParticle(Particle.SOUL_FIRE_FLAME, moonLoc, 1, 0.05, 0.05, 0.05, 0);
+            }
         }
         
-        // Acceleration trail
-        for (int i = 1; i <= 3; i++) {
+        // Reduced acceleration trail
+        if (!plugin.getConfigManager().isPerformanceMode()) {
+            for (int i = 1; i <= 2; i++) {
             double trailAngle = sunAngle - (i * 0.3);
-            double trailX = Math.cos(trailAngle) * 4;
-            double trailY = Math.sin(trailAngle) * 2;
+            double trailX = Math.cos(trailAngle) * 2.5;
+            double trailY = Math.sin(trailAngle) * 1.5;
             if (trailY > 0) {
                 Location trailLoc = center.clone().add(trailX, trailY, 0);
-                world.spawnParticle(Particle.FIREWORKS_SPARK, trailLoc, 1, 0.1, 0.1, 0.1, 0.02);
+                world.spawnParticle(Particle.FIREWORKS_SPARK, trailLoc, 1, 0.05, 0.05, 0.05, 0.01);
+                }
             }
         }
         
@@ -303,33 +326,35 @@ public class AnimationManager {
      * Create time stabilization effect
      */
     private void createTimeStabilization(Player player, Location center, int ticks) {
-        if (!isPlayerInRange(player, center)) return;
+        if (!isPlayerInRange(player, center, 32)) return;
         
         World world = player.getWorld();
         
-        // Converging energy streams
-        for (int i = 0; i < 12; i++) {
+        // Reduced converging energy streams
+        int streamCount = plugin.getConfigManager().isPerformanceMode() ? 6 : 8;
+        
+        for (int i = 0; i < streamCount; i++) {
             double progress = Math.min(1.0, ticks / 60.0);
             double angle = i * 30 * Math.PI / 180;
-            double startRadius = 5.0;
+            double startRadius = 3.0; // Smaller radius
             double currentRadius = startRadius * (1.0 - progress);
             
             double x = Math.cos(angle) * currentRadius;
             double z = Math.sin(angle) * currentRadius;
-            double y = Math.sin(progress * Math.PI) * 1.5;
+            double y = Math.sin(progress * Math.PI) * 1.0; // Reduced height
             
             Location stabilizeLoc = center.clone().add(x, y, z);
             
-            world.spawnParticle(Particle.TOTEM, stabilizeLoc, 1, 0.1, 0.1, 0.1, 0.02);
+            world.spawnParticle(Particle.TOTEM, stabilizeLoc, 1, 0.05, 0.05, 0.05, 0.01);
             
-            if (progress > 0.8) {
-                world.spawnParticle(Particle.FIREWORKS_SPARK, stabilizeLoc, 2, 0.2, 0.2, 0.2, 0.05);
+            if (progress > 0.8 && !plugin.getConfigManager().isPerformanceMode()) {
+                world.spawnParticle(Particle.FIREWORKS_SPARK, stabilizeLoc, 1, 0.1, 0.1, 0.1, 0.02);
             }
         }
         
         // Central stabilization core
-        if (ticks > 30) {
-            world.spawnParticle(Particle.END_ROD, center, 5, 0.3, 0.3, 0.3, 0.05);
+        if (ticks > 30 && !plugin.getConfigManager().isPerformanceMode()) {
+            world.spawnParticle(Particle.END_ROD, center, 2, 0.15, 0.15, 0.15, 0.02);
         }
         
         // Final sound
@@ -342,6 +367,11 @@ public class AnimationManager {
      * Gentle night skip animation for sleeping players
      */
     private void startGentleNightSkipAnimation(Player player) {
+        // Skip if performance mode is enabled
+        if (plugin.getConfigManager().isPerformanceMode()) {
+            return;
+        }
+        
         new BukkitRunnable() {
             int ticks = 0;
             
@@ -355,16 +385,16 @@ public class AnimationManager {
                 Location loc = player.getLocation().add(0, 2, 0);
                 
                 // Very gentle dream completion effect
-                if (ticks % 10 == 0) {
-                    player.getWorld().spawnParticle(Particle.HEART, loc, 1, 0.3, 0.3, 0.3, 0.01);
+                if (ticks % 20 == 0) { // Even less frequent
+                    player.getWorld().spawnParticle(Particle.HEART, loc, 1, 0.1, 0.1, 0.1, 0.005);
                 }
                 
-                if (ticks % 20 == 0) {
-                    player.getWorld().spawnParticle(Particle.END_ROD, loc, 2, 0.5, 0.5, 0.5, 0.02);
+                if (ticks % 30 == 0) { // Much less frequent
+                    player.getWorld().spawnParticle(Particle.END_ROD, loc, 1, 0.2, 0.2, 0.2, 0.01);
                 }
                 
                 ticks++;
-                if (ticks >= 60) { // 3 seconds
+                if (ticks >= 40) { // Shorter duration - 2 seconds
                     cancel();
                 }
             }
@@ -375,6 +405,11 @@ public class AnimationManager {
      * Effects for awake players during night skip
      */
     private void startAwakePlayerEffects(Player player) {
+        // Skip if performance mode is enabled
+        if (plugin.getConfigManager().isPerformanceMode()) {
+            return;
+        }
+        
         new BukkitRunnable() {
             int ticks = 0;
             
@@ -388,20 +423,20 @@ public class AnimationManager {
                 Location loc = player.getLocation().add(0, 1.5, 0);
                 
                 // Subtle mystical aura
-                if (ticks % 15 == 0) {
+                if (ticks % 25 == 0) { // Much less frequent
                     double angle = ticks * 0.2;
-                    for (int i = 0; i < 4; i++) {
+                    for (int i = 0; i < 2; i++) { // Fewer particles
                         double currentAngle = angle + (i * 90 * Math.PI / 180);
-                        double x = Math.cos(currentAngle) * 1.0;
-                        double z = Math.sin(currentAngle) * 1.0;
+                        double x = Math.cos(currentAngle) * 0.5; // Smaller radius
+                        double z = Math.sin(currentAngle) * 0.5;
                         Location auraLoc = loc.clone().add(x, 0, z);
                         
-                        player.getWorld().spawnParticle(Particle.PORTAL, auraLoc, 1, 0.1, 0.1, 0.1, 0.01);
+                        player.getWorld().spawnParticle(Particle.PORTAL, auraLoc, 1, 0.05, 0.05, 0.05, 0.005);
                     }
                 }
                 
                 ticks++;
-                if (ticks >= 80) { // 4 seconds
+                if (ticks >= 60) { // Shorter duration - 3 seconds
                     cancel();
                 }
             }
@@ -421,11 +456,14 @@ public class AnimationManager {
     /**
      * Check if player is within animation range for performance
      */
-    private boolean isPlayerInRange(Player player, Location center) {
+    private boolean isPlayerInRange(Player player, Location center, int defaultRange) {
         int maxDistance = plugin.getConfigManager().getMaxAnimationDistance();
         
+        // Use the smaller of the two ranges
+        maxDistance = Math.min(maxDistance, defaultRange);
+        
         if (plugin.getConfigManager().isPerformanceMode()) {
-            maxDistance = Math.min(maxDistance, 16);
+            maxDistance = Math.min(maxDistance, 8); // Much smaller range in performance mode
         }
         
         for (Player p : player.getWorld().getPlayers()) {
