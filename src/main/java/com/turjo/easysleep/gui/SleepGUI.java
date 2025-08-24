@@ -659,7 +659,7 @@ public class SleepGUI implements Listener {
         
         // Sleep Events
         gui.setItem(10, createItem(
-            Material.BED,
+            Material.RED_BED,
             "&b🛏️ Sleep Events",
             Arrays.asList(
                 "&7Total Sleep Events: &a" + plugin.getStatisticsManager().getTotalSleepEvents(),
@@ -687,7 +687,7 @@ public class SleepGUI implements Listener {
         
         // Days Tracked
         gui.setItem(12, createItem(
-            Material.CALENDAR,
+            Material.PAPER,
             "&a📅 Days Tracked",
             Arrays.asList(
                 "&7Total Days Tracked: &e" + plugin.getStatisticsManager().getTotalDaysTracked(),

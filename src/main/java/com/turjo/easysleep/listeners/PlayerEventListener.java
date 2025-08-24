@@ -63,10 +63,12 @@ public class PlayerEventListener implements Listener {
         Player player = event.getPlayer();
         String message = event.getMessage();
         
-        // Handle pending GUI input
-        if (plugin.getSleepGUI().hasPendingInput(player)) {
-            event.setCancelled(true);
-            plugin.getSleepGUI().handleChatInput(player, message);
-        }
+        // Handle pending GUI input - run on main thread
+        plugin.getServer().getScheduler().runTask(plugin, () -> {
+            if (plugin.getSleepGUI().hasPendingInput(player)) {
+                event.setCancelled(true);
+                plugin.getSleepGUI().handleChatInput(player, message);
+            }
+        });
     }
 }
