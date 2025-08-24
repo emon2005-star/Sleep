@@ -783,6 +783,49 @@ public class SleepGUI implements Listener {
     }
     
     /**
+     * Check if player has pending input
+     */
+    public boolean hasPendingInput(Player player) {
+        return pendingInput.containsKey(player);
+    }
+    
+    /**
+     * Handle chat input for GUI
+     */
+    public void handleChatInput(Player player, String input) {
+        String inputType = pendingInput.remove(player);
+        if (inputType == null) return;
+        
+        try {
+            switch (inputType) {
+                case "CUSTOM_PERCENTAGE":
+                    int percentage = Integer.parseInt(input);
+                    if (percentage < 0 || percentage > 100) {
+                        MessageUtils.sendMessage(player, "&cInvalid percentage! Must be between 0-100.");
+                        return;
+                    }
+                    player.getWorld().setGameRule(GameRule.PLAYERS_SLEEPING_PERCENTAGE, percentage);
+                    MessageUtils.sendMessage(player, "&a✓ Set sleep percentage to &e" + percentage + "%");
+                    openSleepSettings(player);
+                    break;
+                    
+                case "CUSTOM_DAY":
+                    long day = Long.parseLong(input);
+                    if (day < 1 || day > 999999) {
+                        MessageUtils.sendMessage(player, "&cInvalid day! Must be between 1-999999.");
+                        return;
+                    }
+                    plugin.getDayCounterManager().setDay(player.getWorld(), day);
+                    MessageUtils.sendMessage(player, "&a✓ Set day counter to &eDay " + day);
+                    openDayCounter(player);
+                    break;
+            }
+        } catch (NumberFormatException e) {
+            MessageUtils.sendMessage(player, "&cInvalid number format! Please enter a valid number.");
+        }
+    }
+    
+    /**
      * Create GUI item from config
      */
     private ItemStack createGUIItem(String guiName, String itemName) {

@@ -406,21 +406,21 @@ public class GUIConfigManager {
      * Check if GUI sounds are enabled
      */
     public boolean areGUISoundsEnabled() {
-        return guiConfig.getBoolean("gui.sounds.enabled", true);
+        return guiConfig.getBoolean("sounds.enabled", true);
     }
     
     /**
      * Get GUI sound volume
      */
     public double getGUISoundVolume() {
-        return guiConfig.getDouble("gui.sounds.volume", 0.5);
+        return guiConfig.getDouble("sounds.volume", 0.5);
     }
     
     /**
      * Get GUI sound
      */
     public String getGUISound(String soundType) {
-        return guiConfig.getString("gui.sounds." + soundType, "UI_BUTTON_CLICK");
+        return guiConfig.getString("sounds." + soundType, "UI_BUTTON_CLICK");
     }
     
     /**
