@@ -1,112 +1,401 @@
-# EasySleep Configuration File
-# Plugin by Turjo - Version 1.3.1
+# ╔═══════════════════════════════════════════════════════════════════════════════╗
+# ║                    🌙 EasySleep v1.5.0 Configuration 🌙                      ║
+# ║                     The Ultimate Sleep Management Plugin                      ║
+# ║                              Created by Turjo                                ║
+# ╚═══════════════════════════════════════════════════════════════════════════════╝
 
-settings:
+# ═══════════════════════════════════════════════════════════════════════════════
+# 🎯 CORE SLEEP SETTINGS
+# ═══════════════════════════════════════════════════════════════════════════════
+sleep:
   # Default sleep percentage for new worlds (1-100)
-  default-sleep-percentage: 1
+  # 50% means half the players need to sleep to skip night
+  default-percentage: 50
   
-  # Enable stunning night skip animations
-  enable-animations: true
+  # Time acceleration when ANY player sleeps (1.0 = normal, 2.0 = 2x speed)
+  # Even with 1 player sleeping, time will go faster
+  time-acceleration: 1.75
   
-  # Enable immersive sound effects
-  enable-sound-effects: true
+  # Minimum players online before sleep requirements apply
+  minimum-players: 1
   
-  # Broadcast sleep status messages to all players
-  broadcast-sleep-messages: true
+  # Skip night even if percentage isn't met but time acceleration is active
+  force-skip-with-acceleration: true
   
   # Automatically configure new worlds with default settings
   auto-configure-new-worlds: true
 
-# Feature toggles
-features:
-  # Enable day counter with title messages
-  day-counter: true
+# ═══════════════════════════════════════════════════════════════════════════════
+# 🎁 REWARDS & EFFECTS SYSTEM
+# ═══════════════════════════════════════════════════════════════════════════════
+rewards:
+  # Enable the rewards system
+  enabled: true
   
-  # Enable enhanced particle effects
-  enhanced-particles: true
-  
-  # Enable weather effects during night skip
-  weather-effects: false
-  
-  # Enable automatic update checking
-  update-checker: true
-  
-  # Enable AFK detection system
-  afk-detection: true
-  
-  # AFK threshold in minutes
-  afk-threshold: 5
-  
-  # Enable clock animation for sleeping players
-  clock-animation: true
-  
-  # Enable epic day-night cycle animations
-  day-night-animation: true
-  
-  # Enable anti-spam protection
-  anti-spam: true
-  
-  # Enable exclusive dream sequences
-  dream-sequences: true
-  
-  # Enable sleep rituals for multiple players
-  sleep-rituals: true
-  
-  # Enable moon phase system
-  moon-phases: true
-  
-  # Random good morning messages
-  random-morning-messages:
-    - "Day %day% - A new adventure begins!"
-    - "Day %day% - The sun rises on new possibilities!"
-    - "Day %day% - Another beautiful morning awaits!"
-    - "Day %day% - Rise and shine, adventurer!"
-    - "Day %day% - The world awakens with you!"
-    - "Day %day% - Fresh opportunities await!"
-    - "Day %day% - Dawn breaks on new horizons!"
-    - "Day %day% - Time to make today count!"
-    - "Day %day% - The universe smiles upon you!"
-    - "Day %day% - Destiny awaits your next move!"
+  # Economy rewards (requires Vault)
+  economy:
+    enabled: true
+    money-per-sleep: 25.0
+    bonus-multiplier: 1.5  # Multiplier for streak bonuses
+    
+  # Experience rewards
+  experience:
+    enabled: true
+    xp-per-sleep: 100
+    levels-per-sleep: 0  # Set to 0 to disable level rewards
+    
+  # Item rewards
+  items:
+    enabled: true
+    # Format: "MATERIAL:AMOUNT" or "MATERIAL:AMOUNT:DATA"
+    sleep-rewards:
+      - "GOLDEN_APPLE:1"
+      - "EMERALD:2"
+      - "DIAMOND:1"
+    # Special rewards for streaks
+    streak-rewards:
+      7:  # 7-day streak
+        - "DIAMOND_BLOCK:1"
+        - "EXPERIENCE_BOTTLE:5"
+      30: # 30-day streak
+        - "NETHERITE_INGOT:1"
+        - "ENCHANTED_GOLDEN_APPLE:2"
+      100: # 100-day streak
+        - "BEACON:1"
+        - "NETHER_STAR:3"
+        
+  # Potion effects for sleeping players
+  effects:
+    enabled: true
+    # Format: "EFFECT_NAME:DURATION_SECONDS:AMPLIFIER"
+    sleep-effects:
+      - "REGENERATION:60:1"
+      - "SPEED:120:0"
+      - "NIGHT_VISION:300:0"
+      - "SATURATION:30:0"
+    # Effects for morning (when waking up)
+    morning-effects:
+      - "ABSORPTION:600:1"
+      - "LUCK:1200:0"
+      
+  # Streak system
+  streaks:
+    enabled: true
+    reset-on-miss: false  # If false, missing one night won't reset streak
+    announce-milestones: true
+    milestone-rewards: true
 
-# Advanced Settings
-advanced:
-  # Animation intensity (1-3, higher = more particles)
-  animation-intensity: 2
+# ═══════════════════════════════════════════════════════════════════════════════
+# 🎨 VISUAL & AUDIO SETTINGS
+# ═══════════════════════════════════════════════════════════════════════════════
+animations:
+  # Master animation toggle
+  enabled: true
   
-  # Sound volume multiplier (0.1-2.0)
-  sound-volume: 0.2
+  # Animation intensity (1 = minimal, 2 = moderate, 3 = spectacular)
+  intensity: 2
   
-  # Animation duration in seconds
-  animation-duration: 3
+  # Gentle mode - reduces particle density for subtle effects
+  gentle-mode: true
   
-  # Performance mode (reduces particles for better performance)
-  performance-mode: false
+  # Individual animation toggles
+  sleep-animations: true
+  morning-animations: true
+  day-night-cycle: true
+  clock-animation: true
+  night-skip-animation: true
+  
+  # Animation settings
+  duration: 10  # Duration in seconds
+  max-distance: 32  # Maximum distance for animations
+  particle-density: 0.5  # Particle density multiplier (0.1-3.0)
   
   # Performance settings
-  max-animation-distance: 32
-  
-  # Debug mode (enables additional logging)
-  debug-mode: false
+  performance-mode: false  # Reduces effects for better performance
+  max-particles-per-effect: 5
+  animation-interval: 20  # Ticks between animation updates
 
-# Anti-Spam Settings
-anti-spam:
-  # Cooldown for sleep messages (seconds)
-  sleep-message-cooldown: 5
+# Sound system
+sounds:
+  # Master sound toggle
+  enabled: true
   
-  # Cooldown for wake messages (seconds)
-  wake-message-cooldown: 3
+  # Master volume (0.0-2.0)
+  master-volume: 0.3
   
-  # Cooldown for commands (seconds)
-  command-cooldown: 2
-# Effect Customization
-effects:
-  # Particle density multiplier (0.5-3.0)
-  particle-density: 0.1
+  # Individual sound settings
+  sleep-sound:
+    enabled: true
+    sound: "BLOCK_AMETHYST_BLOCK_CHIME"
+    volume: 0.2
+    pitch: 1.8
+    
+  wake-sound:
+    enabled: true
+    sound: "ENTITY_EXPERIENCE_ORB_PICKUP"
+    volume: 0.15
+    pitch: 1.5
+    
+  night-skip-sound:
+    enabled: true
+    sound: "BLOCK_AMETHYST_BLOCK_RESONATE"
+    volume: 0.25
+    pitch: 1.2
+    
+  morning-sound:
+    enabled: true
+    sound: "ENTITY_PLAYER_LEVELUP"
+    volume: 0.2
+    pitch: 2.0
+    
+  gui-sounds:
+    enabled: true
+    click-sound: "UI_BUTTON_CLICK"
+    success-sound: "ENTITY_EXPERIENCE_ORB_PICKUP"
+    error-sound: "ENTITY_VILLAGER_NO"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 🌅 DAILY MESSAGES SYSTEM
+# ═══════════════════════════════════════════════════════════════════════════════
+daily-messages:
+  # Enable daily inspirational messages
+  enabled: true
   
-  # Modern particle effects (use Minecraft particle names)
-  sleep-particle: "SOUL_FIRE_FLAME"
-  awake-particle: "END_ROD"
+  # Show as title (true) or chat message (false)
+  show-as-title: true
   
-  # Modern sound effects (use Minecraft sound names)
-  sleep-sound: "BLOCK_AMETHYST_BLOCK_CHIME"
-  night-skip-sound: "BLOCK_AMETHYST_BLOCK_RESONATE"
+  # Title display settings
+  title-settings:
+    fade-in: 20    # Ticks
+    stay: 100      # Ticks
+    fade-out: 40   # Ticks
+    
+  # Message pool - Add your own inspirational messages!
+  messages:
+    - "Day %day% - Today is your canvas, paint it beautifully!"
+    - "Day %day% - Every sunrise is an invitation to brighten someone's day!"
+    - "Day %day% - Your potential is endless, your possibilities infinite!"
+    - "Day %day% - Dreams don't work unless you do - make today count!"
+    - "Day %day% - The universe conspires to help those who help themselves!"
+    - "Day %day% - Success is not final, failure is not fatal - courage continues!"
+    - "Day %day% - Be the reason someone believes in the goodness of people!"
+    - "Day %day% - Life is 10% what happens, 90% how you react to it!"
+    - "Day %day% - The best time to plant a tree was 20 years ago, second best is now!"
+    - "Day %day% - Your only limit is your mind - think bigger, dream larger!"
+    - "Day %day% - Every expert was once a beginner, every pro was once an amateur!"
+    - "Day %day% - The journey of a thousand miles begins with a single step!"
+    - "Day %day% - Believe you can and you're halfway there!"
+    - "Day %day% - What lies behind us and before us are tiny matters compared to what lies within us!"
+    - "Day %day% - The only impossible journey is the one you never begin!"
+    - "Day %day% - Success is walking from failure to failure with no loss of enthusiasm!"
+    - "Day %day% - The future belongs to those who believe in the beauty of their dreams!"
+    - "Day %day% - It is during our darkest moments that we must focus to see the light!"
+    - "Day %day% - The way to get started is to quit talking and begin doing!"
+    - "Day %day% - Don't let yesterday take up too much of today!"
+    - "Day %day% - You learn more from failure than from success!"
+    - "Day %day% - If you are working on something exciting that you really care about, you don't have to be pushed!"
+    - "Day %day% - Experience is a hard teacher because she gives the test first, the lesson afterward!"
+    - "Day %day% - The most difficult thing is the decision to act, the rest is merely tenacity!"
+    - "Day %day% - Life is what happens to you while you're busy making other plans!"
+    - "Day %day% - The world is changed by your example, not by your opinion!"
+    - "Day %day% - It is better to fail in originality than to succeed in imitation!"
+    - "Day %day% - The road to success and the road to failure are almost exactly the same!"
+    - "Day %day% - Success is not how high you have climbed, but how you make a positive difference!"
+    - "Day %day% - Don't be afraid to give up the good to go for the great!"
+    - "Day %day% - The only person you are destined to become is the person you decide to be!"
+    - "Day %day% - Go confidently in the direction of your dreams and live the life you have imagined!"
+    - "Day %day% - When you have a dream, you've got to grab it and never let go!"
+    - "Day %day% - Nothing is impossible, the word itself says 'I'm possible'!"
+    - "Day %day% - There is only one way to avoid criticism: do nothing, say nothing, and be nothing!"
+    - "Day %day% - Ask and it will be given to you; search, and you will find; knock and the door will be opened!"
+    - "Day %day% - The only person you should try to be better than is who you were yesterday!"
+    - "Day %day% - A person who never made a mistake never tried anything new!"
+    - "Day %day% - In the end, we will remember not the words of our enemies, but the silence of our friends!"
+    - "Day %day% - The best revenge is massive success!"
+    - "Day %day% - Life shrinks or expands in proportion to one's courage!"
+    - "Day %day% - If you want to lift yourself up, lift up someone else!"
+    - "Day %day% - I have learned throughout my life as a composer chiefly through my mistakes!"
+    - "Day %day% - It's not whether you get knocked down, it's whether you get up!"
+    - "Day %day% - Champions keep playing until they get it right!"
+    - "Day %day% - Failure will never overtake me if my determination to succeed is strong enough!"
+    - "Day %day% - We may encounter many defeats but we must not be defeated!"
+    - "Day %day% - Knowing is not enough; we must apply. Wishing is not enough; we must do!"
+    - "Day %day% - Imagine your life is perfect in every respect; what would it look like?"
+    - "Day %day% - We generate fears while we sit. We overcome them by action!"
+    - "Day %day% - Whether you think you can or think you can't, you're right!"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 🤖 ADVANCED FEATURES
+# ═══════════════════════════════════════════════════════════════════════════════
+features:
+  # AFK Detection System
+  afk-detection:
+    enabled: true
+    threshold-minutes: 5  # Minutes before player is considered AFK
+    exclude-from-sleep: true  # Don't count AFK players in sleep requirements
+    
+  # Weather Management
+  weather:
+    skip-thunderstorms: true
+    skip-rain: false
+    clear-weather-after-sleep: true
+    
+  # Day Counter System
+  day-counter:
+    enabled: true
+    start-day: 1
+    show-titles: true
+    broadcast-new-day: true
+    
+  # Moon Phase System
+  moon-phases:
+    enabled: true
+    affect-rewards: true
+    show-phase-changes: true
+    bonus-multipliers:
+      NEW_MOON: 1.2
+      WAXING_CRESCENT: 1.1
+      FIRST_QUARTER: 1.3
+      WAXING_GIBBOUS: 1.4
+      FULL_MOON: 2.0
+      WANING_GIBBOUS: 1.4
+      LAST_QUARTER: 1.3
+      WANING_CRESCENT: 1.1
+      
+  # Statistics System
+  statistics:
+    enabled: true
+    track-individual-players: true
+    save-interval-minutes: 5
+    
+  # Update Checker
+  update-checker:
+    enabled: true
+    check-interval-hours: 6
+    notify-admins: true
+    
+  # Anti-Spam Protection
+  anti-spam:
+    enabled: true
+    sleep-message-cooldown: 5  # seconds
+    wake-message-cooldown: 3   # seconds
+    command-cooldown: 2        # seconds
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 🌍 WORLD-SPECIFIC SETTINGS
+# ═══════════════════════════════════════════════════════════════════════════════
+worlds:
+  # Per-world overrides (optional)
+  # world_nether:
+  #   sleep-percentage: 100  # Disable sleep in nether
+  #   rewards-enabled: false
+  # world_the_end:
+  #   sleep-percentage: 25
+  #   time-acceleration: 3.0
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 🔧 TECHNICAL SETTINGS
+# ═══════════════════════════════════════════════════════════════════════════════
+technical:
+  # Debug mode (enables detailed logging)
+  debug-mode: false
+  
+  # Performance monitoring
+  performance-monitoring: true
+  
+  # Database settings (for statistics)
+  database:
+    type: "YAML"  # YAML, MYSQL, SQLITE
+    save-interval: 300  # seconds
+    
+  # Language settings
+  language: "en"  # en, es, fr, de, etc.
+  
+  # Compatibility settings
+  compatibility:
+    vault: true
+    placeholderapi: true
+    luckperms: true
+    essentials: true
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 📝 MESSAGES & LOCALIZATION
+# ═══════════════════════════════════════════════════════════════════════════════
+messages:
+  # Prefix for all plugin messages
+  prefix: "&8[&6EasySleep&8] &r"
+  
+  # Sleep messages
+  sleep:
+    player-sleeping: "&7🌙 &e%player% &7enters dream state &8(&a%sleeping%&7/&e%required%&8)"
+    player-waking: "&7☀ &e%player% &7wakes up &8(&a%sleeping%&7/&e%total%&8)"
+    night-skip: "&a✓ &fNight skipped! &7Time acceleration: &e%speed%x"
+    time-acceleration: "&b⚡ &fTime flowing faster... &7(&e%speed%x speed&7)"
+    
+  # Reward messages
+  rewards:
+    money-received: "&a+ $%amount% &7(Sleep reward)"
+    xp-received: "&a+ %amount% XP &7(Sleep reward)"
+    item-received: "&a+ %item% &7(Sleep reward)"
+    effect-received: "&b+ %effect% &7(Sleep bonus)"
+    streak-milestone: "&6🏆 &e%days%-day sleep streak! &6Bonus rewards unlocked!"
+    
+  # Error messages
+  errors:
+    no-permission: "&cYou don't have permission to use this command!"
+    invalid-number: "&cInvalid number: %input%"
+    world-not-found: "&cWorld not found: %world%"
+    player-not-found: "&cPlayer not found: %player%"
+    command-cooldown: "&cPlease wait %seconds% seconds before using this command again!"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 🎮 GUI SETTINGS
+# ═══════════════════════════════════════════════════════════════════════════════
+gui:
+  # Enable GUI system
+  enabled: true
+  
+  # GUI update interval (ticks)
+  update-interval: 20
+  
+  # Close GUI on world change
+  close-on-world-change: true
+  
+  # GUI sounds
+  sounds:
+    enabled: true
+    volume: 0.5
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 📊 PLACEHOLDERS (PlaceholderAPI)
+# ═══════════════════════════════════════════════════════════════════════════════
+placeholders:
+  # Available placeholders:
+  # %easysleep_sleep_percentage% - Current sleep percentage
+  # %easysleep_sleeping_players% - Number of sleeping players
+  # %easysleep_total_players% - Total players in world
+  # %easysleep_required_players% - Required players to sleep
+  # %easysleep_time_acceleration% - Current time acceleration
+  # %easysleep_current_day% - Current day number
+  # %easysleep_player_streak% - Player's sleep streak
+  # %easysleep_moon_phase% - Current moon phase
+  # %easysleep_afk_players% - Number of AFK players
+  enabled: true
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 🔄 AUTO-UPDATER
+# ═══════════════════════════════════════════════════════════════════════════════
+auto-updater:
+  # Enable automatic updates (downloads to plugins/update folder)
+  enabled: false
+  
+  # Check for updates on startup
+  check-on-startup: true
+  
+  # Update channel (stable, beta, alpha)
+  channel: "stable"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 📝 CONFIG VERSION (DO NOT MODIFY)
+# ═══════════════════════════════════════════════════════════════════════════════
+config-version: 15

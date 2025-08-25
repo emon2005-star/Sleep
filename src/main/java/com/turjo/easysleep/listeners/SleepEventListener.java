@@ -19,10 +19,10 @@ import org.bukkit.scheduler.BukkitRunnable;
  * Event listener for sleep-related events
  * 
  * Handles player bed enter/leave events, time skip events, and world loading
- * with real-time sleep status updates and futuristic styling.
+ * with rewards, effects, and enhanced sleep management.
  * 
  * @author Turjo
- * @version 1.3.1
+ * @version 1.5.0
  */
 public class SleepEventListener implements Listener {
     
@@ -46,16 +46,16 @@ public class SleepEventListener implements Listener {
         // Record sleep event
         plugin.getStatisticsManager().recordSleepEvent();
         
-        // Start exclusive dream sequence
-        plugin.getDreamSequenceManager().startDreamSequence(player);
-        
-        // Apply moon phase bonus
-        plugin.getMoonPhaseManager().applyMoonPhaseBonus(player);
+        // Give sleep rewards
+        plugin.getRewardsManager().giveSleepRewards(player);
         
         // Check anti-spam
         if (!plugin.getAntiSpamManager().canSendSleepMessage(player)) {
             return;
         }
+        
+        // Start time acceleration if enabled
+        startTimeAcceleration(world);
         
         // Start sleep animation if animations are enabled
         if (plugin.getConfigManager().areAnimationsEnabled()) {
@@ -72,33 +72,84 @@ public class SleepEventListener implements Listener {
         
         // Get sleep statistics
         int totalPlayers = world.getPlayers().size();
-        long sleepingCount = world.getPlayers().stream()
-                .filter(Player::isSleeping)
-                .count();
-        int sleepingPlayers = (int) sleepingCount;
+        int sleepingPlayers = getSleepingPlayerCount(world);
+        int activePlayers = getActivePlayerCount(world);
         
         // Calculate required players based on percentage
         Integer sleepPercentage = world.getGameRuleValue(GameRule.PLAYERS_SLEEPING_PERCENTAGE);
-        int requiredPlayers = (int) Math.ceil((sleepPercentage != null ? sleepPercentage : 100) * totalPlayers / 100.0);
+        int requiredPlayers = (int) Math.ceil((sleepPercentage != null ? sleepPercentage : 50) * activePlayers / 100.0);
         
         // Broadcast sleep status if enabled
-        if (plugin.getConfigManager().shouldBroadcastSleepMessages()) {
-            // Enhanced futuristic messages for sleeping and awake players
-            MessageUtils.sendMessage(player, "");
-            MessageUtils.sendMessage(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
-            MessageUtils.sendMessage(player, "&b💤 &f&lDREAM SEQUENCE &b&lINITIATED &b💤");
-            MessageUtils.sendMessage(player, "&7┌─ &fYou drift into &bpeaceful dreams&f...");
-            MessageUtils.sendMessage(player, "&7├─ &fSleep Protocol: &a" + sleepingPlayers + "&7/&e" + requiredPlayers + " &7dreamers");
-            MessageUtils.sendMessage(player, "&7└─ &fStatus: &b⚡ DREAM ENERGY FLOWING");
-            MessageUtils.sendMessage(player, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
-            MessageUtils.sendMessage(player, "");
+        if (plugin.getConfigManager().getConfig().getBoolean("sleep.broadcast-sleep-messages", true)) {
+            String sleepMessage = plugin.getConfigManager().getConfig().getString("messages.sleep.player-sleeping",
+                "&7🌙 &e%player% &7enters dream state &8(&a%sleeping%&7/&e%required%&8)");
+            
+            sleepMessage = sleepMessage.replace("%player%", player.getName())
+                                     .replace("%sleeping%", String.valueOf(sleepingPlayers))
+                                     .replace("%required%", String.valueOf(requiredPlayers));
             
             for (Player p : world.getPlayers()) {
                 if (!p.equals(player)) {
-                    MessageUtils.sendMessage(p, "&7🌙 &e" + player.getName() + " &7enters &bdream state &8(&a" + sleepingPlayers + "&7/&e" + requiredPlayers + "&8)");
+                    MessageUtils.sendMessage(p, sleepMessage);
                 }
             }
         }
+    }
+    
+    /**
+     * Start time acceleration when any player sleeps
+     */
+    private void startTimeAcceleration(World world) {
+        double acceleration = plugin.getConfigManager().getConfig().getDouble("sleep.time-acceleration", 1.75);
+        
+        if (acceleration > 1.0) {
+            // Start time acceleration task
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (getSleepingPlayerCount(world) == 0) {
+                        cancel();
+                        return;
+                    }
+                    
+                    // Accelerate time
+                    long currentTime = world.getTime();
+                    long newTime = currentTime + (long) (20 * (acceleration - 1.0));
+                    world.setTime(newTime);
+                }
+            }.runTaskTimer(plugin, 0L, 1L);
+            
+            // Broadcast acceleration message
+            String accelMessage = plugin.getConfigManager().getConfig().getString("messages.sleep.time-acceleration",
+                "&b⚡ &fTime flowing faster... &7(&e%speed%x speed&7)");
+            MessageUtils.broadcastToWorld(world, accelMessage.replace("%speed%", String.format("%.1f", acceleration)));
+        }
+    }
+    
+    /**
+     * Get count of sleeping players (excluding AFK)
+     */
+    private int getSleepingPlayerCount(World world) {
+        int count = 0;
+        for (Player player : world.getPlayers()) {
+            if (player.isSleeping() && !plugin.getAFKManager().isPlayerAFK(player)) {
+                count++;
+            }
+        }
+        return count;
+    }
+    
+    /**
+     * Get count of active players (excluding AFK)
+     */
+    private int getActivePlayerCount(World world) {
+        int count = 0;
+        for (Player player : world.getPlayers()) {
+            if (!plugin.getAFKManager().isPlayerAFK(player)) {
+                count++;
+            }
+        }
+        return count;
     }
     
     @EventHandler
@@ -114,28 +165,20 @@ public class SleepEventListener implements Listener {
         // Stop sleep animation
         animationManager.stopAnimation(player);
         
-        // End dream sequence
-        plugin.getDreamSequenceManager().endDreamSequence(player);
-        
         // Get updated sleep statistics
         int totalPlayers = world.getPlayers().size();
-        long sleepingCount = world.getPlayers().stream()
-                .filter(Player::isSleeping)
-                .count();
-        int sleepingPlayers = (int) sleepingCount;
+        int sleepingPlayers = getSleepingPlayerCount(world);
         
         // Broadcast wake up message if enabled
-        if (plugin.getConfigManager().shouldBroadcastSleepMessages()) {
-            // Enhanced futuristic wake up message
-            MessageUtils.broadcastToWorld(world, "");
-            MessageUtils.broadcastToWorld(world, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
-            MessageUtils.broadcastToWorld(world, "&c⚠ &f&lDREAM PROTOCOL &c&lINTERRUPTED &c⚠");
-            MessageUtils.broadcastToWorld(world, "&7┌─ &e" + player.getName() + " &7has &cabruptly left dream state");
-            MessageUtils.broadcastToWorld(world, "&7├─ &fActive Dreamers: &a" + sleepingPlayers + "&7/&c" + totalPlayers + " &7souls");
-            MessageUtils.broadcastToWorld(world, "&7├─ &fDream Energy: &c&lDISRUPTED");
-            MessageUtils.broadcastToWorld(world, "&7└─ &fStatus: &c⚠ TIME SKIP PROTOCOL CANCELLED");
-            MessageUtils.broadcastToWorld(world, "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
-            MessageUtils.broadcastToWorld(world, "");
+        if (plugin.getConfigManager().getConfig().getBoolean("sleep.broadcast-sleep-messages", true)) {
+            String wakeMessage = plugin.getConfigManager().getConfig().getString("messages.sleep.player-waking",
+                "&7☀ &e%player% &7wakes up &8(&a%sleeping%&7/&e%total%&8)");
+            
+            wakeMessage = wakeMessage.replace("%player%", player.getName())
+                                   .replace("%sleeping%", String.valueOf(sleepingPlayers))
+                                   .replace("%total%", String.valueOf(totalPlayers));
+            
+            MessageUtils.broadcastToWorld(world, wakeMessage);
         }
     }
     
@@ -147,14 +190,59 @@ public class SleepEventListener implements Listener {
             // Record night skip
             plugin.getStatisticsManager().recordNightSkip();
             
+            // Give morning effects to all players
+            giveMorningEffects(world);
+            
             // Start night skip animation if enabled
             if (plugin.getConfigManager().areAnimationsEnabled()) {
                 plugin.getAnimationManager().startNightSkipAnimation(world);
-                
-                // Check for sleep rituals
-                plugin.getSleepRitualManager().checkSleepRitual(world);
+            }
+            
+            // Broadcast night skip message
+            double acceleration = plugin.getConfigManager().getConfig().getDouble("sleep.time-acceleration", 1.75);
+            String skipMessage = plugin.getConfigManager().getConfig().getString("messages.sleep.night-skip",
+                "&a✓ &fNight skipped! &7Time acceleration: &e%speed%x");
+            MessageUtils.broadcastToWorld(world, skipMessage.replace("%speed%", String.format("%.1f", acceleration)));
+        }
+    }
+    
+    /**
+     * Give morning effects to all players in world
+     */
+    private void giveMorningEffects(World world) {
+        if (!plugin.getConfigManager().getConfig().getBoolean("rewards.effects.enabled", true)) {
+            return;
+        }
+        
+        List<String> morningEffects = plugin.getConfigManager().getConfig().getStringList("rewards.effects.morning-effects");
+        
+        for (Player player : world.getPlayers()) {
+            for (String effectString : morningEffects) {
+                org.bukkit.potion.PotionEffect effect = parseEffectString(effectString);
+                if (effect != null) {
+                    player.addPotionEffect(effect);
+                }
             }
         }
+    }
+    
+    /**
+     * Parse effect string format: "EFFECT_NAME:DURATION:AMPLIFIER"
+     */
+    private org.bukkit.potion.PotionEffect parseEffectString(String effectString) {
+        try {
+            String[] parts = effectString.split(":");
+            org.bukkit.potion.PotionEffectType effectType = org.bukkit.potion.PotionEffectType.getByName(parts[0].toUpperCase());
+            int duration = parts.length > 1 ? Integer.parseInt(parts[1]) * 20 : 600; // Convert to ticks
+            int amplifier = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
+            
+            if (effectType != null) {
+                return new org.bukkit.potion.PotionEffect(effectType, duration, amplifier);
+            }
+        } catch (Exception e) {
+            plugin.getLogger().warning("Invalid effect format: " + effectString);
+        }
+        return null;
     }
     
     @EventHandler
@@ -162,11 +250,11 @@ public class SleepEventListener implements Listener {
         World world = event.getWorld();
         
         // Auto-configure new worlds with default sleep percentage
-        if (plugin.getConfigManager().shouldAutoConfigureNewWorlds()) {
+        if (plugin.getConfigManager().getConfig().getBoolean("sleep.auto-configure-new-worlds", true)) {
             Integer currentPercentage = world.getGameRuleValue(GameRule.PLAYERS_SLEEPING_PERCENTAGE);
-            int defaultPercentage = plugin.getConfigManager().getDefaultSleepPercentage();
+            int defaultPercentage = plugin.getConfigManager().getConfig().getInt("sleep.default-percentage", 50);
             
-            if (currentPercentage == null || currentPercentage == 100) {
+            if (currentPercentage == null || currentPercentage != defaultPercentage) {
                 world.setGameRule(GameRule.PLAYERS_SLEEPING_PERCENTAGE, defaultPercentage);
                 plugin.getLogger().info("Auto-configured world '" + world.getName() + "' with " + defaultPercentage + "% sleep requirement");
             }

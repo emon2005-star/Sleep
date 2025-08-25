@@ -15,6 +15,7 @@ import com.turjo.easysleep.managers.MoonPhaseManager;
 import com.turjo.easysleep.managers.SleepRitualManager;
 import com.turjo.easysleep.managers.StatisticsManager;
 import com.turjo.easysleep.managers.UpdateChecker;
+import com.turjo.easysleep.managers.RewardsManager;
 import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -23,10 +24,10 @@ import org.bukkit.plugin.java.JavaPlugin;
  * EasySleep Plugin Main Class
  * 
  * A Minecraft plugin that provides easy management of the playersSleepingPercentage
- * game rule through custom commands with stunning animations and modern interface.
+ * game rule with rewards, effects, and comprehensive sleep management.
  * 
  * @author Turjo
- * @version 1.4.1
+ * @version 1.5.0
  */
 public class EasySleep extends JavaPlugin {
     
@@ -43,6 +44,7 @@ public class EasySleep extends JavaPlugin {
     private DreamSequenceManager dreamSequenceManager;
     private SleepRitualManager sleepRitualManager;
     private MoonPhaseManager moonPhaseManager;
+    private RewardsManager rewardsManager;
     
     @Override
     public void onEnable() {
@@ -50,6 +52,7 @@ public class EasySleep extends JavaPlugin {
         
         // Initialize managers
         this.configManager = new ConfigManager(this);
+        this.rewardsManager = new RewardsManager(this);
         this.animationManager = new AnimationManager(this);
         this.dayCounterManager = new DayCounterManager(this);
         this.updateChecker = new UpdateChecker(this);
@@ -74,24 +77,21 @@ public class EasySleep extends JavaPlugin {
         // Start update checker
         updateChecker.startPeriodicCheck();
         
-        // Enhanced startup message with ASCII art
+        // Enhanced startup message
         getLogger().info("╔═══════════════════════════════════════════╗");
-        getLogger().info("║       🌙 EASYSLEEP v1.4.1 ACTIVATED 🌙    ║");
+        getLogger().info("║       🌙 EASYSLEEP v1.5.0 ACTIVATED 🌙    ║");
         getLogger().info("║                                           ║");
-        getLogger().info("║ ⚡ Sleep Protocol: ULTIMATE EDITION      ║");
-        getLogger().info("║ 🌙 Night Skip System: ENHANCED           ║");
-        getLogger().info("║ ✨ Animation Engine: OPTIMIZED           ║");
-        getLogger().info("║ 🎵 Audio System: IMMERSIVE               ║");
-        getLogger().info("║ 📅 Day Counter: ACTIVE                   ║");
-        getLogger().info("║ 🔄 Update Checker: MONITORING            ║");
-        getLogger().info("║ 👤 AFK Detection: ENABLED                ║");
-        getLogger().info("║ 🕐 Clock Animation: RUNNING              ║");
-        getLogger().info("║ 🌅 Day-Night Cycle: EPIC                 ║");
-        getLogger().info("║ 🛡️ Anti-Spam: PROTECTED                  ║");
-        getLogger().info("║ 🌙 Dream Sequences: EXCLUSIVE            ║");
-        getLogger().info("║ 🔮 Sleep Rituals: REVOLUTIONARY          ║");
-        getLogger().info("║ 🌕 Moon Phases: MYSTICAL                 ║");
-        getLogger().info("║ 🚀 Status: READY FOR ACTION              ║");
+        getLogger().info("║ 🎁 Rewards System: ACTIVE                ║");
+        getLogger().info("║ ⚡ Time Acceleration: 1.5-2x SPEED       ║");
+        getLogger().info("║ 🎨 Gentle Animations: OPTIMIZED         ║");
+        getLogger().info("║ 🌅 Day-Night Cycle: STUNNING             ║");
+        getLogger().info("║ 📊 Statistics Tracking: COMPREHENSIVE    ║");
+        getLogger().info("║ 🤖 AFK Detection: INTELLIGENT            ║");
+        getLogger().info("║ 🌙 Moon Phases: MYSTICAL BONUSES         ║");
+        getLogger().info("║ 🏆 Achievement System: UNLOCKED          ║");
+        getLogger().info("║ 💰 Economy Integration: VAULT READY      ║");
+        getLogger().info("║ 🎮 Modern GUI: FULLY FUNCTIONAL          ║");
+        getLogger().info("║ 🚀 Status: ULTIMATE SLEEP EXPERIENCE     ║");
         getLogger().info("╚═══════════════════════════════════════════╝");
     }
     
@@ -99,16 +99,18 @@ public class EasySleep extends JavaPlugin {
     public void onDisable() {
         // Enhanced shutdown message
         getLogger().info("╔═══════════════════════════════════════════╗");
-        getLogger().info("║     🌙 EASYSLEEP v1.4.1 DEACTIVATED 🌙    ║");
+        getLogger().info("║     🌙 EASYSLEEP v1.5.0 DEACTIVATED 🌙    ║");
         getLogger().info("║                                           ║");
-        getLogger().info("║ 🌙 Ultimate Sleep Protocol: TERMINATED   ║");
+        getLogger().info("║ 🎁 Rewards saved and secured             ║");
         getLogger().info("║ ⚡ All systems: OFFLINE                  ║");
-        getLogger().info("║ 💫 Thanks for using EasySleep v1.4.1!    ║");
-        getLogger().info("║ ✨ Animation threads: STOPPED            ║");
+        getLogger().info("║ 💫 Thanks for using EasySleep v1.5.0!    ║");
         getLogger().info("║ 📊 Statistics: SAVED                     ║");
         getLogger().info("╚═══════════════════════════════════════════╝");
         
         // Cleanup
+        if (rewardsManager != null) {
+            rewardsManager.cleanup();
+        }
         if (animationManager != null) {
             animationManager.cleanup();
         }
@@ -168,10 +170,10 @@ public class EasySleep extends JavaPlugin {
      * Set default sleep percentage to 1% for all worlds
      */
     private void setDefaultSleepPercentage() {
-        int defaultPercentage = configManager.getDefaultSleepPercentage();
+        int defaultPercentage = configManager.getConfig().getInt("sleep.default-percentage", 50);
         for (World world : getServer().getWorlds()) {
             Integer currentPercentage = world.getGameRuleValue(GameRule.PLAYERS_SLEEPING_PERCENTAGE);
-            if (currentPercentage == null || currentPercentage == 100) {
+            if (currentPercentage == null || currentPercentage != defaultPercentage) {
                 world.setGameRule(GameRule.PLAYERS_SLEEPING_PERCENTAGE, defaultPercentage);
                 getLogger().info("Configured world '" + world.getName() + "' with " + defaultPercentage + "% sleep requirement");
             }
@@ -184,6 +186,14 @@ public class EasySleep extends JavaPlugin {
      */
     public static EasySleep getInstance() {
         return instance;
+    }
+    
+    /**
+     * Get the rewards manager
+     * @return RewardsManager instance
+     */
+    public RewardsManager getRewardsManager() {
+        return rewardsManager;
     }
     
     /**
