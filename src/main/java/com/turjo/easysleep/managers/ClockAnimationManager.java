@@ -9,8 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
- * Beautiful Clock Animation System
- * Displays floating particle clocks showing real game time
+ * Modern Minimalist Clock Animation System
+ * Ultra-lightweight clock display with modern aesthetics
  * 
  * @author Turjo
  * @version 1.4.1
@@ -26,7 +26,7 @@ public class ClockAnimationManager {
     }
     
     /**
-     * Start the clock animation system
+     * Start modern clock animation system
      */
     private void startClockAnimation() {
         if (!plugin.getConfigManager().isClockAnimationEnabled()) {
@@ -42,15 +42,18 @@ public class ClockAnimationManager {
                     return;
                 }
                 
-                for (Player player : plugin.getServer().getOnlinePlayers()) {
-                    if (player.isSleeping()) {
-                        showClockAnimation(player);
+                // Only show clock every 60 ticks (3 seconds) to reduce lag
+                if (ticks % 60 == 0) {
+                    for (Player player : plugin.getServer().getOnlinePlayers()) {
+                        if (player.isSleeping()) {
+                            showModernClock(player);
+                        }
                     }
                 }
                 
-                // Play chime sound every 30 seconds
-                if (ticks % 600 == 0) {
-                    playClockChime();
+                // Gentle chime every 5 minutes (6000 ticks)
+                if (ticks % 6000 == 0) {
+                    playModernClockChime();
                 }
                 
                 ticks++;
@@ -60,95 +63,88 @@ public class ClockAnimationManager {
     }
     
     /**
-     * Show clock animation for a player
+     * Show modern minimalist clock
      */
-    private void showClockAnimation(Player player) {
-        // Skip if performance mode is enabled
-        if (plugin.getConfigManager().isPerformanceMode()) {
-            return;
-        }
-        
+    private void showModernClock(Player player) {
         World world = player.getWorld();
-        Location loc = player.getLocation().add(0, 3, 0);
+        Location loc = player.getLocation().add(0, 2.5, 0);
         long time = world.getTime();
         
-        // Convert Minecraft time to 12-hour format
+        // Convert to 12-hour format
         double hours = ((time + 6000) % 24000) / 1000.0;
         double minutes = (hours % 1) * 60;
         
-        // Create clock face
-        createClockFace(loc, world);
+        // Modern clock design - only 4 cardinal points
+        createModernClockFace(loc, world);
         
-        // Create hour hand
-        createClockHand(loc, world, hours * 30, 0.8, getTimeParticle(time)); // 30 degrees per hour
+        // Single particle for hour hand
+        createModernClockHand(loc, world, hours * 30, 0.6, getModernTimeParticle(time));
         
-        // Create minute hand
-        createClockHand(loc, world, minutes * 6, 1.2, getTimeParticle(time)); // 6 degrees per minute
+        // Single particle for minute hand  
+        createModernClockHand(loc, world, minutes * 6, 0.9, getModernTimeParticle(time));
         
-        // Center dot
-        world.spawnParticle(Particle.END_ROD, loc, 1, 0, 0, 0, 0);
+        // Center point - single particle
+        world.spawnParticle(Particle.SOUL_FIRE_FLAME, loc, 1, 0, 0, 0, 0);
     }
     
     /**
-     * Create clock face with hour markers
+     * Create modern clock face - only 4 markers
      */
-    private void createClockFace(Location center, World world) {
-        // Reduce markers for performance
-        for (int i = 0; i < 4; i++) { // Only show 4 main markers instead of 12
-            double angle = i * 30 * Math.PI / 180; // 30 degrees per hour
-            double x = Math.cos(angle) * 1.0; // Smaller radius
-            double z = Math.sin(angle) * 1.0;
+    private void createModernClockFace(Location center, World world) {
+        // Only show 4 main positions (12, 3, 6, 9 o'clock)
+        for (int i = 0; i < 4; i++) {
+            double angle = i * 90 * Math.PI / 180;
+            double x = Math.cos(angle) * 0.8;
+            double z = Math.sin(angle) * 0.8;
             Location markerLoc = center.clone().add(x, 0, z);
             
-            world.spawnParticle(Particle.VILLAGER_HAPPY, markerLoc, 1, 0, 0, 0, 0);
+            world.spawnParticle(Particle.END_ROD, markerLoc, 1, 0, 0, 0, 0);
         }
     }
     
     /**
-     * Create clock hand
+     * Create modern clock hand - single particle
      */
-    private void createClockHand(Location center, World world, double angleDegrees, double length, Particle particle) {
-        double angle = (angleDegrees - 90) * Math.PI / 180; // -90 to start from top
+    private void createModernClockHand(Location center, World world, double angleDegrees, double length, Particle particle) {
+        double angle = (angleDegrees - 90) * Math.PI / 180;
         
-        // Reduce hand detail for performance
-        for (double i = 0.3; i <= length; i += 0.3) { // Larger steps, fewer particles
-            double x = Math.cos(angle) * i;
-            double z = Math.sin(angle) * i;
-            Location handLoc = center.clone().add(x, 0, z);
-            
-            world.spawnParticle(particle, handLoc, 1, 0, 0, 0, 0);
-        }
+        // Only one particle at the end of the hand
+        double x = Math.cos(angle) * length;
+        double z = Math.sin(angle) * length;
+        Location handLoc = center.clone().add(x, 0, z);
+        
+        world.spawnParticle(particle, handLoc, 1, 0, 0, 0, 0);
     }
     
     /**
-     * Get appropriate particle based on time of day
+     * Get modern time-appropriate particle
      */
-    private Particle getTimeParticle(long time) {
+    private Particle getModernTimeParticle(long time) {
         if (time >= 0 && time < 12000) {
-            return Particle.FLAME; // Day - warm particles
+            return Particle.SOUL_FIRE_FLAME; // Day - cool blue flames
         } else {
-            return Particle.SOUL_FIRE_FLAME; // Night - cool particles
+            return Particle.SOUL; // Night - mystical souls
         }
     }
     
     /**
-     * Play gentle clock chime
+     * Play modern gentle clock chime
      */
-    private void playClockChime() {
+    private void playModernClockChime() {
         if (!plugin.getConfigManager().areSoundEffectsEnabled()) {
             return;
         }
         
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (player.isSleeping()) {
-                float volume = (float) (0.1f * plugin.getConfigManager().getSoundVolume());
-                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, volume, 2.0f);
+                float volume = (float) (0.05f * plugin.getConfigManager().getSoundVolume());
+                player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_CHIME, volume, 2.2f);
             }
         }
     }
     
     /**
-     * Restart clock animation (for config reload)
+     * Restart clock animation
      */
     public void restart() {
         if (clockTask != null && !clockTask.isCancelled()) {
