@@ -1,8 +1,6 @@
 package com.turjo.easysleep;
 
 import com.turjo.easysleep.commands.SleepCommand;
-import com.turjo.easysleep.commands.SleepGUICommand;
-import com.turjo.easysleep.gui.SleepGUI;
 import com.turjo.easysleep.listeners.SleepEventListener;
 import com.turjo.easysleep.listeners.PlayerEventListener;
 import com.turjo.easysleep.managers.AnimationManager;
@@ -13,8 +11,6 @@ import com.turjo.easysleep.managers.ConfigManager;
 import com.turjo.easysleep.managers.DayCounterManager;
 import com.turjo.easysleep.managers.DayNightCycleManager;
 import com.turjo.easysleep.managers.StatisticsManager;
-import com.turjo.easysleep.managers.SectionConfigManager;
-import com.turjo.easysleep.managers.GUIConfigManager;
 import com.turjo.easysleep.managers.UpdateChecker;
 import org.bukkit.GameRule;
 import org.bukkit.World;
@@ -41,9 +37,6 @@ public class EasySleep extends JavaPlugin {
     private ClockAnimationManager clockAnimationManager;
     private DayNightCycleManager dayNightCycleManager;
     private StatisticsManager statisticsManager;
-    private SectionConfigManager sectionConfigManager;
-    private GUIConfigManager guiConfigManager;
-    private SleepGUI sleepGUI;
     
     @Override
     public void onEnable() {
@@ -59,9 +52,6 @@ public class EasySleep extends JavaPlugin {
         this.clockAnimationManager = new ClockAnimationManager(this);
         this.dayNightCycleManager = new DayNightCycleManager(this);
         this.statisticsManager = new StatisticsManager(this);
-        this.sectionConfigManager = new SectionConfigManager(this);
-        this.guiConfigManager = new GUIConfigManager(this);
-        this.sleepGUI = new SleepGUI(this);
         
         // Initialize commands
         initializeCommands();
@@ -125,9 +115,6 @@ public class EasySleep extends JavaPlugin {
         if (dayNightCycleManager != null) {
             dayNightCycleManager.cleanup();
         }
-        if (sleepGUI != null) {
-            sleepGUI.cleanup();
-        }
         instance = null;
     }
     
@@ -146,17 +133,6 @@ public class EasySleep extends JavaPlugin {
         getCommand("sleepmgr").setTabCompleter(sleepCommand);
         getCommand("nightskip").setExecutor(sleepCommand);
         getCommand("nightskip").setTabCompleter(sleepCommand);
-        
-        // Register GUI command
-        SleepGUICommand guiCommand = new SleepGUICommand(this);
-        getCommand("sleepgui").setExecutor(guiCommand);
-        getCommand("sleepgui").setTabCompleter(guiCommand);
-        getCommand("sgui").setExecutor(guiCommand);
-        getCommand("sgui").setTabCompleter(guiCommand);
-        getCommand("sleepui").setExecutor(guiCommand);
-        getCommand("sleepui").setTabCompleter(guiCommand);
-        getCommand("esleep").setExecutor(guiCommand);
-        getCommand("esleep").setTabCompleter(guiCommand);
     }
     
     /**
@@ -259,29 +235,5 @@ public class EasySleep extends JavaPlugin {
      */
     public StatisticsManager getStatisticsManager() {
         return statisticsManager;
-    }
-    
-    /**
-     * Get the section config manager
-     * @return SectionConfigManager instance
-     */
-    public SectionConfigManager getSectionConfigManager() {
-        return sectionConfigManager;
-    }
-    
-    /**
-     * Get the GUI config manager
-     * @return GUIConfigManager instance
-     */
-    public GUIConfigManager getGUIConfigManager() {
-        return guiConfigManager;
-    }
-    
-    /**
-     * Get the sleep GUI
-     * @return SleepGUI instance
-     */
-    public SleepGUI getSleepGUI() {
-        return sleepGUI;
     }
 }

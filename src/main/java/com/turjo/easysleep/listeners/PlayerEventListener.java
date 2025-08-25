@@ -7,7 +7,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 /**
  * Event listener for player-related events
@@ -56,19 +55,5 @@ public class PlayerEventListener implements Listener {
         // Clean up tracking data
         plugin.getAFKManager().removePlayer(player);
         plugin.getAntiSpamManager().removePlayer(player);
-    }
-    
-    @EventHandler
-    public void onPlayerChat(AsyncPlayerChatEvent event) {
-        Player player = event.getPlayer();
-        String message = event.getMessage();
-        
-        // Handle pending GUI input - run on main thread
-        plugin.getServer().getScheduler().runTask(plugin, () -> {
-            if (plugin.getSleepGUI().hasPendingInput(player)) {
-                event.setCancelled(true);
-                plugin.getSleepGUI().handleChatInput(player, message);
-            }
-        });
     }
 }
