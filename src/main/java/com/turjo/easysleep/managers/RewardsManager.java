@@ -2,23 +2,18 @@ package com.turjo.easysleep.managers;
 
 import com.turjo.easysleep.EasySleep;
 import com.turjo.easysleep.utils.MessageUtils;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-// Vault Economy interface - will be loaded dynamically if Vault is present
-interface Economy {
-    boolean depositPlayer(org.bukkit.entity.Player player, double amount);
-    String getName();
-}
 
 /**
  * Advanced Rewards Management System
@@ -51,42 +46,14 @@ public class RewardsManager {
             return;
         }
         
-        try {
-            RegisteredServiceProvider<?> rsp = plugin.getServer().getServicesManager().getRegistration(
-                Class.forName("net.milkbowl.vault.economy.Economy"));
-            if (rsp == null) {
-                plugin.getLogger().info("No economy plugin found - economy rewards disabled");
-                return;
-            }
-            
-            final Object vaultEconomy = rsp.getProvider();
-            economy = new Economy() {
-                @Override
-                public boolean depositPlayer(Player player, double amount) {
-                    try {
-                        Object response = vaultEconomy.getClass().getMethod("depositPlayer", Player.class, double.class)
-                            .invoke(vaultEconomy, player, amount);
-                        return true;
-                    } catch (Exception e) {
-                        plugin.getLogger().warning("Failed to deposit money: " + e.getMessage());
-                        return false;
-                    }
-                }
-                
-                @Override
-                public String getName() {
-                    try {
-                        return (String) vaultEconomy.getClass().getMethod("getName").invoke(vaultEconomy);
-                    } catch (Exception e) {
-                        return "Unknown";
-                    }
-                }
-            };
-            
-            plugin.getLogger().info("Economy integration enabled with " + economy.getName());
-        } catch (ClassNotFoundException e) {
-            plugin.getLogger().info("Vault Economy class not found - economy rewards disabled");
+        RegisteredServiceProvider<Economy> rsp = plugin.getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            plugin.getLogger().info("No economy plugin found - economy rewards disabled");
+            return;
         }
+        
+        economy = rsp.getProvider();
+        plugin.getLogger().info("Economy integration enabled with " + economy.getName());
     }
     
     /**
@@ -131,11 +98,23 @@ public class RewardsManager {
         double baseAmount = plugin.getConfigManager().getConfig().getDouble("rewards.economy.money-per-sleep", 25.0);
         double amount = baseAmount * multiplier;
         
-        economy.depositPlayer(player, amount);
-        
-        String message = plugin.getConfigManager().getConfig().getString("messages.rewards.money-received", 
-            "&a+ $%amount% &7(Sleep reward)");
-        MessageUtils.sendMessage(player, message.replace("%amount%", String.format("%.2f", amount)));
+        try {
+            net.milkbowl.vault.economy.EconomyResponse response = economy.depositPlayer(player, amount);
+            
+            if (response.transactionSuccess()) {
+                String message = plugin.getConfigManager().getConfig().getString("messages.rewards.money-received", 
+                    "&a+ $%amount% &7(Sleep reward)");
+                MessageUtils.sendMessage(player, message.replace("%amount%", String.format("%.2f", amount)));
+                
+                if (plugin.getConfigManager().isDebugMode()) {
+                    plugin.getLogger().info("Successfully deposited $" + amount + " to " + player.getName());
+                }
+            } else {
+                plugin.getLogger().warning("Failed to deposit money to " + player.getName() + ": " + response.errorMessage);
+            }
+        } catch (Exception e) {
+            plugin.getLogger().warning("Error depositing money to " + player.getName() + ": " + e.getMessage());
+        }
     }
     
     /**
