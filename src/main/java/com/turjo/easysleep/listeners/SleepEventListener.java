@@ -15,6 +15,8 @@ import org.bukkit.event.world.TimeSkipEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.List;
+
 /**
  * Event listener for sleep-related events
  * 

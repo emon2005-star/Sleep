@@ -145,6 +145,69 @@ public class ConfigManager {
     }
     
     /**
+     * Check if AFK detection is enabled
+     */
+    public boolean isAFKDetectionEnabled() {
+        return config.getBoolean("features.afk-detection.enabled", true);
+    }
+    
+    /**
+     * Get AFK threshold in minutes
+     */
+    public int getAFKThreshold() {
+        return config.getInt("features.afk-detection.threshold-minutes", 5);
+    }
+    
+    /**
+     * Get sleep message cooldown in seconds
+     */
+    public int getSleepMessageCooldown() {
+        return config.getInt("features.anti-spam.sleep-message-cooldown", 5);
+    }
+    
+    /**
+     * Get wake message cooldown in seconds
+     */
+    public int getWakeMessageCooldown() {
+        return config.getInt("features.anti-spam.wake-message-cooldown", 3);
+    }
+    
+    /**
+     * Get command cooldown in seconds
+     */
+    public int getCommandCooldown() {
+        return config.getInt("features.anti-spam.command-cooldown", 2);
+    }
+    
+    /**
+     * Get sleep particle type
+     */
+    public String getSleepParticle() {
+        return config.getString("animations.sleep-particle", "SOUL_FIRE_FLAME");
+    }
+    
+    /**
+     * Get sleep sound type
+     */
+    public String getSleepSound() {
+        return config.getString("sounds.sleep-sound.sound", "BLOCK_AMETHYST_BLOCK_CHIME");
+    }
+    
+    /**
+     * Get random morning messages
+     */
+    public java.util.List<String> getRandomMorningMessages() {
+        return config.getStringList("daily-messages.messages");
+    }
+    
+    /**
+     * Check if performance mode is enabled
+     */
+    public boolean isPerformanceMode() {
+        return config.getBoolean("animations.performance-mode", false);
+    }
+    
+    /**
      * Reload configuration
      */
     public void reloadConfig() {
