@@ -180,8 +180,11 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
         MessageUtils.sendMessage(sender, "&6║ &fDay Counter: " + (plugin.getConfigManager().isDayCounterEnabled() ? "&aDay " + plugin.getDayCounterManager().getCurrentDay(world) : "&cDisabled") + String.format("%" + (15 - (plugin.getConfigManager().isDayCounterEnabled() ? ("Day " + plugin.getDayCounterManager().getCurrentDay(world)) : "Disabled").length()) + "s", "") + "&6║");
         MessageUtils.sendMessage(sender, "&6║ &fEnhanced FX: " + (plugin.getConfigManager().areEnhancedParticlesEnabled() ? "&aActive" : "&cInactive") + String.format("%" + (18 - (plugin.getConfigManager().areEnhancedParticlesEnabled() ? "Active" : "Inactive").length()) + "s", "") + "&6║");
         MessageUtils.sendMessage(sender, "&6║ &fPerformance: " + (plugin.getConfigManager().isPerformanceMode() ? "&eOptimized" : "&aNormal") + String.format("%" + (16 - (plugin.getConfigManager().isPerformanceMode() ? "Optimized" : "Normal").length()) + "s", "") + "&6║");
+        MessageUtils.sendMessage(sender, "&6║ &fMoon Phase: " + plugin.getMoonPhaseManager().getMoonPhaseInfo(world) + String.format("%" + (20 - plugin.getMoonPhaseManager().getMoonPhaseInfo(world).length()) + "s", "") + "&6║");
+        MessageUtils.sendMessage(sender, "&6║ &fDream States: &d" + plugin.getDreamSequenceManager().getActiveDreamCount() + String.format("%" + (18 - String.valueOf(plugin.getDreamSequenceManager().getActiveDreamCount()).length()) + "s", "") + "&6║");
+        MessageUtils.sendMessage(sender, "&6║ &fActive Rituals: &5" + plugin.getSleepRitualManager().getActiveRitualCount() + String.format("%" + (16 - String.valueOf(plugin.getSleepRitualManager().getActiveRitualCount()).length()) + "s", "") + "&6║");
         MessageUtils.sendMessage(sender, "&6╠═══════════════════════════════════════════╣");
-        MessageUtils.sendMessage(sender, "&6║ &7⚡ All systems operational and enhanced  &6║");
+        MessageUtils.sendMessage(sender, "&6║ &7⚡ All exclusive systems operational     &6║");
         MessageUtils.sendMessage(sender, "&6╚═══════════════════════════════════════════╝");
         
         return true;

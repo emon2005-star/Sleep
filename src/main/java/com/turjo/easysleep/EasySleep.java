@@ -9,7 +9,10 @@ import com.turjo.easysleep.managers.AntiSpamManager;
 import com.turjo.easysleep.managers.ClockAnimationManager;
 import com.turjo.easysleep.managers.ConfigManager;
 import com.turjo.easysleep.managers.DayCounterManager;
+import com.turjo.easysleep.managers.DreamSequenceManager;
 import com.turjo.easysleep.managers.DayNightCycleManager;
+import com.turjo.easysleep.managers.MoonPhaseManager;
+import com.turjo.easysleep.managers.SleepRitualManager;
 import com.turjo.easysleep.managers.StatisticsManager;
 import com.turjo.easysleep.managers.UpdateChecker;
 import org.bukkit.GameRule;
@@ -37,6 +40,9 @@ public class EasySleep extends JavaPlugin {
     private ClockAnimationManager clockAnimationManager;
     private DayNightCycleManager dayNightCycleManager;
     private StatisticsManager statisticsManager;
+    private DreamSequenceManager dreamSequenceManager;
+    private SleepRitualManager sleepRitualManager;
+    private MoonPhaseManager moonPhaseManager;
     
     @Override
     public void onEnable() {
@@ -52,6 +58,9 @@ public class EasySleep extends JavaPlugin {
         this.clockAnimationManager = new ClockAnimationManager(this);
         this.dayNightCycleManager = new DayNightCycleManager(this);
         this.statisticsManager = new StatisticsManager(this);
+        this.dreamSequenceManager = new DreamSequenceManager(this);
+        this.sleepRitualManager = new SleepRitualManager(this);
+        this.moonPhaseManager = new MoonPhaseManager(this);
         
         // Initialize commands
         initializeCommands();
@@ -79,6 +88,9 @@ public class EasySleep extends JavaPlugin {
         getLogger().info("║ 🕐 Clock Animation: RUNNING              ║");
         getLogger().info("║ 🌅 Day-Night Cycle: EPIC                 ║");
         getLogger().info("║ 🛡️ Anti-Spam: PROTECTED                  ║");
+        getLogger().info("║ 🌙 Dream Sequences: EXCLUSIVE            ║");
+        getLogger().info("║ 🔮 Sleep Rituals: REVOLUTIONARY          ║");
+        getLogger().info("║ 🌕 Moon Phases: MYSTICAL                 ║");
         getLogger().info("║ 🚀 Status: READY FOR ACTION              ║");
         getLogger().info("╚═══════════════════════════════════════════╝");
     }
@@ -114,6 +126,15 @@ public class EasySleep extends JavaPlugin {
         }
         if (dayNightCycleManager != null) {
             dayNightCycleManager.cleanup();
+        }
+        if (dreamSequenceManager != null) {
+            dreamSequenceManager.cleanup();
+        }
+        if (sleepRitualManager != null) {
+            sleepRitualManager.cleanup();
+        }
+        if (moonPhaseManager != null) {
+            moonPhaseManager.cleanup();
         }
         instance = null;
     }
@@ -235,5 +256,29 @@ public class EasySleep extends JavaPlugin {
      */
     public StatisticsManager getStatisticsManager() {
         return statisticsManager;
+    }
+    
+    /**
+     * Get the dream sequence manager
+     * @return DreamSequenceManager instance
+     */
+    public DreamSequenceManager getDreamSequenceManager() {
+        return dreamSequenceManager;
+    }
+    
+    /**
+     * Get the sleep ritual manager
+     * @return SleepRitualManager instance
+     */
+    public SleepRitualManager getSleepRitualManager() {
+        return sleepRitualManager;
+    }
+    
+    /**
+     * Get the moon phase manager
+     * @return MoonPhaseManager instance
+     */
+    public MoonPhaseManager getMoonPhaseManager() {
+        return moonPhaseManager;
     }
 }

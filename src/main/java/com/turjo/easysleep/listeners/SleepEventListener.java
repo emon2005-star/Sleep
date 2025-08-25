@@ -46,6 +46,12 @@ public class SleepEventListener implements Listener {
         // Record sleep event
         plugin.getStatisticsManager().recordSleepEvent();
         
+        // Start exclusive dream sequence
+        plugin.getDreamSequenceManager().startDreamSequence(player);
+        
+        // Apply moon phase bonus
+        plugin.getMoonPhaseManager().applyMoonPhaseBonus(player);
+        
         // Check anti-spam
         if (!plugin.getAntiSpamManager().canSendSleepMessage(player)) {
             return;
@@ -108,6 +114,9 @@ public class SleepEventListener implements Listener {
         // Stop sleep animation
         animationManager.stopAnimation(player);
         
+        // End dream sequence
+        plugin.getDreamSequenceManager().endDreamSequence(player);
+        
         // Get updated sleep statistics
         int totalPlayers = world.getPlayers().size();
         long sleepingCount = world.getPlayers().stream()
@@ -141,6 +150,9 @@ public class SleepEventListener implements Listener {
             // Start night skip animation if enabled
             if (plugin.getConfigManager().areAnimationsEnabled()) {
                 plugin.getAnimationManager().startNightSkipAnimation(world);
+                
+                // Check for sleep rituals
+                plugin.getSleepRitualManager().checkSleepRitual(world);
             }
         }
     }

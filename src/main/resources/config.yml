@@ -46,6 +46,15 @@ features:
   # Enable anti-spam protection
   anti-spam: true
   
+  # Enable exclusive dream sequences
+  dream-sequences: true
+  
+  # Enable sleep rituals for multiple players
+  sleep-rituals: true
+  
+  # Enable moon phase system
+  moon-phases: true
+  
   # Random good morning messages
   random-morning-messages:
     - "Day %day% - A new adventure begins!"
