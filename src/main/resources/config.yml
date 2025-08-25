@@ -147,12 +147,6 @@ sounds:
     sound: "ENTITY_PLAYER_LEVELUP"
     volume: 0.2
     pitch: 2.0
-    
-  gui-sounds:
-    enabled: true
-    click-sound: "UI_BUTTON_CLICK"
-    success-sound: "ENTITY_EXPERIENCE_ORB_PICKUP"
-    error-sound: "ENTITY_VILLAGER_NO"
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # 🌅 DAILY MESSAGES SYSTEM
@@ -347,24 +341,6 @@ messages:
     world-not-found: "&cWorld not found: %world%"
     player-not-found: "&cPlayer not found: %player%"
     command-cooldown: "&cPlease wait %seconds% seconds before using this command again!"
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# 🎮 GUI SETTINGS
-# ═══════════════════════════════════════════════════════════════════════════════
-gui:
-  # Enable GUI system
-  enabled: true
-  
-  # GUI update interval (ticks)
-  update-interval: 20
-  
-  # Close GUI on world change
-  close-on-world-change: true
-  
-  # GUI sounds
-  sounds:
-    enabled: true
-    volume: 0.5
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # 📊 PLACEHOLDERS (PlaceholderAPI)

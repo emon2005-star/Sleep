@@ -1,5 +1,5 @@
 name: EasySleep
-version: 1.4.1
+version: 1.5.0
 description: A plugin to easily manage player sleep percentage
 author: Turjo
 main: com.turjo.easysleep.EasySleep
@@ -32,8 +32,16 @@ permissions:
   easysleep.admin:
     description: Allows access to sleep management commands
     default: op
+  easysleep.user:
+    description: Allows access to user commands like rewards
+    default: true
+  easysleep.rewards:
+    description: Allows receiving sleep rewards
+    default: true
   easysleep.*:
     description: Grants all EasySleep permissions
     default: op
     children:
       easysleep.admin: true
+      easysleep.user: true
+      easysleep.rewards: true

@@ -21,7 +21,7 @@ import java.util.List;
  * proper validation, and futuristic user interface.
  * 
  * @author Turjo
- * @version 1.3.1
+ * @version 1.5.0
  */
 public class SleepCommand implements CommandExecutor, TabCompleter {
     
@@ -76,6 +76,8 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
                 return handleStatsCommand(sender);
             case "update":
                 return handleUpdateCommand(sender);
+            case "rewards":
+                return handleRewardsCommand(sender);
             case "help":
                 sendHelpMessage(sender);
                 return true;
@@ -179,7 +181,7 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
         MessageUtils.sendMessage(sender, "&6║ &fAnimations: " + (plugin.getConfigManager().areAnimationsEnabled() ? "&aEnabled" : "&cDisabled") + String.format("%" + (19 - (plugin.getConfigManager().areAnimationsEnabled() ? "Enabled" : "Disabled").length()) + "s", "") + "&6║");
         MessageUtils.sendMessage(sender, "&6║ &fDay Counter: " + (plugin.getConfigManager().isDayCounterEnabled() ? "&aDay " + plugin.getDayCounterManager().getCurrentDay(world) : "&cDisabled") + String.format("%" + (15 - (plugin.getConfigManager().isDayCounterEnabled() ? ("Day " + plugin.getDayCounterManager().getCurrentDay(world)) : "Disabled").length()) + "s", "") + "&6║");
         MessageUtils.sendMessage(sender, "&6║ &fEnhanced FX: " + (plugin.getConfigManager().areEnhancedParticlesEnabled() ? "&aActive" : "&cInactive") + String.format("%" + (18 - (plugin.getConfigManager().areEnhancedParticlesEnabled() ? "Active" : "Inactive").length()) + "s", "") + "&6║");
-        MessageUtils.sendMessage(sender, "&6║ &fPerformance: " + (plugin.getConfigManager().isPerformanceMode() ? "&eOptimized" : "&aNormal") + String.format("%" + (16 - (plugin.getConfigManager().isPerformanceMode() ? "Optimized" : "Normal").length()) + "s", "") + "&6║");
+        MessageUtils.sendMessage(sender, "&6║ &fRewards: " + (plugin.getConfigManager().getConfig().getBoolean("rewards.enabled", true) ? "&aEnabled" : "&cDisabled") + String.format("%" + (20 - (plugin.getConfigManager().getConfig().getBoolean("rewards.enabled", true) ? "Enabled" : "Disabled").length()) + "s", "") + "&6║");
         MessageUtils.sendMessage(sender, "&6║ &fMoon Phase: " + plugin.getMoonPhaseManager().getMoonPhaseInfo(world) + String.format("%" + (20 - plugin.getMoonPhaseManager().getMoonPhaseInfo(world).length()) + "s", "") + "&6║");
         MessageUtils.sendMessage(sender, "&6║ &fDream States: &d" + plugin.getDreamSequenceManager().getActiveDreamCount() + String.format("%" + (18 - String.valueOf(plugin.getDreamSequenceManager().getActiveDreamCount()).length()) + "s", "") + "&6║");
         MessageUtils.sendMessage(sender, "&6║ &fActive Rituals: &5" + plugin.getSleepRitualManager().getActiveRitualCount() + String.format("%" + (16 - String.valueOf(plugin.getSleepRitualManager().getActiveRitualCount()).length()) + "s", "") + "&6║");
@@ -314,6 +316,29 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
     }
     
     /**
+     * Handle the rewards subcommand
+     */
+    private boolean handleRewardsCommand(CommandSender sender) {
+        if (!(sender instanceof Player)) {
+            MessageUtils.sendMessage(sender, "&cThis command can only be used by players!");
+            return true;
+        }
+        
+        Player player = (Player) sender;
+        int streak = plugin.getRewardsManager().getPlayerStreak(player);
+        
+        MessageUtils.sendMessage(sender, "&6╔═══════════════════════════════════════════╗");
+        MessageUtils.sendMessage(sender, "&6║ &b🎁 &f&lREWARDS INFORMATION &b🎁 &6║");
+        MessageUtils.sendMessage(sender, "&6╠═══════════════════════════════════════════╣");
+        MessageUtils.sendMessage(sender, "&6║ &fYour Sleep Streak: &e" + streak + " days" + String.format("%" + (15 - String.valueOf(streak).length()) + "s", "") + "&6║");
+        MessageUtils.sendMessage(sender, "&6║ &fMoney per Sleep: &a$" + plugin.getConfigManager().getConfig().getDouble("rewards.economy.money-per-sleep", 25.0) + String.format("%" + (15 - String.valueOf(plugin.getConfigManager().getConfig().getDouble("rewards.economy.money-per-sleep", 25.0)).length()) + "s", "") + "&6║");
+        MessageUtils.sendMessage(sender, "&6║ &fXP per Sleep: &b" + plugin.getConfigManager().getConfig().getInt("rewards.experience.xp-per-sleep", 100) + " XP" + String.format("%" + (15 - String.valueOf(plugin.getConfigManager().getConfig().getInt("rewards.experience.xp-per-sleep", 100)).length()) + "s", "") + "&6║");
+        MessageUtils.sendMessage(sender, "&6║ &fRewards Status: " + (plugin.getConfigManager().getConfig().getBoolean("rewards.enabled", true) ? "&aEnabled" : "&cDisabled") + String.format("%" + (17 - (plugin.getConfigManager().getConfig().getBoolean("rewards.enabled", true) ? "Enabled" : "Disabled").length()) + "s", "") + "&6║");
+        MessageUtils.sendMessage(sender, "&6╚═══════════════════════════════════════════╝");
+        return true;
+    }
+    
+    /**
      * Get the target world for the command
      */
     private World getTargetWorld(CommandSender sender) {
@@ -340,6 +365,7 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
         MessageUtils.sendMessage(sender, "&6║ &e/sleep setday <X> &7- Set day counter     &6║");
         MessageUtils.sendMessage(sender, "&6║ &e/sleep resetday &7- Reset to Day 1        &6║");
         MessageUtils.sendMessage(sender, "&6║ &e/sleep stats &7- View plugin statistics  &6║");
+        MessageUtils.sendMessage(sender, "&6║ &e/sleep rewards &7- View reward info       &6║");
         MessageUtils.sendMessage(sender, "&6║ &e/sleep update &7- Check for updates      &6║");
         MessageUtils.sendMessage(sender, "&6║ &e/sleep help &7- Show this matrix         &6║");
         MessageUtils.sendMessage(sender, "&6╠═══════════════════════════════════════════╣");
@@ -361,7 +387,7 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             // First argument - subcommands
             String partial = args[0].toLowerCase();
-            List<String> subCommands = Arrays.asList("set", "get", "status", "reset", "reload", "setday", "resetday", "stats", "update", "help");
+            List<String> subCommands = Arrays.asList("set", "get", "status", "reset", "reload", "setday", "resetday", "stats", "rewards", "update", "help");
             for (String subCommand : subCommands) {
                 if (subCommand.startsWith(partial)) {
                     completions.add(subCommand);
