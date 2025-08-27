@@ -27,7 +27,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * game rule with rewards, effects, and comprehensive sleep management.
  * 
  * @author Turjo
- * @version 1.5.0
+ * @version 1.5.1
  */
 public class EasySleep extends JavaPlugin {
     
@@ -79,7 +79,7 @@ public class EasySleep extends JavaPlugin {
         
         // Enhanced startup message
         getLogger().info("╔═══════════════════════════════════════════╗");
-        getLogger().info("║       🌙 EASYSLEEP v1.5.0 ACTIVATED 🌙    ║");
+        getLogger().info("║       🌙 EASYSLEEP v1.5.1 ACTIVATED 🌙    ║");
         getLogger().info("║                                           ║");
         getLogger().info("║ 🎁 Rewards System: ACTIVE                ║");
         getLogger().info("║ ⚡ Time Acceleration: 1.5-2x SPEED       ║");
@@ -99,11 +99,11 @@ public class EasySleep extends JavaPlugin {
     public void onDisable() {
         // Enhanced shutdown message
         getLogger().info("╔═══════════════════════════════════════════╗");
-        getLogger().info("║     🌙 EASYSLEEP v1.5.0 DEACTIVATED 🌙    ║");
+        getLogger().info("║     🌙 EASYSLEEP v1.5.1 DEACTIVATED 🌙    ║");
         getLogger().info("║                                           ║");
         getLogger().info("║ 🎁 Rewards saved and secured             ║");
         getLogger().info("║ ⚡ All systems: OFFLINE                  ║");
-        getLogger().info("║ 💫 Thanks for using EasySleep v1.5.0!    ║");
+        getLogger().info("║ 💫 Thanks for using EasySleep v1.5.1!    ║");
         getLogger().info("║ 📊 Statistics: SAVED                     ║");
         getLogger().info("╚═══════════════════════════════════════════╝");
         

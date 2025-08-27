@@ -1,5 +1,5 @@
 name: EasySleep
-version: 1.5.0
+version: 1.5.1
 description: A plugin to easily manage player sleep percentage
 author: Turjo
 main: com.turjo.easysleep.EasySleep

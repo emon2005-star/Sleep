@@ -1,5 +1,5 @@
 # ╔═══════════════════════════════════════════════════════════════════════════════╗
-# ║                    🌙 EasySleep v1.5.0 Configuration 🌙                      ║
+# ║                    🌙 EasySleep v1.5.1 Configuration 🌙                      ║
 # ║                     The Ultimate Sleep Management Plugin                      ║
 # ║                              Created by Turjo                                ║
 # ╚═══════════════════════════════════════════════════════════════════════════════╝
@@ -313,18 +313,45 @@ technical:
     essentials: true
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# 📝 MESSAGES & LOCALIZATION
+# 📝 MESSAGES & LOCALIZATION - FULLY CUSTOMIZABLE
 # ═══════════════════════════════════════════════════════════════════════════════
 messages:
   # Prefix for all plugin messages
   prefix: "&8[&6EasySleep&8] &r"
   
+  # Enable/disable specific message categories
+  enabled:
+    sleep-messages: true          # Player sleep/wake messages
+    night-skip-messages: true     # Night skip announcements
+    time-acceleration: true       # Time acceleration messages
+    reward-messages: true         # Reward notifications
+    dream-messages: true          # Dream sequence messages
+    ritual-messages: true         # Sleep ritual messages
+    moon-phase-messages: true     # Moon phase announcements
+    day-counter-messages: true    # Day counter messages
+    command-responses: true       # Command response messages
+    error-messages: true          # Error messages
+    
   # Sleep messages
   sleep:
     player-sleeping: "&7🌙 &e%player% &7enters dream state &8(&a%sleeping%&7/&e%required%&8)"
     player-waking: "&7☀ &e%player% &7wakes up &8(&a%sleeping%&7/&e%total%&8)"
-    night-skip: "&a✓ &fNight skipped! &7Time acceleration: &e%speed%x"
-    time-acceleration: "&b⚡ &fTime flowing faster... &7(&e%speed%x speed&7)"
+    
+  # Night skip messages
+  night-skip:
+    announcement: "&a✓ &fNight skipped! &7Time acceleration: &e%speed%x"
+    protocol-activated: "&b⚡ &f&lNIGHT SKIP PROTOCOL &b&lACTIVATED &b⚡"
+    time-acceleration-progress: "&7✨ &eTime acceleration in progress... &7✨"
+    protocol-complete: "&a✓ &f&lNIGHT SKIP &a&lCOMPLETE &a✓"
+    new-dawn: "&7🌅 &eWelcome to the new dawn! &7🌅"
+    
+  # Time acceleration messages
+  time-acceleration:
+    active: "&b⚡ &f&lTIME ACCELERATION &b&lACTIVE &b⚡"
+    flowing-faster: "&b⚡ &fTime flowing faster... &7(&e%speed%x speed&7)"
+    reality-shifting: "&7🌀 &eReality shifting... &7🌀"
+    complete: "&a✓ &f&lTIME ACCELERATION &a&lCOMPLETE &a✓"
+    timeline-established: "&7🌅 &eNew timeline established! &7🌅"
     
   # Reward messages
   rewards:
@@ -334,6 +361,56 @@ messages:
     effect-received: "&b+ %effect% &7(Sleep bonus)"
     streak-milestone: "&6🏆 &e%days%-day sleep streak! &6Bonus rewards unlocked!"
     
+  # Dream sequence messages
+  dreams:
+    access-granted: "&d✨ &f&lDREAM REALM &d&lACCESS GRANTED &d✨"
+    entering-realm: "&7🌙 &fEntering: &b%dream_name%"
+    dream-id: "&7⚡ &fDream ID: &e#%dream_id%"
+    sequence-deepening: "&7💫 &fDream sequence &bdeepening&f... &7💫"
+    state-stabilized: "&7🌙 &fDream state &dstabilized&f... entering &bdeep sleep&f... &7🌙"
+    sequence-terminated: "&c⚠ &f&lDREAM SEQUENCE &c&lTERMINATED &c⚠"
+    returning-reality: "&7🌅 &fReturning to &areality&f..."
+    dream-duration: "&7⏱ &fDream Duration: &e%duration%s"
+    dream-type: "&7💫 &fDream Type: &b%dream_type%"
+    
+  # Sleep ritual messages
+  rituals:
+    activated: "&5🔮 &f&lSLEEP RITUAL &5&lACTIVATED &5🔮"
+    ritual-type: "&7✨ &fRitual Type: &d%ritual_type%"
+    participants: "&7👥 &fParticipants: &e%participant_count% &7dreamers"
+    energy-converging: "&7🌟 &fCollective dream energy &bconverging&f..."
+    energies-converging: "&7🌟 &fDream energies &bconverging&f... ritual power &dincreasing&f... &7🌟"
+    climax-reached: "&7⚡ &fRitual &dclimax &freached! &bCollective consciousness &factivated! &7⚡"
+    ritual-completed: "&a✓ &f&lSLEEP RITUAL &a&lCOMPLETED &a✓"
+    ritual-duration: "&7⏱ &fDuration: &e%duration%s"
+    energy-dissipating: "&7💫 &fCollective dream energy &adissipating&f..."
+    
+  # Moon phase messages
+  moon-phases:
+    transition: "&f🌙 &f&lLUNAR PHASE TRANSITION &f🌙"
+    current-phase: "&7✨ &fCurrent Phase: %moon_symbol% &e%moon_name%"
+    sleep-bonus: "&7🌟 &fSleep Bonus: &a+%bonus_percent%%"
+    lunar-energy: "&7💫 &fLunar Energy: &b%moon_description%"
+    blessing-received: "&f🌙 &f&lLUNAR BLESSING RECEIVED &f🌙"
+    moon-phase-info: "&7✨ &fMoon Phase: %moon_symbol% &e%moon_name%"
+    bonus-effectiveness: "&7🌟 &fSleep Bonus: &a+%bonus_percent%% &feffectiveness"
+    
+  # Day counter messages
+  day-counter:
+    new-day-title: "&fDay %day%"
+    new-day-subtitle: "&7%message%"
+    
+  # Command response messages
+  commands:
+    sleep-set-success: "&aSuccessfully set sleep percentage to &e%percentage%% &ain world &e%world%"
+    sleep-get-current: "&aCurrent sleep percentage in &e%world%&a: &e%percentage%%"
+    sleep-reset-success: "&a✓ &fSleep percentage &areset to optimal value &e(%percentage%%) &ain world &e%world%"
+    config-reloaded: "&a✓ &fConfiguration &areloaded successfully&f!"
+    config-reload-failed: "&c✗ &fFailed to reload configuration: %error%"
+    day-set-success: "&a✓ &fSet day counter to &eDay %day% &fin world &e%world%"
+    day-reset-success: "&a✓ &fReset day counter to &eDay 1 &fin world &e%world%"
+    checking-updates: "&a✓ &fChecking for updates..."
+    
   # Error messages
   errors:
     no-permission: "&cYou don't have permission to use this command!"
@@ -341,6 +418,17 @@ messages:
     world-not-found: "&cWorld not found: %world%"
     player-not-found: "&cPlayer not found: %player%"
     command-cooldown: "&cPlease wait %seconds% seconds before using this command again!"
+    invalid-day: "&cDay must be 1 or higher!"
+    console-only: "&cThis command can only be used by players!"
+    world-determination-failed: "&cCould not determine target world!"
+    sleep-percentage-retrieval-failed: "&cCould not retrieve sleep percentage!"
+    percentage-range-error: "&cPercentage must be between 0 and 100!"
+    unknown-subcommand: "&cUnknown subcommand: %subcommand%"
+    
+  # Decorative borders and separators
+  decorations:
+    border-line: "&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    section-separator: "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # 📊 PLACEHOLDERS (PlaceholderAPI)
@@ -374,4 +462,3 @@ auto-updater:
 # ═══════════════════════════════════════════════════════════════════════════════
 # 📝 CONFIG VERSION (DO NOT MODIFY)
 # ═══════════════════════════════════════════════════════════════════════════════
-config-version: 15

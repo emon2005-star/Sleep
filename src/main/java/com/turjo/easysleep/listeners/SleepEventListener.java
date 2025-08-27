@@ -24,7 +24,7 @@ import java.util.List;
  * with rewards, effects, and enhanced sleep management.
  * 
  * @author Turjo
- * @version 1.5.0
+ * @version 1.5.1
  */
 public class SleepEventListener implements Listener {
     
@@ -82,13 +82,11 @@ public class SleepEventListener implements Listener {
         int requiredPlayers = (int) Math.ceil((sleepPercentage != null ? sleepPercentage : 50) * activePlayers / 100.0);
         
         // Broadcast sleep status if enabled
-        if (plugin.getConfigManager().getConfig().getBoolean("sleep.broadcast-sleep-messages", true)) {
-            String sleepMessage = plugin.getConfigManager().getConfig().getString("messages.sleep.player-sleeping",
-                "&7🌙 &e%player% &7enters dream state &8(&a%sleeping%&7/&e%required%&8)");
-            
-            sleepMessage = sleepMessage.replace("%player%", player.getName())
-                                     .replace("%sleeping%", String.valueOf(sleepingPlayers))
-                                     .replace("%required%", String.valueOf(requiredPlayers));
+        if (plugin.getConfigManager().isMessageCategoryEnabled("sleep-messages")) {
+            String sleepMessage = plugin.getConfigManager().getMessage("sleep.player-sleeping",
+                "%player%", player.getName(),
+                "%sleeping%", String.valueOf(sleepingPlayers),
+                "%required%", String.valueOf(requiredPlayers));
             
             for (Player p : world.getPlayers()) {
                 if (!p.equals(player)) {
@@ -122,9 +120,11 @@ public class SleepEventListener implements Listener {
             }.runTaskTimer(plugin, 0L, 1L);
             
             // Broadcast acceleration message
-            String accelMessage = plugin.getConfigManager().getConfig().getString("messages.sleep.time-acceleration",
-                "&b⚡ &fTime flowing faster... &7(&e%speed%x speed&7)");
-            MessageUtils.broadcastToWorld(world, accelMessage.replace("%speed%", String.format("%.1f", acceleration)));
+            if (plugin.getConfigManager().isMessageCategoryEnabled("time-acceleration")) {
+                String accelMessage = plugin.getConfigManager().getMessage("time-acceleration.flowing-faster",
+                    "%speed%", String.format("%.1f", acceleration));
+                MessageUtils.broadcastToWorld(world, accelMessage);
+            }
         }
     }
     
@@ -172,13 +172,11 @@ public class SleepEventListener implements Listener {
         int sleepingPlayers = getSleepingPlayerCount(world);
         
         // Broadcast wake up message if enabled
-        if (plugin.getConfigManager().getConfig().getBoolean("sleep.broadcast-sleep-messages", true)) {
-            String wakeMessage = plugin.getConfigManager().getConfig().getString("messages.sleep.player-waking",
-                "&7☀ &e%player% &7wakes up &8(&a%sleeping%&7/&e%total%&8)");
-            
-            wakeMessage = wakeMessage.replace("%player%", player.getName())
-                                   .replace("%sleeping%", String.valueOf(sleepingPlayers))
-                                   .replace("%total%", String.valueOf(totalPlayers));
+        if (plugin.getConfigManager().isMessageCategoryEnabled("sleep-messages")) {
+            String wakeMessage = plugin.getConfigManager().getMessage("sleep.player-waking",
+                "%player%", player.getName(),
+                "%sleeping%", String.valueOf(sleepingPlayers),
+                "%total%", String.valueOf(totalPlayers));
             
             MessageUtils.broadcastToWorld(world, wakeMessage);
         }
@@ -202,9 +200,11 @@ public class SleepEventListener implements Listener {
             
             // Broadcast night skip message
             double acceleration = plugin.getConfigManager().getConfig().getDouble("sleep.time-acceleration", 1.75);
-            String skipMessage = plugin.getConfigManager().getConfig().getString("messages.sleep.night-skip",
-                "&a✓ &fNight skipped! &7Time acceleration: &e%speed%x");
-            MessageUtils.broadcastToWorld(world, skipMessage.replace("%speed%", String.format("%.1f", acceleration)));
+            if (plugin.getConfigManager().isMessageCategoryEnabled("night-skip-messages")) {
+                String skipMessage = plugin.getConfigManager().getMessage("night-skip.announcement",
+                    "%speed%", String.format("%.1f", acceleration));
+                MessageUtils.broadcastToWorld(world, skipMessage);
+            }
         }
     }
     

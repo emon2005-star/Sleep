@@ -20,7 +20,7 @@ import java.util.Random;
  * Ultra-lightweight animations with modern visual effects
  * 
  * @author Turjo
- * @version 1.4.1
+ * @version 1.5.1
  */
 public class AnimationManager {
     
@@ -123,13 +123,15 @@ public class AnimationManager {
             return;
         }
         
-        // Modern futuristic messages
-        MessageUtils.broadcastToWorld(world, "");
-        MessageUtils.broadcastToWorld(world, "&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        MessageUtils.broadcastToWorld(world, "&b⚡ &f&lNIGHT SKIP PROTOCOL &b&lACTIVATED &b⚡");
-        MessageUtils.broadcastToWorld(world, "&7✨ &eTime acceleration in progress... &7✨");
-        MessageUtils.broadcastToWorld(world, "&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        MessageUtils.broadcastToWorld(world, "");
+        // Check if night skip messages are enabled
+        if (plugin.getConfigManager().isMessageCategoryEnabled("night-skip-messages")) {
+            MessageUtils.broadcastToWorld(world, "");
+            MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getBorderLine());
+            MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getMessage("night-skip.protocol-activated"));
+            MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getMessage("night-skip.time-acceleration-progress"));
+            MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getBorderLine());
+            MessageUtils.broadcastToWorld(world, "");
+        }
         
         // Start minimal animation
         startModernNightSkipSequence(world);
@@ -180,13 +182,15 @@ public class AnimationManager {
                     ticks = 0;
                     
                     if (phase >= 2) {
-                        // Modern completion message
-                        MessageUtils.broadcastToWorld(world, "");
-                        MessageUtils.broadcastToWorld(world, "&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-                        MessageUtils.broadcastToWorld(world, "&a✓ &f&lNIGHT SKIP &a&lCOMPLETE &a✓");
-                        MessageUtils.broadcastToWorld(world, "&7🌅 &eWelcome to the new dawn! &7🌅");
-                        MessageUtils.broadcastToWorld(world, "&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-                        MessageUtils.broadcastToWorld(world, "");
+                        // Check if night skip messages are enabled
+                        if (plugin.getConfigManager().isMessageCategoryEnabled("night-skip-messages")) {
+                            MessageUtils.broadcastToWorld(world, "");
+                            MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getBorderLine());
+                            MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getMessage("night-skip.protocol-complete"));
+                            MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getMessage("night-skip.new-dawn"));
+                            MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getBorderLine());
+                            MessageUtils.broadcastToWorld(world, "");
+                        }
                         cancel();
                     }
                 }

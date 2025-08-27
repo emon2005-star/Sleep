@@ -7,7 +7,7 @@ import org.bukkit.configuration.file.FileConfiguration;
  * Manages plugin configuration and settings with hot-reload capability
  * 
  * @author Turjo
- * @version 1.5.0
+ * @version 1.5.1
  */
 public class ConfigManager {
     
@@ -27,9 +27,9 @@ public class ConfigManager {
         config = plugin.getConfig();
         
         // Ensure config version is up to date
-        if (config.getInt("config-version", 0) < 15) {
-            plugin.getLogger().info("Updating configuration to version 15...");
-            updateConfigToV15();
+        if (config.getInt("config-version", 0) < 16) {
+            plugin.getLogger().info("Updating configuration to version 16...");
+            updateConfigToV16();
         }
         
         config.options().copyDefaults(true);
@@ -37,9 +37,9 @@ public class ConfigManager {
     }
     
     /**
-     * Update configuration to version 15
+     * Update configuration to version 16
      */
-    private void updateConfigToV15() {
+    private void updateConfigToV16() {
         // Migrate old settings to new structure
         if (config.contains("settings.default-sleep-percentage")) {
             config.set("sleep.default-percentage", config.getInt("settings.default-sleep-percentage", 50));
@@ -56,7 +56,19 @@ public class ConfigManager {
         config.addDefault("animations.gentle-mode", true);
         config.addDefault("daily-messages.enabled", true);
         
-        config.set("config-version", 15);
+        // Add new message system defaults
+        config.addDefault("messages.enabled.sleep-messages", true);
+        config.addDefault("messages.enabled.night-skip-messages", true);
+        config.addDefault("messages.enabled.time-acceleration", true);
+        config.addDefault("messages.enabled.reward-messages", true);
+        config.addDefault("messages.enabled.dream-messages", true);
+        config.addDefault("messages.enabled.ritual-messages", true);
+        config.addDefault("messages.enabled.moon-phase-messages", true);
+        config.addDefault("messages.enabled.day-counter-messages", true);
+        config.addDefault("messages.enabled.command-responses", true);
+        config.addDefault("messages.enabled.error-messages", true);
+        
+        config.set("config-version", 16);
         plugin.saveConfig();
     }
     
@@ -198,6 +210,43 @@ public class ConfigManager {
      */
     public java.util.List<String> getRandomMorningMessages() {
         return config.getStringList("daily-messages.messages");
+    }
+    
+    /**
+     * Check if specific message category is enabled
+     */
+    public boolean isMessageCategoryEnabled(String category) {
+        return config.getBoolean("messages.enabled." + category, true);
+    }
+    
+    /**
+     * Get customizable message with placeholder replacement
+     */
+    public String getMessage(String path, String... placeholders) {
+        String message = config.getString("messages." + path, "");
+        
+        // Replace placeholders in pairs (key, value)
+        for (int i = 0; i < placeholders.length - 1; i += 2) {
+            message = message.replace(placeholders[i], placeholders[i + 1]);
+        }
+        
+        return message;
+    }
+    
+    /**
+     * Get decorative border line
+     */
+    public String getBorderLine() {
+        return config.getString("messages.decorations.border-line", 
+            "&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    }
+    
+    /**
+     * Get section separator
+     */
+    public String getSectionSeparator() {
+        return config.getString("messages.decorations.section-separator",
+            "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
     }
     
     /**

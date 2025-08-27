@@ -17,7 +17,7 @@ import java.util.Map;
  * Ultra-lightweight time acceleration effects
  * 
  * @author Turjo
- * @version 1.4.1
+ * @version 1.5.1
  */
 public class DayNightCycleManager {
     
@@ -85,13 +85,15 @@ public class DayNightCycleManager {
             plugin.getLogger().info("Modern time acceleration in " + world.getName());
         }
         
-        // Modern announcement
-        MessageUtils.broadcastToWorld(world, "");
-        MessageUtils.broadcastToWorld(world, "&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        MessageUtils.broadcastToWorld(world, "&b⚡ &f&lTIME ACCELERATION &b&lACTIVE &b⚡");
-        MessageUtils.broadcastToWorld(world, "&7🌀 &eReality shifting... &7🌀");
-        MessageUtils.broadcastToWorld(world, "&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        MessageUtils.broadcastToWorld(world, "");
+        // Check if time acceleration messages are enabled
+        if (plugin.getConfigManager().isMessageCategoryEnabled("time-acceleration")) {
+            MessageUtils.broadcastToWorld(world, "");
+            MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getBorderLine());
+            MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getMessage("time-acceleration.active"));
+            MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getMessage("time-acceleration.reality-shifting"));
+            MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getBorderLine());
+            MessageUtils.broadcastToWorld(world, "");
+        }
         
         startModernAccelerationSequence(world);
     }
@@ -120,12 +122,14 @@ public class DayNightCycleManager {
                     createModernStabilization(player, skyLoc, ticks - 40);
                 } else {
                     // Completion
-                    MessageUtils.broadcastToWorld(world, "");
-                    MessageUtils.broadcastToWorld(world, "&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-                    MessageUtils.broadcastToWorld(world, "&a✓ &f&lTIME ACCELERATION &a&lCOMPLETE &a✓");
-                    MessageUtils.broadcastToWorld(world, "&7🌅 &eNew timeline established! &7🌅");
-                    MessageUtils.broadcastToWorld(world, "&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-                    MessageUtils.broadcastToWorld(world, "");
+                    if (plugin.getConfigManager().isMessageCategoryEnabled("time-acceleration")) {
+                        MessageUtils.broadcastToWorld(world, "");
+                        MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getBorderLine());
+                        MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getMessage("time-acceleration.complete"));
+                        MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getMessage("time-acceleration.timeline-established"));
+                        MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getBorderLine());
+                        MessageUtils.broadcastToWorld(world, "");
+                    }
                     cancel();
                 }
                 
