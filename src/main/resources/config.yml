@@ -1,6 +1,7 @@
 # ╔═══════════════════════════════════════════════════════════════════════════════╗
-# ║                    🌙 EasySleep v1.5.1 Configuration 🌙                      ║
+# ║                    🌙 EasySleep v1.5.2 Configuration 🌙                      ║
 # ║                     The Ultimate Sleep Management Plugin                      ║
+# ║                        🌌 NOW WITH QUANTUM FEATURES 🌌                       ║
 # ║                              Created by Turjo                                ║
 # ╚═══════════════════════════════════════════════════════════════════════════════╝
 
@@ -261,6 +262,31 @@ features:
     enabled: true
     track-individual-players: true
     save-interval-minutes: 5
+    
+  # 🌌 EXCLUSIVE QUANTUM FEATURES 🌌
+  quantum-sleep:
+    enabled: true
+    cross-dimensional-entanglement: true
+    quantum-coherence-time: 300  # seconds
+    
+  # 🌍 DIMENSIONAL PORTAL SYSTEM 🌍
+  dimensional-portals:
+    enabled: true
+    portal-duration: 300  # seconds
+    cross-world-effects: true
+    
+  # 🏆 ACHIEVEMENT SYSTEM 🏆
+  achievements:
+    enabled: true
+    broadcast-unlocks: true
+    spectacular-effects: true
+    
+  # 💎 DREAM COIN ECONOMY 💎
+  dream-economy:
+    enabled: true
+    base-coins-per-sleep: 10
+    streak-bonus-multiplier: 0.1  # 10% per streak day
+    shop-enabled: true
     
   # Update Checker
   update-checker:

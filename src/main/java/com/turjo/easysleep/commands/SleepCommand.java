@@ -388,6 +388,7 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
             // First argument - subcommands
             String partial = args[0].toLowerCase();
             List<String> subCommands = Arrays.asList("set", "get", "status", "reset", "reload", "setday", "resetday", "stats", "rewards", "update", "help");
+            List<String> subCommands = Arrays.asList("set", "get", "status", "reset", "reload", "setday", "resetday", "stats", "rewards", "achievements", "shop", "balance", "update", "help");
             for (String subCommand : subCommands) {
                 if (subCommand.startsWith(partial)) {
                     completions.add(subCommand);
@@ -409,6 +410,13 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
                 for (String suggestion : suggestions) {
                     if (suggestion.startsWith(partial)) {
                         completions.add(suggestion);
+                    }
+                }
+            } else if (args[0].equalsIgnoreCase("shop") && args.length == 3 && "buy".equals(args[1])) {
+                String partial = args[2];
+                for (String item : plugin.getSleepEconomyManager().getShopItems()) {
+                    if (item.startsWith(partial)) {
+                        completions.add(item);
                     }
                 }
             }
