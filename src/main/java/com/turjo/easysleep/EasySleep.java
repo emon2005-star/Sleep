@@ -16,6 +16,10 @@ import com.turjo.easysleep.managers.SleepRitualManager;
 import com.turjo.easysleep.managers.StatisticsManager;
 import com.turjo.easysleep.managers.UpdateChecker;
 import com.turjo.easysleep.managers.RewardsManager;
+import com.turjo.easysleep.managers.QuantumSleepManager;
+import com.turjo.easysleep.managers.DimensionalSleepManager;
+import com.turjo.easysleep.managers.SleepAchievementManager;
+import com.turjo.easysleep.managers.SleepEconomyManager;
 import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -27,7 +31,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * game rule with rewards, effects, and comprehensive sleep management.
  * 
  * @author Turjo
- * @version 1.5.1
+ * @version 1.5.2
  */
 public class EasySleep extends JavaPlugin {
     
@@ -45,6 +49,10 @@ public class EasySleep extends JavaPlugin {
     private SleepRitualManager sleepRitualManager;
     private MoonPhaseManager moonPhaseManager;
     private RewardsManager rewardsManager;
+    private QuantumSleepManager quantumSleepManager;
+    private DimensionalSleepManager dimensionalSleepManager;
+    private SleepAchievementManager sleepAchievementManager;
+    private SleepEconomyManager sleepEconomyManager;
     
     @Override
     public void onEnable() {
@@ -64,6 +72,10 @@ public class EasySleep extends JavaPlugin {
         this.dreamSequenceManager = new DreamSequenceManager(this);
         this.sleepRitualManager = new SleepRitualManager(this);
         this.moonPhaseManager = new MoonPhaseManager(this);
+        this.quantumSleepManager = new QuantumSleepManager(this);
+        this.dimensionalSleepManager = new DimensionalSleepManager(this);
+        this.sleepAchievementManager = new SleepAchievementManager(this);
+        this.sleepEconomyManager = new SleepEconomyManager(this);
         
         // Initialize commands
         initializeCommands();
@@ -79,8 +91,12 @@ public class EasySleep extends JavaPlugin {
         
         // Enhanced startup message
         getLogger().info("╔═══════════════════════════════════════════╗");
-        getLogger().info("║       🌙 EASYSLEEP v1.5.1 ACTIVATED 🌙    ║");
+        getLogger().info("║       🌙 EASYSLEEP v1.5.2 ACTIVATED 🌙    ║");
         getLogger().info("║                                           ║");
+        getLogger().info("║ 🌌 Quantum Entanglement: REVOLUTIONARY   ║");
+        getLogger().info("║ 🌍 Dimensional Portals: CROSS-WORLD      ║");
+        getLogger().info("║ 🏆 Achievement System: 16 EXCLUSIVE      ║");
+        getLogger().info("║ 💎 Dream Coin Economy: UNIQUE CURRENCY   ║");
         getLogger().info("║ 🎁 Rewards System: ACTIVE                ║");
         getLogger().info("║ ⚡ Time Acceleration: 1.5-2x SPEED       ║");
         getLogger().info("║ 🎨 Gentle Animations: OPTIMIZED         ║");
@@ -92,6 +108,7 @@ public class EasySleep extends JavaPlugin {
         getLogger().info("║ 💰 Economy Integration: VAULT READY      ║");
         getLogger().info("║ 🎮 Modern GUI: FULLY FUNCTIONAL          ║");
         getLogger().info("║ 🚀 Status: ULTIMATE SLEEP EXPERIENCE     ║");
+        getLogger().info("║ 🔧 Multiverse Compatible: FIXED v1.5.2   ║");
         getLogger().info("╚═══════════════════════════════════════════╝");
     }
     
@@ -99,11 +116,15 @@ public class EasySleep extends JavaPlugin {
     public void onDisable() {
         // Enhanced shutdown message
         getLogger().info("╔═══════════════════════════════════════════╗");
-        getLogger().info("║     🌙 EASYSLEEP v1.5.1 DEACTIVATED 🌙    ║");
+        getLogger().info("║     🌙 EASYSLEEP v1.5.2 DEACTIVATED 🌙    ║");
         getLogger().info("║                                           ║");
+        getLogger().info("║ 🌌 Quantum states: COLLAPSED             ║");
+        getLogger().info("║ 🌍 Dimensional portals: CLOSED           ║");
+        getLogger().info("║ 🏆 Achievements: SAVED                   ║");
+        getLogger().info("║ 💎 Dream economy: SECURED                ║");
         getLogger().info("║ 🎁 Rewards saved and secured             ║");
         getLogger().info("║ ⚡ All systems: OFFLINE                  ║");
-        getLogger().info("║ 💫 Thanks for using EasySleep v1.5.1!    ║");
+        getLogger().info("║ 💫 Thanks for using EasySleep v1.5.2!    ║");
         getLogger().info("║ 📊 Statistics: SAVED                     ║");
         getLogger().info("╚═══════════════════════════════════════════╝");
         
@@ -137,6 +158,18 @@ public class EasySleep extends JavaPlugin {
         }
         if (moonPhaseManager != null) {
             moonPhaseManager.cleanup();
+        }
+        if (quantumSleepManager != null) {
+            quantumSleepManager.cleanup();
+        }
+        if (dimensionalSleepManager != null) {
+            dimensionalSleepManager.cleanup();
+        }
+        if (sleepAchievementManager != null) {
+            sleepAchievementManager.cleanup();
+        }
+        if (sleepEconomyManager != null) {
+            sleepEconomyManager.cleanup();
         }
         instance = null;
     }
@@ -290,5 +323,37 @@ public class EasySleep extends JavaPlugin {
      */
     public MoonPhaseManager getMoonPhaseManager() {
         return moonPhaseManager;
+    }
+    
+    /**
+     * Get the quantum sleep manager
+     * @return QuantumSleepManager instance
+     */
+    public QuantumSleepManager getQuantumSleepManager() {
+        return quantumSleepManager;
+    }
+    
+    /**
+     * Get the dimensional sleep manager
+     * @return DimensionalSleepManager instance
+     */
+    public DimensionalSleepManager getDimensionalSleepManager() {
+        return dimensionalSleepManager;
+    }
+    
+    /**
+     * Get the sleep achievement manager
+     * @return SleepAchievementManager instance
+     */
+    public SleepAchievementManager getSleepAchievementManager() {
+        return sleepAchievementManager;
+    }
+    
+    /**
+     * Get the sleep economy manager
+     * @return SleepEconomyManager instance
+     */
+    public SleepEconomyManager getSleepEconomyManager() {
+        return sleepEconomyManager;
     }
 }

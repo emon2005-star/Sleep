@@ -46,8 +46,9 @@ public class AFKManager {
             activity = new PlayerActivity(currentLoc, currentTime);
             playerActivity.put(uuid, activity);
         } else {
-            // Check if player moved significantly
-            if (activity.lastLocation.distance(currentLoc) > 1.0) {
+            // Check if player moved significantly (with world safety check)
+            if (isSameWorld(activity.lastLocation, currentLoc) && 
+                activity.lastLocation.distance(currentLoc) > 1.0) {
                 activity.lastLocation = currentLoc;
                 activity.lastActivity = currentTime;
                 
@@ -58,8 +59,25 @@ public class AFKManager {
                         plugin.getLogger().info(player.getName() + " is no longer AFK");
                     }
                 }
+            } else if (!isSameWorld(activity.lastLocation, currentLoc)) {
+                // Player changed worlds - update location without distance check
+                activity.lastLocation = currentLoc;
+                activity.lastActivity = currentTime;
             }
         }
+    }
+    
+    /**
+     * Check if two locations are in the same world (Multiverse compatibility)
+     */
+    private boolean isSameWorld(Location loc1, Location loc2) {
+        if (loc1 == null || loc2 == null) {
+            return false;
+        }
+        if (loc1.getWorld() == null || loc2.getWorld() == null) {
+            return false;
+        }
+        return loc1.getWorld().equals(loc2.getWorld());
     }
     
     /**

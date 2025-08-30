@@ -51,6 +51,19 @@ public class SleepEventListener implements Listener {
         // Give sleep rewards
         plugin.getRewardsManager().giveSleepRewards(player);
         
+        // Award dream coins
+        plugin.getSleepEconomyManager().awardDreamCoins(player, 10);
+        
+        // Check achievements
+        plugin.getSleepAchievementManager().checkSleepAchievements(player);
+        plugin.getSleepAchievementManager().checkDimensionalAchievements(player);
+        
+        // Check moon phase achievements
+        MoonPhaseManager.MoonPhase moonPhase = plugin.getMoonPhaseManager().getCurrentMoonPhase(world);
+        if (moonPhase != null) {
+            plugin.getSleepAchievementManager().checkMoonPhaseAchievements(player, moonPhase.name());
+        }
+        
         // Check anti-spam
         if (!plugin.getAntiSpamManager().canSendSleepMessage(player)) {
             return;
