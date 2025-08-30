@@ -54,6 +54,8 @@ public class ConfigManager {
         config.addDefault("rewards.economy.money-per-sleep", 25.0);
         config.addDefault("animations.enabled", true);
         config.addDefault("animations.gentle-mode", true);
+        config.addDefault("animations.sleep-particle", "SOUL_FIRE_FLAME");
+        config.addDefault("sounds.sleep-sound.sound", "BLOCK_AMETHYST_BLOCK_CHIME");
         config.addDefault("daily-messages.enabled", true);
         
         // Add new message system defaults
@@ -67,6 +69,10 @@ public class ConfigManager {
         config.addDefault("messages.enabled.day-counter-messages", true);
         config.addDefault("messages.enabled.command-responses", true);
         config.addDefault("messages.enabled.error-messages", true);
+        config.addDefault("messages.enabled.achievement-messages", true);
+        config.addDefault("messages.enabled.economy-messages", true);
+        config.addDefault("messages.enabled.quantum-messages", true);
+        config.addDefault("messages.enabled.dimensional-messages", true);
         
         config.set("config-version", 16);
         plugin.saveConfig();

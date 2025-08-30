@@ -59,7 +59,7 @@ public class SleepEventListener implements Listener {
         plugin.getSleepAchievementManager().checkDimensionalAchievements(player);
         
         // Check moon phase achievements
-        MoonPhaseManager.MoonPhase moonPhase = plugin.getMoonPhaseManager().getCurrentMoonPhase(world);
+        com.turjo.easysleep.managers.MoonPhaseManager.MoonPhase moonPhase = plugin.getMoonPhaseManager().getCurrentMoonPhase(world);
         if (moonPhase != null) {
             plugin.getSleepAchievementManager().checkMoonPhaseAchievements(player, moonPhase.name());
         }

@@ -2,6 +2,10 @@ package com.turjo.easysleep.managers;
 
 import com.turjo.easysleep.EasySleep;
 import com.turjo.easysleep.utils.MessageUtils;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -124,7 +128,10 @@ public class SleepEconomyManager {
         dreamCoins.put(uuid, currentCoins + finalAmount);
         
         // Announce dream coin reward
-        MessageUtils.sendMessage(player, "&d💎 &f+ &e" + finalAmount + " &dDream Coins &7(Sleep reward)");
+        if (plugin.getConfigManager().isMessageCategoryEnabled("economy-messages")) {
+            String message = plugin.getConfigManager().getMessage("economy.coins-received", "%amount%", String.valueOf(finalAmount));
+            MessageUtils.sendMessage(player, message);
+        }
         
         // Spectacular coin effect
         Location loc = player.getLocation().add(0, 1.5, 0);
@@ -204,8 +211,14 @@ public class SleepEconomyManager {
         sleepShopPurchases.put(uuid, purchases);
         
         // Success message
-        MessageUtils.sendMessage(player, "&a✓ &fPurchased &e" + item.name + " &ffor &e" + item.price + " &dDream Coins");
-        MessageUtils.sendMessage(player, "&7Remaining balance: &e" + getDreamCoins(player) + " &dDream Coins");
+        if (plugin.getConfigManager().isMessageCategoryEnabled("economy-messages")) {
+            String purchaseMessage = plugin.getConfigManager().getMessage("economy.purchase-success", 
+                "%item%", item.name, "%price%", String.valueOf(item.price));
+            String balanceMessage = plugin.getConfigManager().getMessage("economy.remaining-balance", 
+                "%balance%", String.valueOf(getDreamCoins(player)));
+            MessageUtils.sendMessage(player, purchaseMessage);
+            MessageUtils.sendMessage(player, balanceMessage);
+        }
         
         // Purchase effects
         Location loc = player.getLocation().add(0, 1.5, 0);

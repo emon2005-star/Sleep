@@ -264,14 +264,16 @@ public class SleepAchievementManager {
         playerAchievements.put(uuid, earned);
         
         // Spectacular achievement announcement
-        MessageUtils.sendMessage(player, "");
-        MessageUtils.sendMessage(player, "&6╔═══════════════════════════════════════════╗");
-        MessageUtils.sendMessage(player, "&6║ &e🏆 &f&lACHIEVEMENT UNLOCKED &e🏆 &6║");
-        MessageUtils.sendMessage(player, "&6╠═══════════════════════════════════════════╣");
-        MessageUtils.sendMessage(player, "&6║ &f" + String.format("%-37s", achievement.getName()) + " &6║");
-        MessageUtils.sendMessage(player, "&6║ &7" + String.format("%-37s", achievement.getDescription()) + " &6║");
-        MessageUtils.sendMessage(player, "&6╚═══════════════════════════════════════════╝");
-        MessageUtils.sendMessage(player, "");
+        if (plugin.getConfigManager().isMessageCategoryEnabled("achievement-messages")) {
+            MessageUtils.sendMessage(player, "");
+            MessageUtils.sendMessage(player, plugin.getConfigManager().getMessage("decorations.achievement-border"));
+            MessageUtils.sendMessage(player, plugin.getConfigManager().getMessage("achievements.unlocked"));
+            MessageUtils.sendMessage(player, plugin.getConfigManager().getMessage("decorations.achievement-separator"));
+            MessageUtils.sendMessage(player, "&6║ &f" + String.format("%-37s", achievement.getName()) + " &6║");
+            MessageUtils.sendMessage(player, "&6║ &7" + String.format("%-37s", achievement.getDescription()) + " &6║");
+            MessageUtils.sendMessage(player, plugin.getConfigManager().getMessage("decorations.achievement-footer"));
+            MessageUtils.sendMessage(player, "");
+        }
         
         // Give reward
         giveAchievementReward(player, achievement.getReward());
@@ -286,8 +288,11 @@ public class SleepAchievementManager {
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.8f, 2.0f);
         
         // Broadcast to world
-        MessageUtils.broadcastToWorld(player.getWorld(), 
-            "&6🏆 &e" + player.getName() + " &funlocked achievement: &b" + achievement.getName() + " &6🏆");
+        if (plugin.getConfigManager().isMessageCategoryEnabled("achievement-messages")) {
+            String broadcastMessage = plugin.getConfigManager().getMessage("achievements.broadcast-unlock", 
+                "%player%", player.getName(), "%achievement%", achievement.getName());
+            MessageUtils.broadcastToWorld(player.getWorld(), broadcastMessage);
+        }
         
         // Check for Sleep Sage achievement (all achievements unlocked)
         if (earned.size() >= SleepAchievement.values().length - 1) { // -1 because Sleep Sage is the final one

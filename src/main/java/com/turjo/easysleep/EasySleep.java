@@ -93,6 +93,8 @@ public class EasySleep extends JavaPlugin {
         getLogger().info("╔═══════════════════════════════════════════╗");
         getLogger().info("║       🌙 EASYSLEEP v1.5.2 ACTIVATED 🌙    ║");
         getLogger().info("║                                           ║");
+        getLogger().info("║ 💬 Customizable Messages: FULL CONTROL   ║");
+        getLogger().info("║ 🎛️ Message Categories: ENABLE/DISABLE    ║");
         getLogger().info("║ 🌌 Quantum Entanglement: REVOLUTIONARY   ║");
         getLogger().info("║ 🌍 Dimensional Portals: CROSS-WORLD      ║");
         getLogger().info("║ 🏆 Achievement System: 16 EXCLUSIVE      ║");

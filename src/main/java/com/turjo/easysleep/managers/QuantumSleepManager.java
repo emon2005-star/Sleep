@@ -94,14 +94,17 @@ public class QuantumSleepManager {
         // Announce quantum entanglement
         for (List<Player> sleepers : worldSleepers.values()) {
             World world = sleepers.get(0).getWorld();
-            MessageUtils.broadcastToWorld(world, "");
-            MessageUtils.broadcastToWorld(world, "&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-            MessageUtils.broadcastToWorld(world, "&b⚛ &f&lQUANTUM ENTANGLEMENT &b&lDETECTED &b⚛");
-            MessageUtils.broadcastToWorld(world, "&7🌌 &fCross-dimensional sleep synchronization &bactivated");
-            MessageUtils.broadcastToWorld(world, "&7⚡ &fEntangled players: &e" + entangledPlayers.size() + " &7across &e" + worldSleepers.size() + " &7dimensions");
-            MessageUtils.broadcastToWorld(world, "&7💫 &fQuantum coherence &destablishing&f...");
-            MessageUtils.broadcastToWorld(world, "&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-            MessageUtils.broadcastToWorld(world, "");
+            if (plugin.getConfigManager().isMessageCategoryEnabled("quantum-messages")) {
+                MessageUtils.broadcastToWorld(world, "");
+                MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getBorderLine());
+                MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getMessage("quantum.entanglement-detected"));
+                MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getMessage("quantum.cross-dimensional-sync"));
+                MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getMessage("quantum.entangled-players", 
+                    "%count%", String.valueOf(entangledPlayers.size()), "%dimensions%", String.valueOf(worldSleepers.size())));
+                MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getMessage("quantum.quantum-coherence"));
+                MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getBorderLine());
+                MessageUtils.broadcastToWorld(world, "");
+            }
         }
         
         // Start quantum effects
@@ -200,8 +203,10 @@ public class QuantumSleepManager {
                 world.spawnParticle(Particle.TOTEM, center, 5, 2.0, 2.0, 2.0, 0.1);
                 world.playSound(center, Sound.BLOCK_BEACON_POWER_SELECT, 0.2f, 2.0f);
                 
-                // Broadcast quantum sync message
-                MessageUtils.broadcastToWorld(world, "&7⚛ &bQuantum synchronization pulse &7⚛");
+                // Broadcast resonance message
+                if (plugin.getConfigManager().isMessageCategoryEnabled("quantum-messages")) {
+                    MessageUtils.broadcastToWorld(world, plugin.getConfigManager().getMessage("quantum.synchronization-pulse"));
+                }
             }
         }
     }
@@ -239,7 +244,9 @@ public class QuantumSleepManager {
             Player player = plugin.getServer().getPlayer(uuid);
             if (player != null && player.isOnline()) {
                 // Quantum decoherence message
-                MessageUtils.sendMessage(player, "&7⚛ &cQuantum entanglement &7collapsed - returning to classical reality &7⚛");
+                if (plugin.getConfigManager().isMessageCategoryEnabled("quantum-messages")) {
+                    MessageUtils.sendMessage(player, plugin.getConfigManager().getMessage("quantum.entanglement-collapsed"));
+                }
                 
                 // Decoherence effect
                 Location loc = player.getLocation().add(0, 1.5, 0);

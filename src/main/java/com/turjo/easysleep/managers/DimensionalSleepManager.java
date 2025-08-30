@@ -129,27 +129,31 @@ public class DimensionalSleepManager {
         // Announce to first dimension
         if (!sleepers1.isEmpty()) {
             World world1 = sleepers1.get(0).getWorld();
-            MessageUtils.broadcastToWorld(world1, "");
-            MessageUtils.broadcastToWorld(world1, "&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-            MessageUtils.broadcastToWorld(world1, "&5🌌 &f&lDIMENSIONAL PORTAL &5&lOPENED &5🌌");
-            MessageUtils.broadcastToWorld(world1, "&7✨ &fPortal Type: &d" + portalName);
-            MessageUtils.broadcastToWorld(world1, "&7🌟 &fConnected Dreamers: &e" + (sleepers1.size() + sleepers2.size()));
-            MessageUtils.broadcastToWorld(world1, "&7💫 &fDimensional bridge &bstabilizing&f...");
-            MessageUtils.broadcastToWorld(world1, "&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-            MessageUtils.broadcastToWorld(world1, "");
+            if (plugin.getConfigManager().isMessageCategoryEnabled("dimensional-messages")) {
+                MessageUtils.broadcastToWorld(world1, "");
+                MessageUtils.broadcastToWorld(world1, plugin.getConfigManager().getBorderLine());
+                MessageUtils.broadcastToWorld(world1, plugin.getConfigManager().getMessage("dimensional.portal-opened"));
+                MessageUtils.broadcastToWorld(world1, plugin.getConfigManager().getMessage("dimensional.portal-type", "%portal_type%", portalName));
+                MessageUtils.broadcastToWorld(world1, plugin.getConfigManager().getMessage("dimensional.connected-dreamers", "%count%", String.valueOf(sleepers1.size() + sleepers2.size())));
+                MessageUtils.broadcastToWorld(world1, plugin.getConfigManager().getMessage("dimensional.bridge-stabilizing"));
+                MessageUtils.broadcastToWorld(world1, plugin.getConfigManager().getBorderLine());
+                MessageUtils.broadcastToWorld(world1, "");
+            }
         }
         
         // Announce to second dimension
         if (!sleepers2.isEmpty()) {
             World world2 = sleepers2.get(0).getWorld();
-            MessageUtils.broadcastToWorld(world2, "");
-            MessageUtils.broadcastToWorld(world2, "&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-            MessageUtils.broadcastToWorld(world2, "&5🌌 &f&lDIMENSIONAL PORTAL &5&lOPENED &5🌌");
-            MessageUtils.broadcastToWorld(world2, "&7✨ &fPortal Type: &d" + portalName);
-            MessageUtils.broadcastToWorld(world2, "&7🌟 &fConnected Dreamers: &e" + (sleepers1.size() + sleepers2.size()));
-            MessageUtils.broadcastToWorld(world2, "&7💫 &fDimensional bridge &bstabilizing&f...");
-            MessageUtils.broadcastToWorld(world2, "&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-            MessageUtils.broadcastToWorld(world2, "");
+            if (plugin.getConfigManager().isMessageCategoryEnabled("dimensional-messages")) {
+                MessageUtils.broadcastToWorld(world2, "");
+                MessageUtils.broadcastToWorld(world2, plugin.getConfigManager().getBorderLine());
+                MessageUtils.broadcastToWorld(world2, plugin.getConfigManager().getMessage("dimensional.portal-opened"));
+                MessageUtils.broadcastToWorld(world2, plugin.getConfigManager().getMessage("dimensional.portal-type", "%portal_type%", portalName));
+                MessageUtils.broadcastToWorld(world2, plugin.getConfigManager().getMessage("dimensional.connected-dreamers", "%count%", String.valueOf(sleepers1.size() + sleepers2.size())));
+                MessageUtils.broadcastToWorld(world2, plugin.getConfigManager().getMessage("dimensional.bridge-stabilizing"));
+                MessageUtils.broadcastToWorld(world2, plugin.getConfigManager().getBorderLine());
+                MessageUtils.broadcastToWorld(world2, "");
+            }
         }
     }
     
@@ -228,8 +232,10 @@ public class DimensionalSleepManager {
         center2.getWorld().playSound(center2, Sound.BLOCK_BEACON_POWER_SELECT, 0.3f, 1.8f);
         
         // Broadcast resonance message
-        MessageUtils.broadcastToWorld(center1.getWorld(), "&7🌌 &bDimensional resonance &7detected - &dstabilizing portal matrix&7... &7🌌");
-        MessageUtils.broadcastToWorld(center2.getWorld(), "&7🌌 &bDimensional resonance &7detected - &dstabilizing portal matrix&7... &7🌌");
+        if (plugin.getConfigManager().isMessageCategoryEnabled("dimensional-messages")) {
+            MessageUtils.broadcastToWorld(center1.getWorld(), plugin.getConfigManager().getMessage("dimensional.resonance-detected"));
+            MessageUtils.broadcastToWorld(center2.getWorld(), plugin.getConfigManager().getMessage("dimensional.resonance-detected"));
+        }
     }
     
     /**

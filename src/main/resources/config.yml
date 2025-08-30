@@ -1,7 +1,7 @@
 # ╔═══════════════════════════════════════════════════════════════════════════════╗
 # ║                    🌙 EasySleep v1.5.2 Configuration 🌙                      ║
 # ║                     The Ultimate Sleep Management Plugin                      ║
-# ║                        🌌 NOW WITH QUANTUM FEATURES 🌌                       ║
+# ║                    🎨 FULLY CUSTOMIZABLE MESSAGES 🎨                         ║
 # ║                              Created by Turjo                                ║
 # ╚═══════════════════════════════════════════════════════════════════════════════╝
 
@@ -115,6 +115,10 @@ animations:
   performance-mode: false  # Reduces effects for better performance
   max-particles-per-effect: 5
   animation-interval: 20  # Ticks between animation updates
+  
+  # Particle settings
+  sleep-particle: "SOUL_FIRE_FLAME"
+  enhanced-particles: true
 
 # Sound system
 sounds:
@@ -187,37 +191,6 @@ daily-messages:
     - "Day %day% - It is during our darkest moments that we must focus to see the light!"
     - "Day %day% - The way to get started is to quit talking and begin doing!"
     - "Day %day% - Don't let yesterday take up too much of today!"
-    - "Day %day% - You learn more from failure than from success!"
-    - "Day %day% - If you are working on something exciting that you really care about, you don't have to be pushed!"
-    - "Day %day% - Experience is a hard teacher because she gives the test first, the lesson afterward!"
-    - "Day %day% - The most difficult thing is the decision to act, the rest is merely tenacity!"
-    - "Day %day% - Life is what happens to you while you're busy making other plans!"
-    - "Day %day% - The world is changed by your example, not by your opinion!"
-    - "Day %day% - It is better to fail in originality than to succeed in imitation!"
-    - "Day %day% - The road to success and the road to failure are almost exactly the same!"
-    - "Day %day% - Success is not how high you have climbed, but how you make a positive difference!"
-    - "Day %day% - Don't be afraid to give up the good to go for the great!"
-    - "Day %day% - The only person you are destined to become is the person you decide to be!"
-    - "Day %day% - Go confidently in the direction of your dreams and live the life you have imagined!"
-    - "Day %day% - When you have a dream, you've got to grab it and never let go!"
-    - "Day %day% - Nothing is impossible, the word itself says 'I'm possible'!"
-    - "Day %day% - There is only one way to avoid criticism: do nothing, say nothing, and be nothing!"
-    - "Day %day% - Ask and it will be given to you; search, and you will find; knock and the door will be opened!"
-    - "Day %day% - The only person you should try to be better than is who you were yesterday!"
-    - "Day %day% - A person who never made a mistake never tried anything new!"
-    - "Day %day% - In the end, we will remember not the words of our enemies, but the silence of our friends!"
-    - "Day %day% - The best revenge is massive success!"
-    - "Day %day% - Life shrinks or expands in proportion to one's courage!"
-    - "Day %day% - If you want to lift yourself up, lift up someone else!"
-    - "Day %day% - I have learned throughout my life as a composer chiefly through my mistakes!"
-    - "Day %day% - It's not whether you get knocked down, it's whether you get up!"
-    - "Day %day% - Champions keep playing until they get it right!"
-    - "Day %day% - Failure will never overtake me if my determination to succeed is strong enough!"
-    - "Day %day% - We may encounter many defeats but we must not be defeated!"
-    - "Day %day% - Knowing is not enough; we must apply. Wishing is not enough; we must do!"
-    - "Day %day% - Imagine your life is perfect in every respect; what would it look like?"
-    - "Day %day% - We generate fears while we sit. We overcome them by action!"
-    - "Day %day% - Whether you think you can or think you can't, you're right!"
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # 🤖 ADVANCED FEATURES
@@ -339,17 +312,19 @@ technical:
     essentials: true
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# 📝 MESSAGES & LOCALIZATION - FULLY CUSTOMIZABLE
+# 💬 MESSAGES & LOCALIZATION - FULLY CUSTOMIZABLE & ENABLE/DISABLE
 # ═══════════════════════════════════════════════════════════════════════════════
 messages:
   # Prefix for all plugin messages
   prefix: "&8[&6EasySleep&8] &r"
   
-  # Enable/disable specific message categories
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # 🎛️ MESSAGE CATEGORY CONTROLS - ENABLE/DISABLE ANY MESSAGE TYPE
+  # ═══════════════════════════════════════════════════════════════════════════════
   enabled:
     sleep-messages: true          # Player sleep/wake messages
-    night-skip-messages: true     # Night skip announcements
-    time-acceleration: true       # Time acceleration messages
+    night-skip-messages: true     # Night skip announcements (DISABLE TO STOP TIME ACCELERATION MESSAGES)
+    time-acceleration: true       # Time acceleration messages (DISABLE TO STOP REALITY SHIFTING MESSAGES)
     reward-messages: true         # Reward notifications
     dream-messages: true          # Dream sequence messages
     ritual-messages: true         # Sleep ritual messages
@@ -357,21 +332,29 @@ messages:
     day-counter-messages: true    # Day counter messages
     command-responses: true       # Command response messages
     error-messages: true          # Error messages
+    achievement-messages: true    # Achievement unlock messages
+    economy-messages: true        # Dream coin economy messages
+    quantum-messages: true        # Quantum entanglement messages
+    dimensional-messages: true    # Dimensional portal messages
     
+  # ═══════════════════════════════════════════════════════════════════════════════
+  # 🎨 FULLY CUSTOMIZABLE MESSAGES - CHANGE ANY TEXT, COLOR, OR FORMAT
+  # ═══════════════════════════════════════════════════════════════════════════════
+  
   # Sleep messages
   sleep:
     player-sleeping: "&7🌙 &e%player% &7enters dream state &8(&a%sleeping%&7/&e%required%&8)"
     player-waking: "&7☀ &e%player% &7wakes up &8(&a%sleeping%&7/&e%total%&8)"
     
-  # Night skip messages
+  # Night skip messages (THESE ARE THE MESSAGES YOU SAW IN THE IMAGE)
   night-skip:
     announcement: "&a✓ &fNight skipped! &7Time acceleration: &e%speed%x"
-    protocol-activated: "&b⚡ &f&lNIGHT SKIP PROTOCOL &b&lACTIVATED &b⚡"
-    time-acceleration-progress: "&7✨ &eTime acceleration in progress... &7✨"
-    protocol-complete: "&a✓ &f&lNIGHT SKIP &a&lCOMPLETE &a✓"
-    new-dawn: "&7🌅 &eWelcome to the new dawn! &7🌅"
+    protocol-activated: "&b⚡ &f&lTIME ACCELERATION &b&lACTIVE &b⚡"
+    time-acceleration-progress: "&7✨ &eReality shifting... &7✨"
+    protocol-complete: "&a✓ &f&lTIME ACCELERATION &a&lCOMPLETE &a✓"
+    new-dawn: "&7🌅 &eNew timeline established! &7🌅"
     
-  # Time acceleration messages
+  # Time acceleration messages (THESE CONTROL THE REALITY SHIFTING MESSAGES)
   time-acceleration:
     active: "&b⚡ &f&lTIME ACCELERATION &b&lACTIVE &b⚡"
     flowing-faster: "&b⚡ &fTime flowing faster... &7(&e%speed%x speed&7)"
@@ -426,6 +409,39 @@ messages:
     new-day-title: "&fDay %day%"
     new-day-subtitle: "&7%message%"
     
+  # Achievement messages
+  achievements:
+    unlocked: "&6🏆 &f&lACHIEVEMENT UNLOCKED &6🏆"
+    achievement-name: "&f%achievement_name%"
+    achievement-description: "&7%achievement_description%"
+    reward-received: "&a+ %reward% &7(Achievement reward)"
+    broadcast-unlock: "&6🏆 &e%player% &funlocked achievement: &b%achievement% &6🏆"
+    
+  # Economy messages (Dream Coins)
+  economy:
+    coins-received: "&d💎 &f+ &e%amount% &dDream Coins &7(Sleep reward)"
+    balance-display: "&fYour Balance: &e%balance% &dDream Coins"
+    purchase-success: "&a✓ &fPurchased &e%item% &ffor &e%price% &dDream Coins"
+    purchase-failed: "&cInsufficient Dream Coins! Need: &e%required% &cHave: &e%current%"
+    remaining-balance: "&7Remaining balance: &e%balance% &dDream Coins"
+    
+  # Quantum messages
+  quantum:
+    entanglement-detected: "&b⚛ &f&lQUANTUM ENTANGLEMENT &b&lDETECTED &b⚛"
+    cross-dimensional-sync: "&7🌌 &fCross-dimensional sleep synchronization &bactivated"
+    entangled-players: "&7⚡ &fEntangled players: &e%count% &7across &e%dimensions% &7dimensions"
+    quantum-coherence: "&7💫 &fQuantum coherence &destablishing&f..."
+    synchronization-pulse: "&7⚛ &bQuantum synchronization pulse &7⚛"
+    entanglement-collapsed: "&7⚛ &cQuantum entanglement &7collapsed - returning to classical reality &7⚛"
+    
+  # Dimensional portal messages
+  dimensional:
+    portal-opened: "&5🌌 &f&lDIMENSIONAL PORTAL &5&lOPENED &5🌌"
+    portal-type: "&7✨ &fPortal Type: &d%portal_type%"
+    connected-dreamers: "&7🌟 &fConnected Dreamers: &e%count%"
+    bridge-stabilizing: "&7💫 &fDimensional bridge &bstabilizing&f..."
+    resonance-detected: "&7🌌 &bDimensional resonance &7detected - &dstabilizing portal matrix&7... &7🌌"
+    
   # Command response messages
   commands:
     sleep-set-success: "&aSuccessfully set sleep percentage to &e%percentage%% &ain world &e%world%"
@@ -450,11 +466,15 @@ messages:
     sleep-percentage-retrieval-failed: "&cCould not retrieve sleep percentage!"
     percentage-range-error: "&cPercentage must be between 0 and 100!"
     unknown-subcommand: "&cUnknown subcommand: %subcommand%"
+    item-not-found: "&cItem not found: %item%"
     
-  # Decorative borders and separators
+  # Decorative borders and separators (FULLY CUSTOMIZABLE)
   decorations:
     border-line: "&8━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     section-separator: "&8▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
+    achievement-border: "&6╔═══════════════════════════════════════════╗"
+    achievement-separator: "&6╠═══════════════════════════════════════════╣"
+    achievement-footer: "&6╚═══════════════════════════════════════════╝"
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # 📊 PLACEHOLDERS (PlaceholderAPI)
@@ -470,6 +490,8 @@ placeholders:
   # %easysleep_player_streak% - Player's sleep streak
   # %easysleep_moon_phase% - Current moon phase
   # %easysleep_afk_players% - Number of AFK players
+  # %easysleep_dream_coins% - Player's dream coin balance
+  # %easysleep_achievements% - Player's achievement count
   enabled: true
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -488,3 +510,4 @@ auto-updater:
 # ═══════════════════════════════════════════════════════════════════════════════
 # 📝 CONFIG VERSION (DO NOT MODIFY)
 # ═══════════════════════════════════════════════════════════════════════════════
+config-version: 16

@@ -387,7 +387,6 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             // First argument - subcommands
             String partial = args[0].toLowerCase();
-            List<String> subCommands = Arrays.asList("set", "get", "status", "reset", "reload", "setday", "resetday", "stats", "rewards", "update", "help");
             List<String> subCommands = Arrays.asList("set", "get", "status", "reset", "reload", "setday", "resetday", "stats", "rewards", "achievements", "shop", "balance", "update", "help");
             for (String subCommand : subCommands) {
                 if (subCommand.startsWith(partial)) {
