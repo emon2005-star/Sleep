@@ -58,7 +58,7 @@ public class ConfigManager {
         config.addDefault("sounds.sleep-sound.sound", "BLOCK_AMETHYST_BLOCK_CHIME");
         config.addDefault("daily-messages.enabled", true);
         
-        // Add new message system defaults
+        config.set("config-version", 16);
         config.addDefault("messages.enabled.sleep-messages", true);
         config.addDefault("messages.enabled.night-skip-messages", true);
         config.addDefault("messages.enabled.time-acceleration", true);

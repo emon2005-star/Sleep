@@ -61,7 +61,8 @@ public class DayNightCycleManager {
         // Detect time jump
         long timeDiff = Math.abs(currentTime - lastTime);
         
-        if (timeDiff > 200 && !animationActive.getOrDefault(worldName, false)) {
+        // Only trigger if significant time jump and players are online
+        if (timeDiff > 200 && !animationActive.getOrDefault(worldName, false) && !world.getPlayers().isEmpty()) {
             triggerModernTimeAcceleration(world);
             animationActive.put(worldName, true);
             

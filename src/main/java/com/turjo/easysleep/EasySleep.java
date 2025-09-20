@@ -118,7 +118,7 @@ public class EasySleep extends JavaPlugin {
     public void onDisable() {
         // Enhanced shutdown message
         getLogger().info("╔═══════════════════════════════════════════╗");
-        getLogger().info("║     🌙 EASYSLEEP v1.5.2 DEACTIVATED 🌙    ║");
+        getLogger().info("║     🌙 EASYSLEEP v1.5.3 DEACTIVATED 🌙    ║");
         getLogger().info("║                                           ║");
         getLogger().info("║ 🌌 Quantum states: COLLAPSED             ║");
         getLogger().info("║ 🌍 Dimensional portals: CLOSED           ║");
@@ -126,7 +126,7 @@ public class EasySleep extends JavaPlugin {
         getLogger().info("║ 💎 Dream economy: SECURED                ║");
         getLogger().info("║ 🎁 Rewards saved and secured             ║");
         getLogger().info("║ ⚡ All systems: OFFLINE                  ║");
-        getLogger().info("║ 💫 Thanks for using EasySleep v1.5.2!    ║");
+        getLogger().info("║ 💫 Thanks for using EasySleep v1.5.3!    ║");
         getLogger().info("║ 📊 Statistics: SAVED                     ║");
         getLogger().info("╚═══════════════════════════════════════════╝");
         

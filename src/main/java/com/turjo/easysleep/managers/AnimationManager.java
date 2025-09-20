@@ -325,7 +325,7 @@ public class AnimationManager {
      */
     public void stopAllAnimations() {
         for (BukkitTask task : activeAnimations.values()) {
-            if (!task.isCancelled()) {
+            if (task != null && !task.isCancelled()) {
                 task.cancel();
             }
         }

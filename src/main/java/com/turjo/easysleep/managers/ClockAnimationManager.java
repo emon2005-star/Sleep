@@ -157,7 +157,8 @@ public class ClockAnimationManager {
      * Cleanup method
      */
     public void cleanup() {
-        if (clockTask != null && !clockTask.isCancelled()) {
+        if (clockTask != null) {
+            clockTask.cancel();
             clockTask.cancel();
         }
     }

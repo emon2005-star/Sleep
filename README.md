@@ -199,6 +199,13 @@ SleepStats stats = EasySleep.getInstance().getPlayerStats(player);
 
 ## 📈 Version History
 
+### v1.5.3 (Current)
+- 🐛 **Bug Fixes** - Fixed all command issues (achievements, shop, balance)
+- ⚡ **Performance** - Improved animation performance and memory management
+- 💬 **Messages** - Fixed all message errors and GUI management references
+- 🔧 **Commands** - All commands now working perfectly with tab completion
+- 🎯 **Stability** - Enhanced error handling and null pointer prevention
+
 ### v1.5.0 (Current)
 - 🎁 Complete rewards and effects system
 - 🌟 100+ inspirational daily messages
