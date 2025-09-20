@@ -78,6 +78,12 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
                 return handleUpdateCommand(sender);
             case "rewards":
                 return handleRewardsCommand(sender);
+            case "achievements":
+                return handleAchievementsCommand(sender);
+            case "shop":
+                return handleShopCommand(sender, args);
+            case "balance":
+                return handleBalanceCommand(sender);
             case "help":
                 sendHelpMessage(sender);
                 return true;
@@ -339,6 +345,64 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
     }
     
     /**
+     * Handle the achievements subcommand
+     */
+    private boolean handleAchievementsCommand(CommandSender sender) {
+        if (!(sender instanceof Player)) {
+            MessageUtils.sendMessage(sender, "&cThis command can only be used by players!");
+            return true;
+        }
+        
+        Player player = (Player) sender;
+        plugin.getSleepAchievementManager().showAchievements(player);
+        return true;
+    }
+    
+    /**
+     * Handle the shop subcommand
+     */
+    private boolean handleShopCommand(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player)) {
+            MessageUtils.sendMessage(sender, "&cThis command can only be used by players!");
+            return true;
+        }
+        
+        Player player = (Player) sender;
+        
+        if (args.length >= 3 && "buy".equals(args[1])) {
+            String itemId = args[2];
+            boolean success = plugin.getSleepEconomyManager().purchaseShopItem(player, itemId);
+            if (!success) {
+                MessageUtils.sendMessage(player, "&cPurchase failed! Check item name and balance.");
+            }
+        } else {
+            plugin.getSleepEconomyManager().showSleepShop(player);
+        }
+        return true;
+    }
+    
+    /**
+     * Handle the balance subcommand
+     */
+    private boolean handleBalanceCommand(CommandSender sender) {
+        if (!(sender instanceof Player)) {
+            MessageUtils.sendMessage(sender, "&cThis command can only be used by players!");
+            return true;
+        }
+        
+        Player player = (Player) sender;
+        long balance = plugin.getSleepEconomyManager().getDreamCoins(player);
+        
+        MessageUtils.sendMessage(player, "&6╔═══════════════════════════════════════════╗");
+        MessageUtils.sendMessage(player, "&6║ &d💎 &f&lDREAM COIN BALANCE &d💎 &6║");
+        MessageUtils.sendMessage(player, "&6╠═══════════════════════════════════════════╣");
+        MessageUtils.sendMessage(player, "&6║ &fYour Balance: &e" + balance + " &dDream Coins &6║");
+        MessageUtils.sendMessage(player, "&6║ &7Use: &e/sleep shop &7to browse items &6║");
+        MessageUtils.sendMessage(player, "&6╚═══════════════════════════════════════════╝");
+        return true;
+    }
+    
+    /**
      * Get the target world for the command
      */
     private World getTargetWorld(CommandSender sender) {
@@ -366,6 +430,9 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
         MessageUtils.sendMessage(sender, "&6║ &e/sleep resetday &7- Reset to Day 1        &6║");
         MessageUtils.sendMessage(sender, "&6║ &e/sleep stats &7- View plugin statistics  &6║");
         MessageUtils.sendMessage(sender, "&6║ &e/sleep rewards &7- View reward info       &6║");
+        MessageUtils.sendMessage(sender, "&6║ &e/sleep achievements &7- View achievements  &6║");
+        MessageUtils.sendMessage(sender, "&6║ &e/sleep shop &7- Browse Dream Coin shop   &6║");
+        MessageUtils.sendMessage(sender, "&6║ &e/sleep balance &7- Check Dream Coins     &6║");
         MessageUtils.sendMessage(sender, "&6║ &e/sleep update &7- Check for updates      &6║");
         MessageUtils.sendMessage(sender, "&6║ &e/sleep help &7- Show this matrix         &6║");
         MessageUtils.sendMessage(sender, "&6╠═══════════════════════════════════════════╣");
@@ -391,6 +458,15 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
             for (String subCommand : subCommands) {
                 if (subCommand.startsWith(partial)) {
                     completions.add(subCommand);
+                }
+            }
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("shop")) {
+            // Shop subcommands
+            String partial = args[1].toLowerCase();
+            List<String> shopCommands = Arrays.asList("buy");
+            for (String shopCommand : shopCommands) {
+                if (shopCommand.startsWith(partial)) {
+                    completions.add(shopCommand);
                 }
             }
         } else if (args.length == 2) {
