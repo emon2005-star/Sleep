@@ -369,15 +369,8 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
         
         Player player = (Player) sender;
         
-        if (args.length >= 3 && "buy".equals(args[1])) {
-            String itemId = args[2];
-            boolean success = plugin.getSleepEconomyManager().purchaseShopItem(player, itemId);
-            if (!success) {
-                MessageUtils.sendMessage(player, "&cPurchase failed! Check item name and balance.");
-            }
-        } else {
-            plugin.getSleepEconomyManager().showSleepShop(player);
-        }
+        // Open the beautiful GUI shop
+        plugin.getSleepShopGUI().openShop(player);
         return true;
     }
     
@@ -396,8 +389,8 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
         MessageUtils.sendMessage(player, "&6╔═══════════════════════════════════════════╗");
         MessageUtils.sendMessage(player, "&6║ &d💎 &f&lDREAM COIN BALANCE &d💎 &6║");
         MessageUtils.sendMessage(player, "&6╠═══════════════════════════════════════════╣");
-        MessageUtils.sendMessage(player, "&6║ &fYour Balance: &e" + balance + " &dDream Coins &6║");
-        MessageUtils.sendMessage(player, "&6║ &7Use: &e/sleep shop &7to browse items &6║");
+        MessageUtils.sendMessage(player, "&6║ &fYour Balance: &e" + balance + " &dDream Coins" + String.format("%" + (15 - String.valueOf(balance).length()) + "s", "") + "&6║");
+        MessageUtils.sendMessage(player, "&6║ &7Use: &e/sleep shop &7to open GUI shop" + String.format("%" + (8) + "s", "") + "&6║");
         MessageUtils.sendMessage(player, "&6╚═══════════════════════════════════════════╝");
         return true;
     }
@@ -431,7 +424,7 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
         MessageUtils.sendMessage(sender, "&6║ &e/sleep stats &7- View plugin statistics  &6║");
         MessageUtils.sendMessage(sender, "&6║ &e/sleep rewards &7- View reward info       &6║");
         MessageUtils.sendMessage(sender, "&6║ &e/sleep achievements &7- View achievements  &6║");
-        MessageUtils.sendMessage(sender, "&6║ &e/sleep shop &7- Browse Dream Coin shop   &6║");
+        MessageUtils.sendMessage(sender, "&6║ &e/sleep shop &7- Open GUI Dream Shop      &6║");
         MessageUtils.sendMessage(sender, "&6║ &e/sleep balance &7- Check Dream Coins     &6║");
         MessageUtils.sendMessage(sender, "&6║ &e/sleep update &7- Check for updates      &6║");
         MessageUtils.sendMessage(sender, "&6║ &e/sleep help &7- Show this matrix         &6║");
@@ -463,12 +456,7 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
         } else if (args.length == 2 && args[0].equalsIgnoreCase("shop")) {
             // Shop subcommands
             String partial = args[1].toLowerCase();
-            List<String> shopCommands = Arrays.asList("buy");
-            for (String shopCommand : shopCommands) {
-                if (shopCommand.startsWith(partial)) {
-                    completions.add(shopCommand);
-                }
-            }
+            // No subcommands needed for GUI shop
         } else if (args.length == 2) {
             // Second argument for 'set' command - percentage suggestions
             if (args[0].equalsIgnoreCase("set")) {
@@ -485,13 +473,6 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
                 for (String suggestion : suggestions) {
                     if (suggestion.startsWith(partial)) {
                         completions.add(suggestion);
-                    }
-                }
-            } else if (args[0].equalsIgnoreCase("shop") && args.length == 3 && "buy".equals(args[1])) {
-                String partial = args[2];
-                for (String item : plugin.getSleepEconomyManager().getShopItems()) {
-                    if (item.startsWith(partial)) {
-                        completions.add(item);
                     }
                 }
             }

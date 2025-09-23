@@ -199,6 +199,17 @@ SleepStats stats = EasySleep.getInstance().getPlayerStats(player);
 
 ## 📈 Version History
 
+### 🎉 **v1.5.4 (Latest) - GUI Shop Revolution**
+- 🛒 **Complete GUI Shop Overhaul** - Beautiful interactive inventory shop
+- 💎 **Enhanced Dream Economy** - Increased coin rewards and better balance
+- 🎨 **Visual Shopping Experience** - Stunning shop interface with effects
+- 🔊 **Audio Feedback** - Shop sounds and purchase confirmations
+- ⚡ **Performance Optimized** - Smooth GUI interactions and memory management
+- 🎯 **User-Friendly Design** - Intuitive shopping with clear affordability indicators
+
+### 🎉 **v1.5.2 - The Ultimate Update**
+- 🎛️ **Complete message control** - Enable/disable any message type
+
 ### v1.5.3 (Current)
 - 🐛 **Bug Fixes** - Fixed all command issues (achievements, shop, balance)
 - ⚡ **Performance** - Improved animation performance and memory management

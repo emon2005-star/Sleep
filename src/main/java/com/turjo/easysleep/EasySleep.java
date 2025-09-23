@@ -20,6 +20,7 @@ import com.turjo.easysleep.managers.QuantumSleepManager;
 import com.turjo.easysleep.managers.DimensionalSleepManager;
 import com.turjo.easysleep.managers.SleepAchievementManager;
 import com.turjo.easysleep.managers.SleepEconomyManager;
+import com.turjo.easysleep.managers.SleepShopGUI;
 import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -53,6 +54,7 @@ public class EasySleep extends JavaPlugin {
     private DimensionalSleepManager dimensionalSleepManager;
     private SleepAchievementManager sleepAchievementManager;
     private SleepEconomyManager sleepEconomyManager;
+    private SleepShopGUI sleepShopGUI;
     
     @Override
     public void onEnable() {
@@ -76,6 +78,7 @@ public class EasySleep extends JavaPlugin {
         this.dimensionalSleepManager = new DimensionalSleepManager(this);
         this.sleepAchievementManager = new SleepAchievementManager(this);
         this.sleepEconomyManager = new SleepEconomyManager(this);
+        this.sleepShopGUI = new SleepShopGUI(this);
         
         // Initialize commands
         initializeCommands();
@@ -102,6 +105,7 @@ public class EasySleep extends JavaPlugin {
         getLogger().info("║ 🎁 Rewards System: ACTIVE                ║");
         getLogger().info("║ ⚡ Time Acceleration: 1.5-2x SPEED       ║");
         getLogger().info("║ 🎨 Gentle Animations: OPTIMIZED         ║");
+        getLogger().info("║ 🛒 GUI Shop System: ENHANCED             ║");
         getLogger().info("║ 🌅 Day-Night Cycle: STUNNING             ║");
         getLogger().info("║ 📊 Statistics Tracking: COMPREHENSIVE    ║");
         getLogger().info("║ 🤖 AFK Detection: INTELLIGENT            ║");
@@ -172,6 +176,9 @@ public class EasySleep extends JavaPlugin {
         }
         if (sleepEconomyManager != null) {
             sleepEconomyManager.cleanup();
+        }
+        if (sleepShopGUI != null) {
+            sleepShopGUI.cleanup();
         }
         instance = null;
     }
@@ -357,5 +364,13 @@ public class EasySleep extends JavaPlugin {
      */
     public SleepEconomyManager getSleepEconomyManager() {
         return sleepEconomyManager;
+    }
+    
+    /**
+     * Get the sleep shop GUI
+     * @return SleepShopGUI instance
+     */
+    public SleepShopGUI getSleepShopGUI() {
+        return sleepShopGUI;
     }
 }

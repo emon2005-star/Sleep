@@ -257,7 +257,7 @@ features:
   # 💎 DREAM COIN ECONOMY 💎
   dream-economy:
     enabled: true
-    base-coins-per-sleep: 10
+    base-coins-per-sleep: 15
     streak-bonus-multiplier: 0.1  # 10% per streak day
     shop-enabled: true
     
