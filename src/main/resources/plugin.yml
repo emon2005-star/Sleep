@@ -32,20 +32,28 @@ permissions:
   easysleep.admin:
     description: Allows access to sleep management commands
     default: op
-  easysleep.gui:
-    description: Allows access to GUI interface and shop
+  easysleep.shop:
+    description: Allows access to the dream coin shop
     default: true
-  easysleep.user:
-    description: Allows access to user commands like rewards
+  easysleep.balance:
+    description: Allows checking dream coin balance
     default: true
   easysleep.rewards:
-    description: Allows receiving sleep rewards
+    description: Allows viewing reward information and receiving rewards
+    default: true
+  easysleep.achievements:
+    description: Allows viewing achievements
+    default: true
+  easysleep.gui:
+    description: Legacy permission for GUI access
     default: true
   easysleep.*:
     description: Grants all EasySleep permissions
     default: op
     children:
       easysleep.admin: true
-      easysleep.gui: true
-      easysleep.user: true
+      easysleep.shop: true
+      easysleep.balance: true
       easysleep.rewards: true
+      easysleep.achievements: true
+      easysleep.gui: true

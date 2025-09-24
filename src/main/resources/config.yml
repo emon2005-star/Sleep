@@ -36,13 +36,14 @@ rewards:
   # Economy rewards (requires Vault)
   economy:
     enabled: true
-    money-per-sleep: 25.0
+    money-per-sleep: 5.0
     bonus-multiplier: 1.5  # Multiplier for streak bonuses
+    dream-coins-per-sleep: 3  # Dream coins awarded per sleep
     
   # Experience rewards
   experience:
     enabled: true
-    xp-per-sleep: 100
+    xp-per-sleep: 25
     levels-per-sleep: 0  # Set to 0 to disable level rewards
     
   # Item rewards
@@ -50,34 +51,31 @@ rewards:
     enabled: true
     # Format: "MATERIAL:AMOUNT" or "MATERIAL:AMOUNT:DATA"
     sleep-rewards:
-      - "GOLDEN_APPLE:1"
-      - "EMERALD:2"
-      - "DIAMOND:1"
+      - "BREAD:2"
+      - "COOKED_BEEF:1"
     # Special rewards for streaks
     streak-rewards:
       7:  # 7-day streak
-        - "DIAMOND_BLOCK:1"
-        - "EXPERIENCE_BOTTLE:5"
+        - "GOLDEN_APPLE:1"
+        - "EXPERIENCE_BOTTLE:2"
       30: # 30-day streak
-        - "NETHERITE_INGOT:1"
-        - "ENCHANTED_GOLDEN_APPLE:2"
+        - "DIAMOND:1"
+        - "ENCHANTED_GOLDEN_APPLE:1"
       100: # 100-day streak
         - "BEACON:1"
-        - "NETHER_STAR:3"
+        - "NETHER_STAR:1"
         
   # Potion effects for sleeping players
   effects:
     enabled: true
     # Format: "EFFECT_NAME:DURATION_SECONDS:AMPLIFIER"
     sleep-effects:
-      - "REGENERATION:60:1"
-      - "SPEED:120:0"
-      - "NIGHT_VISION:300:0"
-      - "SATURATION:30:0"
+      - "REGENERATION:30:0"
+      - "SATURATION:15:0"
     # Effects for morning (when waking up)
     morning-effects:
-      - "ABSORPTION:600:1"
-      - "LUCK:1200:0"
+      - "ABSORPTION:300:0"
+      - "LUCK:600:0"
       
   # Streak system
   streaks:
@@ -257,7 +255,7 @@ features:
   # 💎 DREAM COIN ECONOMY 💎
   dream-economy:
     enabled: true
-    base-coins-per-sleep: 15
+    base-coins-per-sleep: 3
     streak-bonus-multiplier: 0.1  # 10% per streak day
     shop-enabled: true
     

@@ -107,25 +107,25 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
                 }
                 return handleUpdateCommand(sender);
             case "rewards":
-                if (!sender.hasPermission("easysleep.user")) {
+                if (!sender.hasPermission("easysleep.rewards")) {
                     MessageUtils.sendMessage(sender, "&cYou don't have permission to use this command!");
                     return true;
                 }
                 return handleRewardsCommand(sender);
             case "achievements":
-                if (!sender.hasPermission("easysleep.user")) {
+                if (!sender.hasPermission("easysleep.achievements")) {
                     MessageUtils.sendMessage(sender, "&cYou don't have permission to use this command!");
                     return true;
                 }
                 return handleAchievementsCommand(sender);
             case "shop":
-                if (!sender.hasPermission("easysleep.gui")) {
+                if (!sender.hasPermission("easysleep.shop")) {
                     MessageUtils.sendMessage(sender, "&cYou don't have permission to use this command!");
                     return true;
                 }
                 return handleShopCommand(sender, args);
             case "balance":
-                if (!sender.hasPermission("easysleep.gui")) {
+                if (!sender.hasPermission("easysleep.balance")) {
                     MessageUtils.sendMessage(sender, "&cYou don't have permission to use this command!");
                     return true;
                 }
@@ -497,13 +497,19 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
             }
             
             // Add user commands
-            if (sender.hasPermission("easysleep.user")) {
-                subCommands.addAll(Arrays.asList("rewards", "achievements"));
+            if (sender.hasPermission("easysleep.rewards")) {
+                subCommands.add("rewards");
+            }
+            if (sender.hasPermission("easysleep.achievements")) {
+                subCommands.add("achievements");
             }
             
             // Add GUI commands
-            if (sender.hasPermission("easysleep.gui")) {
-                subCommands.addAll(Arrays.asList("shop", "balance"));
+            if (sender.hasPermission("easysleep.shop")) {
+                subCommands.add("shop");
+            }
+            if (sender.hasPermission("easysleep.balance")) {
+                subCommands.add("balance");
             }
             
             // Help is always available

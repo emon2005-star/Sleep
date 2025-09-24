@@ -64,6 +64,11 @@ public class RewardsManager {
             return;
         }
         
+        // Check if player has permission to receive rewards
+        if (!player.hasPermission("easysleep.rewards")) {
+            return;
+        }
+        
         // Update streak
         updatePlayerStreak(player);
         int streak = getPlayerStreak(player);
@@ -76,6 +81,10 @@ public class RewardsManager {
         giveExperienceReward(player, multiplier);
         giveItemRewards(player);
         givePotionEffects(player);
+        
+        // Award dream coins (integrated into rewards system)
+        int baseDreamCoins = plugin.getConfigManager().getConfig().getInt("rewards.economy.dream-coins-per-sleep", 5);
+        plugin.getSleepEconomyManager().awardDreamCoins(player, baseDreamCoins);
         
         // Check for streak milestones
         checkStreakMilestones(player, streak);

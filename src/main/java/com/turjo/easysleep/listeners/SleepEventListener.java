@@ -48,19 +48,20 @@ public class SleepEventListener implements Listener {
         // Record sleep event
         plugin.getStatisticsManager().recordSleepEvent();
         
-        // Give sleep rewards
-        plugin.getRewardsManager().giveSleepRewards(player);
-        
-        // Award dream coins
-        plugin.getSleepEconomyManager().awardDreamCoins(player, 10);
+        // Give sleep rewards (this includes dream coins, so we don't duplicate)
+        if (player.hasPermission("easysleep.rewards")) {
+            plugin.getRewardsManager().giveSleepRewards(player);
+        }
         
         // Check achievements
-        plugin.getSleepAchievementManager().checkSleepAchievements(player);
-        plugin.getSleepAchievementManager().checkDimensionalAchievements(player);
+        if (player.hasPermission("easysleep.achievements")) {
+            plugin.getSleepAchievementManager().checkSleepAchievements(player);
+            plugin.getSleepAchievementManager().checkDimensionalAchievements(player);
+        }
         
         // Check moon phase achievements
         com.turjo.easysleep.managers.MoonPhaseManager.MoonPhase moonPhase = plugin.getMoonPhaseManager().getCurrentMoonPhase(world);
-        if (moonPhase != null) {
+        if (moonPhase != null && player.hasPermission("easysleep.achievements")) {
             plugin.getSleepAchievementManager().checkMoonPhaseAchievements(player, moonPhase.name());
         }
         

@@ -58,6 +58,12 @@ public class SleepShopGUI implements Listener {
      * 🌟 Open the Dream Shop GUI for player
      */
     public void openShop(Player player) {
+        // Check permission
+        if (!player.hasPermission("easysleep.shop")) {
+            MessageUtils.sendMessage(player, "&cYou don't have permission to access the shop!");
+            return;
+        }
+        
         long playerCoins = plugin.getSleepEconomyManager().getDreamCoins(player);
         
         // Create beautiful shop inventory

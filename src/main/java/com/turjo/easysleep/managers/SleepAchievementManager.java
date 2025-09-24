@@ -143,6 +143,11 @@ public class SleepAchievementManager {
      * 🌟 Check and award sleep achievements
      */
     public void checkSleepAchievements(Player player) {
+        // Check permission
+        if (!player.hasPermission("easysleep.achievements")) {
+            return;
+        }
+        
         UUID uuid = player.getUniqueId();
         
         // Update sleep count

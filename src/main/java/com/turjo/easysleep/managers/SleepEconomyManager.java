@@ -116,6 +116,11 @@ public class SleepEconomyManager {
      * 🌟 Award dream coins for sleeping
      */
     public void awardDreamCoins(Player player, int baseAmount) {
+        // Check if player has permission
+        if (!player.hasPermission("easysleep.balance")) {
+            return;
+        }
+        
         UUID uuid = player.getUniqueId();
         
         // Calculate bonus multipliers
