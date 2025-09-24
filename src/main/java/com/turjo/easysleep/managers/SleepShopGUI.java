@@ -68,7 +68,7 @@ public class SleepShopGUI implements Listener {
         shop.setItem(4, balanceItem);
         
         // Add shop items
-        int[] shopSlots = {19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
+        int[] shopSlots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25};
         int slotIndex = 0;
         
         for (Map.Entry<String, ShopItem> entry : shopItems.entrySet()) {
@@ -200,9 +200,9 @@ public class SleepShopGUI implements Listener {
      * Get item ID from clicked slot
      */
     private String getItemIdFromSlot(int slot) {
-        int[] shopSlots = {19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
-        String[] itemIds = {"dream_boost", "lunar_blessing", "quantum_stabilizer", "dream_catcher", 
-                           "sleep_multiplier", "dimensional_key", "time_crystal", "dream_crown"};
+        int[] shopSlots = {10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25};
+        String[] itemIds = {"food_bundle", "tool_kit", "armor_set", "building_blocks", "potion_bundle",
+                           "dream_boost", "lunar_blessing", "quantum_stabilizer", "time_crystal"};
         
         for (int i = 0; i < shopSlots.length && i < itemIds.length; i++) {
             if (shopSlots[i] == slot) {

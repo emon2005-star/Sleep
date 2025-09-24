@@ -32,6 +32,9 @@ permissions:
   easysleep.admin:
     description: Allows access to sleep management commands
     default: op
+  easysleep.gui:
+    description: Allows access to GUI interface and shop
+    default: true
   easysleep.user:
     description: Allows access to user commands like rewards
     default: true
@@ -43,5 +46,6 @@ permissions:
     default: op
     children:
       easysleep.admin: true
+      easysleep.gui: true
       easysleep.user: true
       easysleep.rewards: true

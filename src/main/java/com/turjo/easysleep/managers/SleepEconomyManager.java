@@ -193,17 +193,8 @@ public class SleepEconomyManager {
         // Deduct coins
         dreamCoins.put(uuid, playerCoins - item.price);
         
-        // Give item
-        try {
-            String[] parts = item.reward.split(":");
-            Material material = Material.valueOf(parts[0]);
-            int amount = Integer.parseInt(parts[1]);
-            
-            org.bukkit.inventory.ItemStack reward = new org.bukkit.inventory.ItemStack(material, amount);
-            player.getInventory().addItem(reward);
-        } catch (Exception e) {
-            plugin.getLogger().warning("Invalid shop item reward: " + item.reward);
-        }
+        // Give items and effects based on item type
+        giveShopItemReward(player, itemId);
         
         // Track purchase
         Map<String, Integer> purchases = sleepShopPurchases.getOrDefault(uuid, new HashMap<>());
@@ -227,6 +218,114 @@ public class SleepEconomyManager {
         
         saveEconomyData();
         return true;
+    }
+    
+    /**
+     * Give shop item rewards with custom effects
+     */
+    private void giveShopItemReward(Player player, String itemId) {
+        switch (itemId.toLowerCase()) {
+            case "food_bundle":
+                player.getInventory().addItem(
+                    new org.bukkit.inventory.ItemStack(Material.BREAD, 16),
+                    new org.bukkit.inventory.ItemStack(Material.COOKED_BEEF, 8),
+                    new org.bukkit.inventory.ItemStack(Material.GOLDEN_CARROT, 4)
+                );
+                break;
+                
+            case "tool_kit":
+                player.getInventory().addItem(
+                    new org.bukkit.inventory.ItemStack(Material.IRON_PICKAXE, 1),
+                    new org.bukkit.inventory.ItemStack(Material.IRON_AXE, 1),
+                    new org.bukkit.inventory.ItemStack(Material.IRON_SHOVEL, 1),
+                    new org.bukkit.inventory.ItemStack(Material.IRON_SWORD, 1)
+                );
+                break;
+                
+            case "armor_set":
+                // Create enchanted iron armor
+                org.bukkit.inventory.ItemStack helmet = new org.bukkit.inventory.ItemStack(Material.IRON_HELMET);
+                org.bukkit.inventory.ItemStack chestplate = new org.bukkit.inventory.ItemStack(Material.IRON_CHESTPLATE);
+                org.bukkit.inventory.ItemStack leggings = new org.bukkit.inventory.ItemStack(Material.IRON_LEGGINGS);
+                org.bukkit.inventory.ItemStack boots = new org.bukkit.inventory.ItemStack(Material.IRON_BOOTS);
+                
+                helmet.addUnsafeEnchantment(org.bukkit.enchantments.Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                chestplate.addUnsafeEnchantment(org.bukkit.enchantments.Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                leggings.addUnsafeEnchantment(org.bukkit.enchantments.Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                boots.addUnsafeEnchantment(org.bukkit.enchantments.Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                
+                helmet.addUnsafeEnchantment(org.bukkit.enchantments.Enchantment.DURABILITY, 2);
+                chestplate.addUnsafeEnchantment(org.bukkit.enchantments.Enchantment.DURABILITY, 2);
+                leggings.addUnsafeEnchantment(org.bukkit.enchantments.Enchantment.DURABILITY, 2);
+                boots.addUnsafeEnchantment(org.bukkit.enchantments.Enchantment.DURABILITY, 2);
+                
+                player.getInventory().addItem(helmet, chestplate, leggings, boots);
+                break;
+                
+            case "building_blocks":
+                player.getInventory().addItem(
+                    new org.bukkit.inventory.ItemStack(Material.STONE_BRICKS, 64),
+                    new org.bukkit.inventory.ItemStack(Material.OAK_PLANKS, 32),
+                    new org.bukkit.inventory.ItemStack(Material.GLASS, 16),
+                    new org.bukkit.inventory.ItemStack(Material.TORCH, 8)
+                );
+                break;
+                
+            case "potion_bundle":
+                // Create custom potions
+                org.bukkit.inventory.ItemStack healingPotion = new org.bukkit.inventory.ItemStack(Material.POTION, 3);
+                org.bukkit.inventory.meta.PotionMeta healingMeta = (org.bukkit.inventory.meta.PotionMeta) healingPotion.getItemMeta();
+                healingMeta.addCustomEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.HEAL, 1, 1), true);
+                healingPotion.setItemMeta(healingMeta);
+                
+                org.bukkit.inventory.ItemStack speedPotion = new org.bukkit.inventory.ItemStack(Material.POTION, 2);
+                org.bukkit.inventory.meta.PotionMeta speedMeta = (org.bukkit.inventory.meta.PotionMeta) speedPotion.getItemMeta();
+                speedMeta.addCustomEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.SPEED, 3600, 0), true);
+                speedPotion.setItemMeta(speedMeta);
+                
+                player.getInventory().addItem(healingPotion, speedPotion);
+                break;
+                
+            case "dream_boost":
+                // Give potion and effect
+                org.bukkit.inventory.ItemStack dreamBoost = new org.bukkit.inventory.ItemStack(Material.POTION, 1);
+                org.bukkit.inventory.meta.PotionMeta dreamMeta = (org.bukkit.inventory.meta.PotionMeta) dreamBoost.getItemMeta();
+                dreamMeta.setDisplayName("§d§lDream Boost Potion");
+                dreamBoost.setItemMeta(dreamMeta);
+                player.getInventory().addItem(dreamBoost);
+                player.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.REGENERATION, 1200, 1));
+                break;
+                
+            case "lunar_blessing":
+                player.getInventory().addItem(new org.bukkit.inventory.ItemStack(Material.NETHER_STAR, 1));
+                player.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.NIGHT_VISION, 12000, 0));
+                break;
+                
+            case "quantum_stabilizer":
+                player.getInventory().addItem(new org.bukkit.inventory.ItemStack(Material.END_CRYSTAL, 1));
+                player.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.SPEED, 6000, 1));
+                break;
+                
+            case "time_crystal":
+                player.getInventory().addItem(new org.bukkit.inventory.ItemStack(Material.DIAMOND_BLOCK, 1));
+                player.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.FAST_DIGGING, 12000, 1));
+                break;
+                
+            default:
+                // Fallback to old system
+                try {
+                    SleepShopItem item = sleepShop.get(itemId);
+                    if (item != null) {
+                        String[] parts = item.reward.split(":");
+                        Material material = Material.valueOf(parts[0]);
+                        int amount = Integer.parseInt(parts[1]);
+                        player.getInventory().addItem(new org.bukkit.inventory.ItemStack(material, amount));
+                    }
+                } catch (Exception e) {
+                    plugin.getLogger().warning("Invalid shop item: " + itemId);
+                }
+                break;
+        }
     }
     
     /**

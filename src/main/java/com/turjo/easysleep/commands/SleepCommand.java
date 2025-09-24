@@ -33,12 +33,6 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
     
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        // Check permissions
-        if (!sender.hasPermission("easysleep.admin")) {
-            MessageUtils.sendMessage(sender, "&cYou don't have permission to use this command!");
-            return true;
-        }
-        
         // Check anti-spam for players
         if (sender instanceof Player) {
             Player player = (Player) sender;
@@ -59,30 +53,82 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
         
         switch (subCommand) {
             case "set":
+                if (!sender.hasPermission("easysleep.admin")) {
+                    MessageUtils.sendMessage(sender, "&cYou don't have permission to use this command!");
+                    return true;
+                }
                 return handleSetCommand(sender, args);
             case "get":
+                if (!sender.hasPermission("easysleep.admin")) {
+                    MessageUtils.sendMessage(sender, "&cYou don't have permission to use this command!");
+                    return true;
+                }
                 return handleGetCommand(sender);
             case "status":
+                if (!sender.hasPermission("easysleep.admin")) {
+                    MessageUtils.sendMessage(sender, "&cYou don't have permission to use this command!");
+                    return true;
+                }
                 return handleStatusCommand(sender);
             case "reset":
+                if (!sender.hasPermission("easysleep.admin")) {
+                    MessageUtils.sendMessage(sender, "&cYou don't have permission to use this command!");
+                    return true;
+                }
                 return handleResetCommand(sender);
             case "reload":
+                if (!sender.hasPermission("easysleep.admin")) {
+                    MessageUtils.sendMessage(sender, "&cYou don't have permission to use this command!");
+                    return true;
+                }
                 return handleReloadCommand(sender);
             case "setday":
+                if (!sender.hasPermission("easysleep.admin")) {
+                    MessageUtils.sendMessage(sender, "&cYou don't have permission to use this command!");
+                    return true;
+                }
                 return handleSetDayCommand(sender, args);
             case "resetday":
+                if (!sender.hasPermission("easysleep.admin")) {
+                    MessageUtils.sendMessage(sender, "&cYou don't have permission to use this command!");
+                    return true;
+                }
                 return handleResetDayCommand(sender);
             case "stats":
+                if (!sender.hasPermission("easysleep.admin")) {
+                    MessageUtils.sendMessage(sender, "&cYou don't have permission to use this command!");
+                    return true;
+                }
                 return handleStatsCommand(sender);
             case "update":
+                if (!sender.hasPermission("easysleep.admin")) {
+                    MessageUtils.sendMessage(sender, "&cYou don't have permission to use this command!");
+                    return true;
+                }
                 return handleUpdateCommand(sender);
             case "rewards":
+                if (!sender.hasPermission("easysleep.user")) {
+                    MessageUtils.sendMessage(sender, "&cYou don't have permission to use this command!");
+                    return true;
+                }
                 return handleRewardsCommand(sender);
             case "achievements":
+                if (!sender.hasPermission("easysleep.user")) {
+                    MessageUtils.sendMessage(sender, "&cYou don't have permission to use this command!");
+                    return true;
+                }
                 return handleAchievementsCommand(sender);
             case "shop":
+                if (!sender.hasPermission("easysleep.gui")) {
+                    MessageUtils.sendMessage(sender, "&cYou don't have permission to use this command!");
+                    return true;
+                }
                 return handleShopCommand(sender, args);
             case "balance":
+                if (!sender.hasPermission("easysleep.gui")) {
+                    MessageUtils.sendMessage(sender, "&cYou don't have permission to use this command!");
+                    return true;
+                }
                 return handleBalanceCommand(sender);
             case "help":
                 sendHelpMessage(sender);
@@ -440,14 +486,29 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> completions = new ArrayList<>();
         
-        if (!sender.hasPermission("easysleep.admin")) {
-            return completions;
-        }
-        
         if (args.length == 1) {
             // First argument - subcommands
             String partial = args[0].toLowerCase();
-            List<String> subCommands = Arrays.asList("set", "get", "status", "reset", "reload", "setday", "resetday", "stats", "rewards", "achievements", "shop", "balance", "update", "help");
+            List<String> subCommands = new ArrayList<>();
+            
+            // Add admin commands
+            if (sender.hasPermission("easysleep.admin")) {
+                subCommands.addAll(Arrays.asList("set", "get", "status", "reset", "reload", "setday", "resetday", "stats", "update"));
+            }
+            
+            // Add user commands
+            if (sender.hasPermission("easysleep.user")) {
+                subCommands.addAll(Arrays.asList("rewards", "achievements"));
+            }
+            
+            // Add GUI commands
+            if (sender.hasPermission("easysleep.gui")) {
+                subCommands.addAll(Arrays.asList("shop", "balance"));
+            }
+            
+            // Help is always available
+            subCommands.add("help");
+            
             for (String subCommand : subCommands) {
                 if (subCommand.startsWith(partial)) {
                     completions.add(subCommand);
@@ -459,7 +520,7 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
             // No subcommands needed for GUI shop
         } else if (args.length == 2) {
             // Second argument for 'set' command - percentage suggestions
-            if (args[0].equalsIgnoreCase("set")) {
+            if (args[0].equalsIgnoreCase("set") && sender.hasPermission("easysleep.admin")) {
                 String partial = args[1];
                 List<String> suggestions = Arrays.asList("1", "10", "25", "50", "75", "100");
                 for (String suggestion : suggestions) {
@@ -467,7 +528,7 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
                         completions.add(suggestion);
                     }
                 }
-            } else if (args[0].equalsIgnoreCase("setday")) {
+            } else if (args[0].equalsIgnoreCase("setday") && sender.hasPermission("easysleep.admin")) {
                 String partial = args[1];
                 List<String> suggestions = Arrays.asList("1", "10", "50", "100", "365");
                 for (String suggestion : suggestions) {

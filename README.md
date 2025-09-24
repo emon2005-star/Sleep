@@ -58,6 +58,7 @@
 ## 🔑 Permissions
 
 - `easysleep.admin` - Full administrative access (default: op)
+- `easysleep.gui` - Access to GUI interface and shop (default: true)
 - `easysleep.gui` - Access to GUI interface (default: true)
 - `easysleep.user` - Basic user features (default: true)
 - `easysleep.rewards` - Receive sleep rewards (default: true)
@@ -205,7 +206,6 @@ SleepStats stats = EasySleep.getInstance().getPlayerStats(player);
 - 🎨 **Visual Shopping Experience** - Stunning shop interface with effects
 - 🔊 **Audio Feedback** - Shop sounds and purchase confirmations
 - ⚡ **Performance Optimized** - Smooth GUI interactions and memory management
-- 🎯 **User-Friendly Design** - Intuitive shopping with clear affordability indicators
 
 ### 🎉 **v1.5.2 - The Ultimate Update**
 - 🎛️ **Complete message control** - Enable/disable any message type
