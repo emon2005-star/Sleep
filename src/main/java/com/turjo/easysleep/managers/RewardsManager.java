@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Advanced Rewards Management System
@@ -26,13 +27,15 @@ public class RewardsManager {
     
     private final EasySleep plugin;
     private final Map<UUID, Integer> playerStreaks;
-    private final Map<UUID, Long> lastSleepTime;
+    private final Map<UUID, Long> lastRewardTime;
     private Economy economy;
+    private final Map<UUID, Boolean> playerSleepingStatus;
     
     public RewardsManager(EasySleep plugin) {
         this.plugin = plugin;
         this.playerStreaks = new HashMap<>();
-        this.lastSleepTime = new HashMap<>();
+        this.lastRewardTime = new HashMap<>();
+        this.playerSleepingStatus = new ConcurrentHashMap<>();
         setupEconomy();
         loadStreakData();
     }
@@ -57,9 +60,23 @@ public class RewardsManager {
     }
     
     /**
-     * Give all sleep rewards to player
+     * Track when player starts sleeping (no rewards yet)
      */
-    public void giveSleepRewards(Player player) {
+    public void onPlayerStartSleep(Player player) {
+        playerSleepingStatus.put(player.getUniqueId(), true);
+    }
+    
+    /**
+     * Track when player stops sleeping (no rewards)
+     */
+    public void onPlayerStopSleep(Player player) {
+        playerSleepingStatus.put(player.getUniqueId(), false);
+    }
+    
+    /**
+     * Give rewards only when night is actually skipped to day
+     */
+    public void giveNightSkipRewards(Player player) {
         if (!plugin.getConfigManager().getConfig().getBoolean("rewards.enabled", true)) {
             return;
         }
@@ -68,6 +85,23 @@ public class RewardsManager {
         if (!player.hasPermission("easysleep.rewards")) {
             return;
         }
+        
+        // Check if player was actually sleeping when night was skipped
+        if (!playerSleepingStatus.getOrDefault(player.getUniqueId(), false)) {
+            return;
+        }
+        
+        // Prevent reward spam - only once per night skip
+        UUID uuid = player.getUniqueId();
+        long currentTime = System.currentTimeMillis();
+        long lastReward = lastRewardTime.getOrDefault(uuid, 0L);
+        
+        // Must wait at least 30 seconds between rewards to prevent exploit
+        if (currentTime - lastReward < 30000) {
+            return;
+        }
+        
+        lastRewardTime.put(uuid, currentTime);
         
         // Update streak
         updatePlayerStreak(player);
@@ -81,10 +115,6 @@ public class RewardsManager {
         giveExperienceReward(player, multiplier);
         giveItemRewards(player);
         givePotionEffects(player);
-        
-        // Award dream coins (integrated into rewards system)
-        int baseDreamCoins = plugin.getConfigManager().getConfig().getInt("rewards.economy.dream-coins-per-sleep", 5);
-        plugin.getSleepEconomyManager().awardDreamCoins(player, baseDreamCoins);
         
         // Check for streak milestones
         checkStreakMilestones(player, streak);
@@ -201,13 +231,13 @@ public class RewardsManager {
     private void updatePlayerStreak(Player player) {
         UUID uuid = player.getUniqueId();
         long currentTime = System.currentTimeMillis();
-        long lastSleep = lastSleepTime.getOrDefault(uuid, 0L);
+        long lastReward = lastRewardTime.getOrDefault(uuid, 0L);
         
         // Check if it's been more than 48 hours (2 days)
-        long timeDiff = currentTime - lastSleep;
+        long timeDiff = currentTime - lastReward;
         long twoDays = 48 * 60 * 60 * 1000L;
         
-        if (lastSleep == 0 || timeDiff <= twoDays) {
+        if (lastReward == 0 || timeDiff <= twoDays) {
             // Continue or start streak
             int currentStreak = playerStreaks.getOrDefault(uuid, 0);
             playerStreaks.put(uuid, currentStreak + 1);
@@ -215,8 +245,6 @@ public class RewardsManager {
             // Reset streak if configured to do so
             playerStreaks.put(uuid, 1);
         }
-        
-        lastSleepTime.put(uuid, currentTime);
         saveStreakData();
     }
     
@@ -355,6 +383,7 @@ public class RewardsManager {
     public void cleanup() {
         saveStreakData();
         playerStreaks.clear();
-        lastSleepTime.clear();
+        lastRewardTime.clear();
+        playerSleepingStatus.clear();
     }
 }

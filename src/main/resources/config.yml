@@ -38,7 +38,6 @@ rewards:
     enabled: true
     money-per-sleep: 5.0
     bonus-multiplier: 1.5  # Multiplier for streak bonuses
-    dream-coins-per-sleep: 3  # Dream coins awarded per sleep
     
   # Experience rewards
   experience:
@@ -253,11 +252,6 @@ features:
     spectacular-effects: true
     
   # 💎 DREAM COIN ECONOMY 💎
-  dream-economy:
-    enabled: true
-    base-coins-per-sleep: 3
-    streak-bonus-multiplier: 0.1  # 10% per streak day
-    shop-enabled: true
     
   # Update Checker
   update-checker:
@@ -331,7 +325,6 @@ messages:
     command-responses: true       # Command response messages
     error-messages: true          # Error messages
     achievement-messages: true    # Achievement unlock messages
-    economy-messages: true        # Dream coin economy messages
     quantum-messages: true        # Quantum entanglement messages
     dimensional-messages: true    # Dimensional portal messages
     
@@ -414,14 +407,6 @@ messages:
     achievement-description: "&7%achievement_description%"
     reward-received: "&a+ %reward% &7(Achievement reward)"
     broadcast-unlock: "&6🏆 &e%player% &funlocked achievement: &b%achievement% &6🏆"
-    
-  # Economy messages (Dream Coins)
-  economy:
-    coins-received: "&d💎 &f+ &e%amount% &dDream Coins &7(Sleep reward)"
-    balance-display: "&fYour Balance: &e%balance% &dDream Coins"
-    purchase-success: "&a✓ &fPurchased &e%item% &ffor &e%price% &dDream Coins"
-    purchase-failed: "&cInsufficient Dream Coins! Need: &e%required% &cHave: &e%current%"
-    remaining-balance: "&7Remaining balance: &e%balance% &dDream Coins"
     
   # Quantum messages
   quantum:

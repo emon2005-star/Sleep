@@ -118,18 +118,6 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
                     return true;
                 }
                 return handleAchievementsCommand(sender);
-            case "shop":
-                if (!sender.hasPermission("easysleep.shop")) {
-                    MessageUtils.sendMessage(sender, "&cYou don't have permission to use this command!");
-                    return true;
-                }
-                return handleShopCommand(sender, args);
-            case "balance":
-                if (!sender.hasPermission("easysleep.balance")) {
-                    MessageUtils.sendMessage(sender, "&cYou don't have permission to use this command!");
-                    return true;
-                }
-                return handleBalanceCommand(sender);
             case "help":
                 sendHelpMessage(sender);
                 return true;
@@ -405,43 +393,6 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
     }
     
     /**
-     * Handle the shop subcommand
-     */
-    private boolean handleShopCommand(CommandSender sender, String[] args) {
-        if (!(sender instanceof Player)) {
-            MessageUtils.sendMessage(sender, "&cThis command can only be used by players!");
-            return true;
-        }
-        
-        Player player = (Player) sender;
-        
-        // Open the beautiful GUI shop
-        plugin.getSleepShopGUI().openShop(player);
-        return true;
-    }
-    
-    /**
-     * Handle the balance subcommand
-     */
-    private boolean handleBalanceCommand(CommandSender sender) {
-        if (!(sender instanceof Player)) {
-            MessageUtils.sendMessage(sender, "&cThis command can only be used by players!");
-            return true;
-        }
-        
-        Player player = (Player) sender;
-        long balance = plugin.getSleepEconomyManager().getDreamCoins(player);
-        
-        MessageUtils.sendMessage(player, "&6╔═══════════════════════════════════════════╗");
-        MessageUtils.sendMessage(player, "&6║ &d💎 &f&lDREAM COIN BALANCE &d💎 &6║");
-        MessageUtils.sendMessage(player, "&6╠═══════════════════════════════════════════╣");
-        MessageUtils.sendMessage(player, "&6║ &fYour Balance: &e" + balance + " &dDream Coins" + String.format("%" + (15 - String.valueOf(balance).length()) + "s", "") + "&6║");
-        MessageUtils.sendMessage(player, "&6║ &7Use: &e/sleep shop &7to open GUI shop" + String.format("%" + (8) + "s", "") + "&6║");
-        MessageUtils.sendMessage(player, "&6╚═══════════════════════════════════════════╝");
-        return true;
-    }
-    
-    /**
      * Get the target world for the command
      */
     private World getTargetWorld(CommandSender sender) {
@@ -470,8 +421,6 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
         MessageUtils.sendMessage(sender, "&6║ &e/sleep stats &7- View plugin statistics  &6║");
         MessageUtils.sendMessage(sender, "&6║ &e/sleep rewards &7- View reward info       &6║");
         MessageUtils.sendMessage(sender, "&6║ &e/sleep achievements &7- View achievements  &6║");
-        MessageUtils.sendMessage(sender, "&6║ &e/sleep shop &7- Open GUI Dream Shop      &6║");
-        MessageUtils.sendMessage(sender, "&6║ &e/sleep balance &7- Check Dream Coins     &6║");
         MessageUtils.sendMessage(sender, "&6║ &e/sleep update &7- Check for updates      &6║");
         MessageUtils.sendMessage(sender, "&6║ &e/sleep help &7- Show this matrix         &6║");
         MessageUtils.sendMessage(sender, "&6╠═══════════════════════════════════════════╣");
@@ -504,14 +453,6 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
                 subCommands.add("achievements");
             }
             
-            // Add GUI commands
-            if (sender.hasPermission("easysleep.shop")) {
-                subCommands.add("shop");
-            }
-            if (sender.hasPermission("easysleep.balance")) {
-                subCommands.add("balance");
-            }
-            
             // Help is always available
             subCommands.add("help");
             
@@ -520,10 +461,6 @@ public class SleepCommand implements CommandExecutor, TabCompleter {
                     completions.add(subCommand);
                 }
             }
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("shop")) {
-            // Shop subcommands
-            String partial = args[1].toLowerCase();
-            // No subcommands needed for GUI shop
         } else if (args.length == 2) {
             // Second argument for 'set' command - percentage suggestions
             if (args[0].equalsIgnoreCase("set") && sender.hasPermission("easysleep.admin")) {

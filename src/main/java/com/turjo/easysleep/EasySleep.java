@@ -53,8 +53,6 @@ public class EasySleep extends JavaPlugin {
     private QuantumSleepManager quantumSleepManager;
     private DimensionalSleepManager dimensionalSleepManager;
     private SleepAchievementManager sleepAchievementManager;
-    private SleepEconomyManager sleepEconomyManager;
-    private SleepShopGUI sleepShopGUI;
     
     @Override
     public void onEnable() {
@@ -77,8 +75,6 @@ public class EasySleep extends JavaPlugin {
         this.quantumSleepManager = new QuantumSleepManager(this);
         this.dimensionalSleepManager = new DimensionalSleepManager(this);
         this.sleepAchievementManager = new SleepAchievementManager(this);
-        this.sleepEconomyManager = new SleepEconomyManager(this);
-        this.sleepShopGUI = new SleepShopGUI(this);
         
         // Initialize commands
         initializeCommands();
@@ -101,7 +97,6 @@ public class EasySleep extends JavaPlugin {
         getLogger().info("║ 🌌 Quantum Entanglement: REVOLUTIONARY   ║");
         getLogger().info("║ 🌍 Dimensional Portals: CROSS-WORLD      ║");
         getLogger().info("║ 🏆 Achievement System: 16 EXCLUSIVE      ║");
-        getLogger().info("║ 💎 Dream Coin Economy: UNIQUE CURRENCY   ║");
         getLogger().info("║ 🎁 Rewards System: ACTIVE                ║");
         getLogger().info("║ ⚡ Time Acceleration: 1.5-2x SPEED       ║");
         getLogger().info("║ 🎨 Gentle Animations: OPTIMIZED         ║");
@@ -127,7 +122,6 @@ public class EasySleep extends JavaPlugin {
         getLogger().info("║ 🌌 Quantum states: COLLAPSED             ║");
         getLogger().info("║ 🌍 Dimensional portals: CLOSED           ║");
         getLogger().info("║ 🏆 Achievements: SAVED                   ║");
-        getLogger().info("║ 💎 Dream economy: SECURED                ║");
         getLogger().info("║ 🎁 Rewards saved and secured             ║");
         getLogger().info("║ ⚡ All systems: OFFLINE                  ║");
         getLogger().info("║ 💫 Thanks for using EasySleep v1.5.3!    ║");
@@ -173,12 +167,6 @@ public class EasySleep extends JavaPlugin {
         }
         if (sleepAchievementManager != null) {
             sleepAchievementManager.cleanup();
-        }
-        if (sleepEconomyManager != null) {
-            sleepEconomyManager.cleanup();
-        }
-        if (sleepShopGUI != null) {
-            sleepShopGUI.cleanup();
         }
         instance = null;
     }
@@ -356,21 +344,5 @@ public class EasySleep extends JavaPlugin {
      */
     public SleepAchievementManager getSleepAchievementManager() {
         return sleepAchievementManager;
-    }
-    
-    /**
-     * Get the sleep economy manager
-     * @return SleepEconomyManager instance
-     */
-    public SleepEconomyManager getSleepEconomyManager() {
-        return sleepEconomyManager;
-    }
-    
-    /**
-     * Get the sleep shop GUI
-     * @return SleepShopGUI instance
-     */
-    public SleepShopGUI getSleepShopGUI() {
-        return sleepShopGUI;
     }
 }

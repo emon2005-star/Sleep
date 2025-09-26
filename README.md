@@ -53,12 +53,9 @@
 | `/sleep rewards` | View available rewards | `easysleep.user` |
 | `/sleep stats` | Personal statistics | `easysleep.user` |
 
-**Aliases:** `/sleepmanager`, `/sleepmgr`, `/nightskip`, `/sgui`, `/sleepui`
-
 ## 🔑 Permissions
 
 - `easysleep.admin` - Full administrative access (default: op)
-- `easysleep.gui` - Access to GUI interface and shop (default: true)
 - `easysleep.gui` - Access to GUI interface (default: true)
 - `easysleep.user` - Basic user features (default: true)
 - `easysleep.rewards` - Receive sleep rewards (default: true)
@@ -201,10 +198,10 @@ SleepStats stats = EasySleep.getInstance().getPlayerStats(player);
 ## 📈 Version History
 
 ### 🎉 **v1.5.4 (Latest) - GUI Shop Revolution**
-- 🛒 **Complete GUI Shop Overhaul** - Beautiful interactive inventory shop
-- 💎 **Enhanced Dream Economy** - Increased coin rewards and better balance
-- 🎨 **Visual Shopping Experience** - Stunning shop interface with effects
-- 🔊 **Audio Feedback** - Shop sounds and purchase confirmations
+- 🐛 **Sleep Exploit Fixed** - Players can no longer spam rewards by entering/leaving bed
+- 🎁 **Reward System Overhaul** - Rewards only given when night is actually skipped
+- 🛒 **Shop System Removed** - Simplified plugin by removing dream coin economy
+- 🔒 **Anti-Exploit Protection** - 30-second cooldown prevents reward farming
 - ⚡ **Performance Optimized** - Smooth GUI interactions and memory management
 
 ### 🎉 **v1.5.2 - The Ultimate Update**

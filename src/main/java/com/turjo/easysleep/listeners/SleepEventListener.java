@@ -48,10 +48,8 @@ public class SleepEventListener implements Listener {
         // Record sleep event
         plugin.getStatisticsManager().recordSleepEvent();
         
-        // Give sleep rewards (this includes dream coins, so we don't duplicate)
-        if (player.hasPermission("easysleep.rewards")) {
-            plugin.getRewardsManager().giveSleepRewards(player);
-        }
+        // Track that player started sleeping (no rewards yet)
+        plugin.getRewardsManager().onPlayerStartSleep(player);
         
         // Check achievements
         if (player.hasPermission("easysleep.achievements")) {
@@ -181,6 +179,9 @@ public class SleepEventListener implements Listener {
         // Stop sleep animation
         animationManager.stopAnimation(player);
         
+        // Track that player stopped sleeping
+        plugin.getRewardsManager().onPlayerStopSleep(player);
+        
         // Get updated sleep statistics
         int totalPlayers = world.getPlayers().size();
         int sleepingPlayers = getSleepingPlayerCount(world);
@@ -203,6 +204,13 @@ public class SleepEventListener implements Listener {
             
             // Record night skip
             plugin.getStatisticsManager().recordNightSkip();
+            
+            // Give rewards only to players who were sleeping when night was skipped
+            for (Player player : world.getPlayers()) {
+                if (player.hasPermission("easysleep.rewards")) {
+                    plugin.getRewardsManager().giveNightSkipRewards(player);
+                }
+            }
             
             // Give morning effects to all players
             giveMorningEffects(world);
